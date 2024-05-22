@@ -35,20 +35,28 @@ public class ProductEntity {
     private String photo;
 
     @CreationTimestamp
-    @Column(name = "product_created", nullable = false)
+    @Column(name = "product_created")
     private LocalDateTime created;
 
     @UpdateTimestamp
-    @Column(name = "product_updated", nullable = false)
+    @Column(name = "product_updated")
     private LocalDateTime updated;
 
-    //todo: Many To One with brands
+    @ManyToOne
+    @JoinColumn(name = "brand_url", referencedColumnName = "brand_url", nullable = false)
+    private BrandEntity brand;
 
-    //todo: One To One with product info
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "description_id", referencedColumnName = "description_id", nullable = false)
+    private DescriptionEntity description;
 
-    //todo: One to One with discounts
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "discount_id", referencedColumnName = "discount_id", nullable = false)
+    private DiscountEntity discount;
 
-    //todo: Many To One with categories
+    @ManyToOne
+    @JoinColumn(name = "category_url", referencedColumnName = "category_url", nullable = false)
+    private CategoryEntity category;
 
     @Column(name = "product_version", nullable = false, unique = true)
     private Long version;

@@ -25,14 +25,15 @@ public class DescriptionEntity {
     private String description;
 
     @CreationTimestamp
-    @Column(name = "description_created", nullable = false)
+    @Column(name = "description_created")
     private LocalDateTime created;
 
     @UpdateTimestamp
-    @Column(name = "description_updated", nullable = false)
+    @Column(name = "description_updated")
     private LocalDateTime updated;
 
-    //todo: One to One with products
+    @OneToOne(mappedBy = "description")
+    private ProductEntity product;
 
     @Column(name = "description_version", nullable = false, unique = true)
     private Long version;

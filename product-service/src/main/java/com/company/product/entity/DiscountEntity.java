@@ -25,14 +25,15 @@ public class DiscountEntity {
     private Double discount;
 
     @CreationTimestamp
-    @Column(name = "discount_created", nullable = false)
+    @Column(name = "discount_created")
     private LocalDateTime created;
 
     @UpdateTimestamp
-    @Column(name = "discount_updated", nullable = false)
+    @Column(name = "discount_updated")
     private LocalDateTime updated;
 
-    //todo: One to One with products
+    @OneToOne(mappedBy = "discount")
+    private ProductEntity product;
 
     @Column(name = "discount_version", nullable = false, unique = true)
     private Long version;

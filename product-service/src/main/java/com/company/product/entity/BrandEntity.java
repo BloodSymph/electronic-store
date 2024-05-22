@@ -6,6 +6,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Builder
@@ -28,16 +30,18 @@ public class BrandEntity {
     private String url;
 
     @CreationTimestamp
-    @Column(name = "brand_created", nullable = false)
+    @Column(name = "brand_created")
     private LocalDateTime created;
 
     @UpdateTimestamp
-    @Column(name = "brand_updated", nullable = false)
+    @Column(name = "brand_updated")
     private LocalDateTime updated;
 
-    //todo: One To Many with products
+    @OneToMany(mappedBy = "brand", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private Set<ProductEntity> products = new HashSet<>();
 
-    //todo: Many To Many with categories
+    @ManyToMany(mappedBy = "brands")
+    private Set<CategoryEntity> categories = new HashSet<>();
 
     @Column(name = "brand_version", nullable = false, unique = true)
     private Long version;

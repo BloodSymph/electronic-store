@@ -6,7 +6,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
-
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Data
@@ -30,16 +31,33 @@ public class CategoryEntity {
     private String url;
 
     @CreationTimestamp
-    @Column(name = "category_created", nullable = false)
+    @Column(name = "category_created")
     private LocalDateTime created;
 
     @UpdateTimestamp
-    @Column(name = "category_updated", nullable = false)
+    @Column(name = "category_updated")
     private LocalDateTime updated;
 
-    //todo: One To Many with products
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private Set<ProductEntity> products = new HashSet<>();
 
-    //todo: Many To Many with brands
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "categories_brands",
+            joinColumns = {
+                    @JoinColumn(
+                            name = "category_url",
+                            referencedColumnName = "category_url"
+                    )
+            },
+            inverseJoinColumns = {
+                    @JoinColumn(
+                            name = "brand_url",
+                            referencedColumnName = "brand_url"
+                    )
+            }
+    )
+    private Set<BrandEntity> brands = new HashSet<>();
 
     @Column(name = "category_version", nullable = false, unique = true)
     private Long version;
