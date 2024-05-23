@@ -4,6 +4,7 @@ import com.company.product.dto.admin.category.CategoryAdminRequest;
 import com.company.product.dto.admin.category.CategoryAdminResponse;
 import com.company.product.entity.CategoryEntity;
 import com.company.product.exception.exceptions.CategoryNotFoundException;
+import com.company.product.exception.exceptions.CategoryVersionNotValidException;
 import com.company.product.mapper.admin.CategoryAdminMapper;
 import com.company.product.repository.CategoryRepository;
 import com.company.product.service.admin.CategoryAdminService;
@@ -52,17 +53,39 @@ public class CategoryAdminServiceImpl implements CategoryAdminService {
     @Transactional
     public CategoryAdminResponse updateCurrentCategory(CategoryAdminRequest categoryAdminRequest,
                                                        String categoryUrl) {
+        CategoryEntity category = categoryRepository
+                .findByUrlIgnoreCase(categoryUrl)
+                .orElseThrow(
+                        () -> new CategoryNotFoundException(
+                                "Can not find category by current url: " + categoryUrl + " !"
+                        )
+                );
 
+        if (!category.getVersion().equals(categoryAdminRequest.getVersion())) {
+            throw new CategoryVersionNotValidException(
+                    "Category Entity version: " + categoryAdminRequest.getVersion() + " not valid!"
+            );
+        }
 
-        return null;
+        category.setName(categoryAdminRequest.getName());
+        category.setUrl(toUrlAddress(categoryAdminRequest.getName()));
+        category.setVersion(categoryAdminRequest.getVersion());
+        CategoryEntity updatedCategory = categoryRepository.save(category);
+
+        return mapToCategoryAdminResponse(updatedCategory);
     }
 
     @Override
     @Transactional
-    public void deleteCurrentCategory(String categoryUrl) {
+    public void deleteCurrentCategory(String categoryUrl, Long categoryVersion) {
         if (!categoryRepository.existsByUrlIgnoreCase(categoryUrl)) {
             throw new CategoryNotFoundException(
-                    "Can not found category by current url: " + categoryUrl
+                    "Can not find category by current url: " + categoryUrl + " !"
+            );
+        }
+        if (!categoryRepository.existsByVersion(categoryVersion)) {
+            throw new CategoryVersionNotValidException(
+                    "Category Entity version: " + categoryVersion + " not valid!"
             );
         }
         categoryRepository.deleteByUrlIgnoreCase(categoryUrl);

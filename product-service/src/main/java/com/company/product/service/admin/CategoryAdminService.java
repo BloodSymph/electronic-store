@@ -22,6 +22,6 @@ public interface CategoryAdminService {
             String categoryUrl
     );
 
-    void deleteCurrentCategory(String categoryUrl);
+    void deleteCurrentCategory(String categoryUrl, Long categoryVersion);
 
 }
