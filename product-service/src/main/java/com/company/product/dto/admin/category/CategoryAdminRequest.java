@@ -20,13 +20,10 @@ public class CategoryAdminRequest {
     @Length(max = 120, message = "Category name field shod have maximum of {max} characters!")
     private String name;
 
-    @NotNull(message = "Category url field shod not contains null value!")
-    @NotBlank(message = "Category url field shod not be empty!")
     @Length(max = 25, message = "Category url field shod have maximum of {max} characters!")
     private String url;
 
     @NotNull(message = "Category version field shod not contains null value!")
-    @NotEmpty(message = "Category version field shod not be empty!")
     private Long version;
 
 }

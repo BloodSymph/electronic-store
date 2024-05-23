@@ -37,7 +37,11 @@ public class CategoryAdminController {
 
     @GetMapping("/categories/search")
     @ResponseStatus(HttpStatus.OK)
-    public List<CategoryAdminResponse> searchCategory(String categoryName) {
+    public List<CategoryAdminResponse> searchCategory(
+            @RequestParam(
+                    value = "categoryName",
+                    required = false,
+                    defaultValue = "") String categoryName) {
         return categoryAdminService.searchCategories(categoryName);
     }
 

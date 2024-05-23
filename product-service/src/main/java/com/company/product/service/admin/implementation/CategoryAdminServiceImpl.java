@@ -36,7 +36,7 @@ public class CategoryAdminServiceImpl implements CategoryAdminService {
 
     @Override
     public List<CategoryAdminResponse> searchCategories(String categoryName) {
-        List<CategoryEntity> categoryEntities = categoryRepository.searchByName(categoryName);
+        List<CategoryEntity> categoryEntities = categoryRepository.searchByNameIgnoreCase(categoryName);
         return categoryEntities.stream()
                 .map(CategoryAdminMapper::mapToCategoryAdminResponse)
                 .collect(Collectors.toList());
@@ -45,7 +45,8 @@ public class CategoryAdminServiceImpl implements CategoryAdminService {
     @Override
     public CategoryAdminResponse createNewCategory(CategoryAdminRequest categoryAdminRequest) {
         CategoryEntity category = mapRequestToCategoryEntity(categoryAdminRequest);
-        category.setName(toUrlAddress(categoryAdminRequest.getName()));
+        category.setUrl(toUrlAddress(categoryAdminRequest.getName()));
+        categoryRepository.save(category);
         return mapToCategoryAdminResponse(category);
     }
 

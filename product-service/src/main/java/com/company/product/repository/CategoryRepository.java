@@ -14,8 +14,12 @@ import java.util.Optional;
 @Repository
 public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> {
 
-    @Query("SELECT category FROM Category category WHERE category.name LIKE LOWER(:categoryName) ")
-    List<CategoryEntity> searchByName(@Param("categoryName") String categoryName);
+    @Query("SELECT category FROM Category category " +
+            "WHERE LOWER(category.name) " +
+            "LIKE LOWER(CONCAT('%', :categoryName, '%') ) ")
+    List<CategoryEntity> searchByNameIgnoreCase(
+            @Param(value = "categoryName") String categoryName
+    );
 
     Optional<CategoryEntity> findByUrlIgnoreCase(String categoryUrl);
 
@@ -23,7 +27,8 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> 
             type = EntityGraph.EntityGraphType.FETCH,
             value = "category-details-entity-graph"
     )
-    @Query("SELECT category FROM Category category WHERE category.name LIKE LOWER(:categoryName) ")
+    @Query("SELECT category FROM Category category " +
+            "WHERE category.url LIKE LOWER(:categoryUrl) ")
     Optional<CategoryEntity> getCategoryDetailsByUrlIgnoreCase(String categoryUrl);
 
     void deleteByUrlIgnoreCase(String categoryUrl);
