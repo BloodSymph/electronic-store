@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/product-service/admin")
+@RequestMapping("/api/v1/product-service/admin")
 @RequiredArgsConstructor
 public class CategoryAdminController {
 

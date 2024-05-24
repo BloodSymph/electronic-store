@@ -1,10 +1,47 @@
 package com.company.product.repository;
 
 import com.company.product.entity.BrandEntity;
+import com.company.product.entity.CategoryEntity;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface BrandRepository extends JpaRepository<BrandEntity, Long> {
+
+    @Query("SELECT brand FROM Brand brand " +
+            "WHERE LOWER(brand.name) " +
+            "LIKE LOWER(CONCAT('%', :brandName, '%') ) ")
+    List<BrandEntity> searchByNameIgnoreCase(
+            @Param(value = "brandName") String brandName
+    );
+
+    @Query("SELECT brand FROM Brand brand " +
+            "INNER JOIN brand.categories categories " +
+            "ON categories.url LIKE LOWER(:categoryUrl) ")
+    List<BrandEntity> getByCategories(@Param(value = "categoryUrl") String categoryUrl);
+
+    Optional<BrandEntity> findByUrlIgnoreCase(String brandUrl);
+
+    @EntityGraph(
+            type = EntityGraph.EntityGraphType.FETCH,
+            value = "brand-details-entity-graph"
+    )
+    @Query("SELECT brand FROM Brand brand " +
+            "WHERE brand.url LIKE LOWER(:brandUrl) ")
+    Optional<BrandEntity> getBrandDetailsByUrlIgnoreCase(
+            @Param(value = "brandUrl") String brandUrl
+    );
+
+    void deleteByUrlIgnoreCase(String brandUrl);
+
+    Boolean existsByUrlIgnoreCase(String brandUrl);
+
+    Boolean existsByVersion(Long brandVersion);
 
 }

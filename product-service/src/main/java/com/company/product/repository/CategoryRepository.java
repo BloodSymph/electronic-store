@@ -1,5 +1,6 @@
 package com.company.product.repository;
 
+import com.company.product.entity.BrandEntity;
 import com.company.product.entity.CategoryEntity;
 import jakarta.ws.rs.Path;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -29,7 +30,9 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> 
     )
     @Query("SELECT category FROM Category category " +
             "WHERE category.url LIKE LOWER(:categoryUrl) ")
-    Optional<CategoryEntity> getCategoryDetailsByUrlIgnoreCase(String categoryUrl);
+    Optional<CategoryEntity> getCategoryDetailsByUrlIgnoreCase(
+            @Param(value = "categoryUrl") String categoryUrl
+    );
 
     void deleteByUrlIgnoreCase(String categoryUrl);
 

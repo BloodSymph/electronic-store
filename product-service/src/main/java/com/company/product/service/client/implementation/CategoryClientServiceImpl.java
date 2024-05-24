@@ -1,6 +1,7 @@
 package com.company.product.service.client.implementation;
 
 import com.company.product.dto.client.category.CategoryClientResponse;
+import com.company.product.entity.CategoryEntity;
 import com.company.product.mapper.client.CategoryClientMapper;
 import com.company.product.repository.CategoryRepository;
 import com.company.product.service.client.CategoryClientService;
