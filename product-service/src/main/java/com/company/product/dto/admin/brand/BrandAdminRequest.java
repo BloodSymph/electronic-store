@@ -20,6 +20,9 @@ public class BrandAdminRequest {
     @Length(max = 25, message = "Brand url field shod have maximum of {max} characters!")
     private String url;
 
+    @Length(max = 25, message = "Category url field shod have maximum of {max} characters!")
+    private String categoryUrl;
+
     @NotNull(message = "Brand version field shod not contains null value!")
     private Long version;
 

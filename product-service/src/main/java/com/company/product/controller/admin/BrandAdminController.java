@@ -1,9 +1,19 @@
 package com.company.product.controller.admin;
 
+import com.company.product.dto.admin.brand.BrandAdminRequest;
+import com.company.product.dto.admin.brand.BrandAdminResponse;
 import com.company.product.service.admin.BrandAdminService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/product-service/admin")
@@ -12,6 +22,62 @@ public class BrandAdminController {
 
     private final BrandAdminService brandAdminService;
 
+    @GetMapping("/brands")
+    @ResponseStatus(HttpStatus.OK)
+    public Page<BrandAdminResponse> getListOfBrands(
+            @PageableDefault(
+                    sort = "name",
+                    direction = Sort.Direction.ASC,
+                    page = 0,
+                    size = 10) Pageable pageable) {
 
+        return brandAdminService.getAllBrands(pageable);
+
+    }
+
+    @GetMapping("/brands/search")
+    @ResponseStatus(HttpStatus.OK)
+    public List<BrandAdminResponse> searchBrands(
+            @RequestParam(
+                    value = "brandName",
+                    required = false,
+                    defaultValue = "") String brandName) {
+
+        return brandAdminService.searchBrands(brandName);
+
+    }
+
+    @PostMapping("/brands/create")
+    @ResponseStatus(HttpStatus.CREATED)
+    public BrandAdminResponse createNewBrand(
+            @Valid @RequestBody BrandAdminRequest brandAdminRequest) {
+
+        return brandAdminService.createNewBrand(brandAdminRequest);
+
+    }
+
+    @PutMapping("/brands/{brandUrl}/update")
+    @ResponseStatus(HttpStatus.CREATED)
+    public BrandAdminResponse updateCurrentBrand(
+            @Valid @RequestBody BrandAdminRequest brandAdminRequest,
+            @PathVariable(value = "brandUrl") String brandUrl) {
+
+        return brandAdminService.updateCurrentBrand(brandAdminRequest, brandUrl);
+
+    }
+
+    @DeleteMapping("/brands/{brandUrl}/delete")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<String> deleteCurrentBrand(
+            @PathVariable(value = "brandUrl") String brandUrl,
+            @RequestParam(value = "brandVersion") Long brandVersion) {
+
+        brandAdminService.deleteCurrentBrand(brandUrl, brandVersion);
+        return new ResponseEntity<>(
+                "Brand successful deleted by url: " + brandUrl + " !",
+                HttpStatus.OK
+        );
+
+    }
 
 }

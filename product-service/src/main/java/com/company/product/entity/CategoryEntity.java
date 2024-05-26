@@ -17,13 +17,6 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity(name = "Category")
 @Table(name = "categories")
-@NamedEntityGraph(
-        name = "category-details-entity-graph",
-        attributeNodes = {
-                @NamedAttributeNode("products"),
-                @NamedAttributeNode("brands")
-        }
-)
 public class CategoryEntity {
 
     @Id
@@ -48,7 +41,7 @@ public class CategoryEntity {
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Set<ProductEntity> products = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "categories_brands",
             joinColumns = {

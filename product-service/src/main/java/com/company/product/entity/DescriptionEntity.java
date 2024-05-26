@@ -32,7 +32,8 @@ public class DescriptionEntity {
     @Column(name = "description_updated")
     private LocalDateTime updated;
 
-    @OneToOne(mappedBy = "description")
+    @OneToOne
+    @JoinColumn(name = "product_url", referencedColumnName = "product_url", nullable = false)
     private ProductEntity product;
 
     @Column(name = "description_version", nullable = false, unique = true)

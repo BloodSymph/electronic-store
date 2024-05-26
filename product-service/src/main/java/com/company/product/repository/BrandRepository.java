@@ -28,16 +28,6 @@ public interface BrandRepository extends JpaRepository<BrandEntity, Long> {
 
     Optional<BrandEntity> findByUrlIgnoreCase(String brandUrl);
 
-    @EntityGraph(
-            type = EntityGraph.EntityGraphType.FETCH,
-            value = "brand-details-entity-graph"
-    )
-    @Query("SELECT brand FROM Brand brand " +
-            "WHERE brand.url LIKE LOWER(:brandUrl) ")
-    Optional<BrandEntity> getBrandDetailsByUrlIgnoreCase(
-            @Param(value = "brandUrl") String brandUrl
-    );
-
     void deleteByUrlIgnoreCase(String brandUrl);
 
     Boolean existsByUrlIgnoreCase(String brandUrl);

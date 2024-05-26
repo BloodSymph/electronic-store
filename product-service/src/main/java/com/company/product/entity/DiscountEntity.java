@@ -32,7 +32,8 @@ public class DiscountEntity {
     @Column(name = "discount_updated")
     private LocalDateTime updated;
 
-    @OneToOne(mappedBy = "discount")
+    @OneToOne
+    @JoinColumn(name = "product_url", referencedColumnName = "product_url", nullable = false)
     private ProductEntity product;
 
     @Column(name = "discount_version", nullable = false, unique = true)

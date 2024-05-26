@@ -1,5 +1,6 @@
 package com.company.product.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -16,13 +17,6 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity(name = "Brand")
 @Table(name = "brands")
-@NamedEntityGraph(
-        name = "brand-details-entity-graph",
-        attributeNodes = {
-                @NamedAttributeNode("products"),
-                @NamedAttributeNode("categories")
-        }
-)
 public class BrandEntity {
 
     @Id

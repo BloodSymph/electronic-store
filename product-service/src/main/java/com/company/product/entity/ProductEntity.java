@@ -46,12 +46,10 @@ public class ProductEntity {
     @JoinColumn(name = "brand_url", referencedColumnName = "brand_url", nullable = false)
     private BrandEntity brand;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "description_id", referencedColumnName = "description_id", nullable = false)
+    @OneToOne(mappedBy = "product")
     private DescriptionEntity description;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "discount_id", referencedColumnName = "discount_id", nullable = false)
+    @OneToOne(mappedBy = "product")
     private DiscountEntity discount;
 
     @ManyToOne

@@ -68,12 +68,11 @@ public class CategoryAdminServiceImpl implements CategoryAdminService {
             );
         }
 
-        category.setName(categoryAdminRequest.getName());
+        category = mapRequestToCategoryEntity(categoryAdminRequest);
         category.setUrl(toUrlAddress(categoryAdminRequest.getName()));
-        category.setVersion(categoryAdminRequest.getVersion());
-        CategoryEntity updatedCategory = categoryRepository.save(category);
+        categoryRepository.save(category);
 
-        return mapToCategoryAdminResponse(updatedCategory);
+        return mapToCategoryAdminResponse(category);
     }
 
     @Override

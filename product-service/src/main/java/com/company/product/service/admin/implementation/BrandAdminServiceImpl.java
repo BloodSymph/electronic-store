@@ -1,6 +1,5 @@
 package com.company.product.service.admin.implementation;
 
-import com.company.product.dto.admin.brand.BrandAdminExtendedRequest;
 import com.company.product.dto.admin.brand.BrandAdminRequest;
 import com.company.product.dto.admin.brand.BrandAdminResponse;
 import com.company.product.entity.BrandEntity;
@@ -18,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -49,34 +49,19 @@ public class BrandAdminServiceImpl implements BrandAdminService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional
+
     @Override
-    public BrandAdminResponse createNewBrand(
-            BrandAdminExtendedRequest brandAdminExtendedRequest) {
+    @Transactional
+    public BrandAdminResponse createNewBrand(BrandAdminRequest brandAdminRequest) {
 
-        CategoryEntity category = categoryRepository
-                .findByUrlIgnoreCase(brandAdminExtendedRequest.getCategoryUrl())
-                .orElseThrow(
-                        () -> new CategoryNotFoundException(
-                                "Can not find category by current url: " +
-                                        brandAdminExtendedRequest.getCategoryUrl() + " !"
-                        )
-                );
 
-        BrandEntity brand = new BrandEntity();
 
-        brand.setName(brandAdminExtendedRequest.getName());
-        brand.setUrl(toUrlAddress(brandAdminExtendedRequest.getName()));
-        brand.setVersion(brandAdminExtendedRequest.getVersion());
-        brand.getCategories().add(category);
-
-        BrandEntity newBrand = brandRepository.save(brand);
-
-        return mapToBrandAdminResponse(newBrand);
+        return null;
     }
 
-    @Transactional
+
     @Override
+    @Transactional
     public BrandAdminResponse updateCurrentBrand(
             BrandAdminRequest brandAdminRequest, String brandUrl) {
 
@@ -94,16 +79,16 @@ public class BrandAdminServiceImpl implements BrandAdminService {
             );
         }
 
-        brand.setName(brandAdminRequest.getName());
-        brand.setUrl(toUrlAddress(brandAdminRequest.getUrl()));
-        brand.setVersion(brandAdminRequest.getVersion());
-        BrandEntity updatedBrand = brandRepository.save(brand);
+        brand = mapToBrandEntityAdminRequest(brandAdminRequest);
+        brand.setUrl(toUrlAddress(brandAdminRequest.getName()));
+        brandRepository.save(brand);
 
-        return mapToBrandAdminResponse(updatedBrand);
+        return mapToBrandAdminResponse(brand);
     }
 
-    @Transactional
+
     @Override
+    @Transactional
     public void deleteCurrentBrand(String brandUrl, Long brandVersion) {
         if (!brandRepository.existsByUrlIgnoreCase(brandUrl)) {
             throw new BrandNotFoundException(

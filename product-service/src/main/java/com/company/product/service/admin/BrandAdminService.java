@@ -1,6 +1,5 @@
 package com.company.product.service.admin;
 
-import com.company.product.dto.admin.brand.BrandAdminExtendedRequest;
 import com.company.product.dto.admin.brand.BrandAdminRequest;
 import com.company.product.dto.admin.brand.BrandAdminResponse;
 import org.springframework.data.domain.Page;
@@ -16,8 +15,7 @@ public interface BrandAdminService {
 
     List<BrandAdminResponse> searchBrands(String brandName);
 
-    BrandAdminResponse createNewBrand(
-            BrandAdminExtendedRequest brandAdminExtendedRequest);
+    BrandAdminResponse createNewBrand(BrandAdminRequest brandAdminRequest);
 
     BrandAdminResponse updateCurrentBrand(
             BrandAdminRequest brandAdminRequest,

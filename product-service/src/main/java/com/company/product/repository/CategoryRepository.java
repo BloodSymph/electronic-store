@@ -24,16 +24,6 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> 
 
     Optional<CategoryEntity> findByUrlIgnoreCase(String categoryUrl);
 
-    @EntityGraph(
-            type = EntityGraph.EntityGraphType.FETCH,
-            value = "category-details-entity-graph"
-    )
-    @Query("SELECT category FROM Category category " +
-            "WHERE category.url LIKE LOWER(:categoryUrl) ")
-    Optional<CategoryEntity> getCategoryDetailsByUrlIgnoreCase(
-            @Param(value = "categoryUrl") String categoryUrl
-    );
-
     void deleteByUrlIgnoreCase(String categoryUrl);
 
     Boolean existsByUrlIgnoreCase(String categoryUrl);
