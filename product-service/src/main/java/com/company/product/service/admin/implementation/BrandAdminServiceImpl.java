@@ -54,9 +54,22 @@ public class BrandAdminServiceImpl implements BrandAdminService {
     @Transactional
     public BrandAdminResponse createNewBrand(BrandAdminRequest brandAdminRequest) {
 
+        CategoryEntity category = categoryRepository
+                .findByUrlIgnoreCase(brandAdminRequest.getCategoryUrl())
+                .orElseThrow(
+                        () -> new CategoryNotFoundException(
+                                "Can not find category by current url: "
+                                        + brandAdminRequest.getCategoryUrl() + " !"
+                        )
+                );
 
+        BrandEntity brand = mapToBrandEntityAdminRequest(brandAdminRequest);
+        brand.setUrl(toUrlAddress(brandAdminRequest.getName()));
+        category.getBrands().add(brand);
+        brandRepository.save(brand);
 
-        return null;
+        return mapToBrandAdminResponse(brand);
+
     }
 
 

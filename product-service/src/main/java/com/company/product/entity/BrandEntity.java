@@ -41,7 +41,7 @@ public class BrandEntity {
     @OneToMany(mappedBy = "brand", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Set<ProductEntity> products = new HashSet<>();
 
-    @ManyToMany(mappedBy = "brands")
+    @ManyToMany(mappedBy = "brands", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<CategoryEntity> categories = new HashSet<>();
 
     @Column(name = "brand_version", nullable = false, unique = true)
