@@ -2,6 +2,7 @@ package com.company.product.mapper.admin;
 
 import com.company.product.dto.admin.brand.BrandAdminRequest;
 import com.company.product.dto.admin.brand.BrandAdminResponse;
+import com.company.product.dto.admin.brand.BrandDetailedAdminResponse;
 import com.company.product.entity.BrandEntity;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +26,11 @@ public class BrandAdminMapper {
                 .url(adminRequest.getUrl())
                 .version(adminRequest.getVersion())
                 .build();
+    }
+
+    public static BrandDetailedAdminResponse mapToBrandDetailedAdminResponse(
+            BrandEntity brand) {
+        return null;
     }
 
 }
