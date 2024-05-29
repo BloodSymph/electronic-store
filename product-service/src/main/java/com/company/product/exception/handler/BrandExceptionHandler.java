@@ -1,8 +1,8 @@
 package com.company.product.exception.handler;
 
 import com.company.product.exception.entity.ErrorEntity;
-import com.company.product.exception.exceptions.BrandNotFoundException;
-import com.company.product.exception.exceptions.BrandVersionNotValidException;
+import com.company.product.exception.exceptions.brand.BrandNotFoundException;
+import com.company.product.exception.exceptions.brand.BrandVersionNotValidException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

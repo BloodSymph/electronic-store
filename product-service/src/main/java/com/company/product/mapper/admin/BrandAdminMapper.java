@@ -6,17 +6,19 @@ import com.company.product.dto.admin.brand.BrandDetailedAdminResponse;
 import com.company.product.entity.BrandEntity;
 import org.springframework.stereotype.Component;
 
+import java.util.stream.Collectors;
+
 @Component
 public class BrandAdminMapper {
 
-    public static BrandAdminResponse mapToBrandAdminResponse(BrandEntity entity) {
+    public static BrandAdminResponse mapToBrandAdminResponse(BrandEntity brand) {
         return BrandAdminResponse.builder()
-                .id(entity.getId())
-                .name(entity.getName())
-                .url(entity.getUrl())
-                .created(entity.getCreated())
-                .updated(entity.getUpdated())
-                .version(entity.getVersion())
+                .id(brand.getId())
+                .name(brand.getName())
+                .url(brand.getUrl())
+                .created(brand.getCreated())
+                .updated(brand.getUpdated())
+                .version(brand.getVersion())
                 .build();
     }
 
@@ -30,7 +32,26 @@ public class BrandAdminMapper {
 
     public static BrandDetailedAdminResponse mapToBrandDetailedAdminResponse(
             BrandEntity brand) {
-        return null;
+        return BrandDetailedAdminResponse.builder()
+                .id(brand.getId())
+                .name(brand.getName())
+                .url(brand.getUrl())
+                .created(brand.getCreated())
+                .updated(brand.getUpdated())
+                .version(brand.getVersion())
+                .categories(
+                        brand.getCategories()
+                                .stream()
+                                .map(CategoryAdminMapper::mapToCategoryAdminResponse)
+                                .collect(Collectors.toSet())
+                )
+                .products(
+                        brand.getProducts()
+                                .stream()
+                                .map(ProductAdminMapper::mapToProductAdminResponse)
+                                .collect(Collectors.toSet())
+                )
+                .build();
     }
 
 }

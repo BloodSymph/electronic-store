@@ -2,11 +2,12 @@ package com.company.product.service.admin.implementation;
 
 import com.company.product.dto.admin.brand.BrandAdminRequest;
 import com.company.product.dto.admin.brand.BrandAdminResponse;
+import com.company.product.dto.admin.brand.BrandDetailedAdminResponse;
 import com.company.product.entity.BrandEntity;
 import com.company.product.entity.CategoryEntity;
-import com.company.product.exception.exceptions.BrandNotFoundException;
-import com.company.product.exception.exceptions.BrandVersionNotValidException;
-import com.company.product.exception.exceptions.CategoryNotFoundException;
+import com.company.product.exception.exceptions.brand.BrandNotFoundException;
+import com.company.product.exception.exceptions.brand.BrandVersionNotValidException;
+import com.company.product.exception.exceptions.category.CategoryNotFoundException;
 import com.company.product.mapper.admin.BrandAdminMapper;
 import com.company.product.repository.BrandRepository;
 import com.company.product.repository.CategoryRepository;
@@ -17,13 +18,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.company.product.mapper.admin.BrandAdminMapper.mapToBrandAdminResponse;
-import static com.company.product.mapper.admin.BrandAdminMapper.mapToBrandEntityAdminRequest;
+import static com.company.product.mapper.admin.BrandAdminMapper.*;
 import static com.company.product.util.URLGenerator.toUrlAddress;
 
 @Service
@@ -49,6 +47,17 @@ public class BrandAdminServiceImpl implements BrandAdminService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public BrandDetailedAdminResponse getDetailsAboutBrand(String brandUrl) {
+        BrandEntity brand = brandRepository
+                .getDetailsAboutBrand(brandUrl)
+                .orElseThrow(
+                        () -> new BrandNotFoundException(
+                                "Can not find brand by current url: " + brandUrl + " !"
+                        )
+                );
+        return mapToBrandDetailedAdminResponse(brand);
+    }
 
     @Override
     @Transactional
@@ -78,6 +87,16 @@ public class BrandAdminServiceImpl implements BrandAdminService {
     public BrandAdminResponse updateCurrentBrand(
             BrandAdminRequest brandAdminRequest, String brandUrl) {
 
+        CategoryEntity category = categoryRepository
+                .findByUrlIgnoreCase(brandAdminRequest.getCategoryUrl())
+                .orElseThrow(
+                        () -> new CategoryNotFoundException(
+                                "Can not find category by current url: "
+                                        + brandAdminRequest.getCategoryUrl() + " !"
+                        )
+                );
+
+
         BrandEntity brand = brandRepository
                 .findByUrlIgnoreCase(brandUrl)
                 .orElseThrow(
@@ -94,6 +113,7 @@ public class BrandAdminServiceImpl implements BrandAdminService {
 
         brand = mapToBrandEntityAdminRequest(brandAdminRequest);
         brand.setUrl(toUrlAddress(brandAdminRequest.getName()));
+        category.getBrands().add(brand);
         brandRepository.save(brand);
 
         return mapToBrandAdminResponse(brand);

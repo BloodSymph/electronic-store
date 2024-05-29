@@ -17,6 +17,13 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity(name = "Brand")
 @Table(name = "brands")
+@NamedEntityGraph(
+        name = "brand-detailed-entity-graph",
+        attributeNodes = {
+                @NamedAttributeNode("categories"),
+                @NamedAttributeNode("products")
+        }
+)
 public class BrandEntity {
 
     @Id
@@ -38,10 +45,18 @@ public class BrandEntity {
     @Column(name = "brand_updated")
     private LocalDateTime updated;
 
-    @OneToMany(mappedBy = "brand", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(
+            mappedBy = "brand",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.REMOVE
+    )
     private Set<ProductEntity> products = new HashSet<>();
 
-    @ManyToMany(mappedBy = "brands", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(
+            mappedBy = "brands",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+            fetch = FetchType.LAZY
+    )
     private Set<CategoryEntity> categories = new HashSet<>();
 
     @Column(name = "brand_version", nullable = false, unique = true)

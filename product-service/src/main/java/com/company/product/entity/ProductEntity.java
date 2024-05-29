@@ -14,6 +14,15 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity(name = "Product")
 @Table(name = "products")
+@NamedEntityGraph(
+        name = "product-detailed-entity-graph",
+        attributeNodes = {
+                @NamedAttributeNode("category"),
+                @NamedAttributeNode("brand"),
+                @NamedAttributeNode("description"),
+                @NamedAttributeNode("discount")
+        }
+)
 public class ProductEntity {
 
     @Id
@@ -42,18 +51,26 @@ public class ProductEntity {
     @Column(name = "product_updated")
     private LocalDateTime updated;
 
-    @ManyToOne
-    @JoinColumn(name = "brand_url", referencedColumnName = "brand_url", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+            name = "brand_url",
+            referencedColumnName = "brand_url",
+            nullable = false
+    )
     private BrandEntity brand;
 
-    @OneToOne(mappedBy = "product")
+    @OneToOne(mappedBy = "product", fetch = FetchType.LAZY)
     private DescriptionEntity description;
 
-    @OneToOne(mappedBy = "product")
+    @OneToOne(mappedBy = "product", fetch = FetchType.LAZY)
     private DiscountEntity discount;
 
-    @ManyToOne
-    @JoinColumn(name = "category_url", referencedColumnName = "category_url", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+            name = "category_url",
+            referencedColumnName = "category_url",
+            nullable = false
+    )
     private CategoryEntity category;
 
     @Column(name = "product_version", nullable = false, unique = true)

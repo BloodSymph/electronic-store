@@ -24,7 +24,15 @@ public interface BrandRepository extends JpaRepository<BrandEntity, Long> {
     @Query("SELECT brand FROM Brand brand " +
             "INNER JOIN brand.categories categories " +
             "ON categories.url LIKE LOWER(:categoryUrl) ")
-    List<BrandEntity> getByCategories(@Param(value = "categoryUrl") String categoryUrl);
+    List<BrandEntity> getByCategories(
+            @Param(value = "categoryUrl") String categoryUrl
+    );
+
+    @EntityGraph(value = "brand-detailed-entity-graph", type = EntityGraph.EntityGraphType.FETCH)
+    @Query("SELECT brand FROM Brand brand WHERE brand.url LIKE LOWER(:brandUrl) ")
+    Optional<BrandEntity> getDetailsAboutBrand(
+            @Param(value = "brandUrl") String brandUrl
+    );
 
     Optional<BrandEntity> findByUrlIgnoreCase(String brandUrl);
 

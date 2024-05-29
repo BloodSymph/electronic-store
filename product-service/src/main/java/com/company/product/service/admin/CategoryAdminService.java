@@ -2,6 +2,7 @@ package com.company.product.service.admin;
 
 import com.company.product.dto.admin.category.CategoryAdminRequest;
 import com.company.product.dto.admin.category.CategoryAdminResponse;
+import com.company.product.dto.admin.category.CategoryDetailedAdminResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,8 @@ public interface CategoryAdminService {
     Page<CategoryAdminResponse> getAllCategories(Pageable pageable);
 
     List<CategoryAdminResponse> searchCategories(String categoryName);
+
+    CategoryDetailedAdminResponse getDetailsAboutCategory(String categoryUrl);
 
     CategoryAdminResponse createNewCategory(CategoryAdminRequest categoryAdminRequest);
 

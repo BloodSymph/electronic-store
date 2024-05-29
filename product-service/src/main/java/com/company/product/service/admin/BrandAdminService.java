@@ -2,6 +2,7 @@ package com.company.product.service.admin;
 
 import com.company.product.dto.admin.brand.BrandAdminRequest;
 import com.company.product.dto.admin.brand.BrandAdminResponse;
+import com.company.product.dto.admin.brand.BrandDetailedAdminResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,8 @@ public interface BrandAdminService {
     Page<BrandAdminResponse> getAllBrands(Pageable pageable);
 
     List<BrandAdminResponse> searchBrands(String brandName);
+
+    BrandDetailedAdminResponse getDetailsAboutBrand(String brandUrl);
 
     BrandAdminResponse createNewBrand(BrandAdminRequest brandAdminRequest);
 

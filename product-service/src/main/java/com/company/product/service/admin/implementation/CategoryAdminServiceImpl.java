@@ -2,9 +2,10 @@ package com.company.product.service.admin.implementation;
 
 import com.company.product.dto.admin.category.CategoryAdminRequest;
 import com.company.product.dto.admin.category.CategoryAdminResponse;
+import com.company.product.dto.admin.category.CategoryDetailedAdminResponse;
 import com.company.product.entity.CategoryEntity;
-import com.company.product.exception.exceptions.CategoryNotFoundException;
-import com.company.product.exception.exceptions.CategoryVersionNotValidException;
+import com.company.product.exception.exceptions.category.CategoryNotFoundException;
+import com.company.product.exception.exceptions.category.CategoryVersionNotValidException;
 import com.company.product.mapper.admin.CategoryAdminMapper;
 import com.company.product.repository.CategoryRepository;
 import com.company.product.service.admin.CategoryAdminService;
@@ -17,8 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.company.product.mapper.admin.CategoryAdminMapper.mapRequestToCategoryEntity;
-import static com.company.product.mapper.admin.CategoryAdminMapper.mapToCategoryAdminResponse;
+import static com.company.product.mapper.admin.CategoryAdminMapper.*;
 import static com.company.product.util.URLGenerator.toUrlAddress;
 
 @Service
@@ -40,6 +40,18 @@ public class CategoryAdminServiceImpl implements CategoryAdminService {
         return categoryEntities.stream()
                 .map(CategoryAdminMapper::mapToCategoryAdminResponse)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public CategoryDetailedAdminResponse getDetailsAboutCategory(String categoryUrl) {
+        CategoryEntity category = categoryRepository
+                .getDetailsAboutCategory(categoryUrl)
+                .orElseThrow(
+                        () -> new CategoryNotFoundException(
+                                "Can not find category by current url: " + categoryUrl + " !"
+                        )
+                );
+        return mapToCategoryDetailedAdminResponse(category);
     }
 
     @Override

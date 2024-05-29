@@ -6,6 +6,8 @@ import com.company.product.dto.admin.category.CategoryDetailedAdminResponse;
 import com.company.product.entity.CategoryEntity;
 import org.springframework.stereotype.Component;
 
+import java.util.stream.Collectors;
+
 @Component
 public class CategoryAdminMapper {
 
@@ -40,8 +42,18 @@ public class CategoryAdminMapper {
                 .created(category.getCreated())
                 .updated(category.getUpdated())
                 .version(category.getVersion())
-//                .brands()
-//                .products()
+                .brands(
+                        category.getBrands()
+                                .stream()
+                                .map(BrandAdminMapper::mapToBrandAdminResponse)
+                                .collect(Collectors.toSet())
+                )
+                .products(
+                        category.getProducts()
+                                .stream()
+                                .map(ProductAdminMapper::mapToProductAdminResponse)
+                                .collect(Collectors.toSet())
+                )
                 .build();
     }
 }

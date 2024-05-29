@@ -2,6 +2,7 @@ package com.company.product.controller.admin;
 
 import com.company.product.dto.admin.category.CategoryAdminRequest;
 import com.company.product.dto.admin.category.CategoryAdminResponse;
+import com.company.product.dto.admin.category.CategoryDetailedAdminResponse;
 import com.company.product.service.admin.CategoryAdminService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +44,13 @@ public class CategoryAdminController {
                     required = false,
                     defaultValue = "") String categoryName) {
         return categoryAdminService.searchCategories(categoryName);
+    }
+
+    @GetMapping("/categories/{categoryUrl}/details")
+    @ResponseStatus(HttpStatus.OK)
+    public CategoryDetailedAdminResponse getDetailsAboutCategory(
+            @PathVariable(value = "categoryUrl") String categoryUrl) {
+        return categoryAdminService.getDetailsAboutCategory(categoryUrl);
     }
 
     @PostMapping("/categories/create")

@@ -2,6 +2,7 @@ package com.company.product.controller.admin;
 
 import com.company.product.dto.admin.brand.BrandAdminRequest;
 import com.company.product.dto.admin.brand.BrandAdminResponse;
+import com.company.product.dto.admin.brand.BrandDetailedAdminResponse;
 import com.company.product.service.admin.BrandAdminService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +46,13 @@ public class BrandAdminController {
 
         return brandAdminService.searchBrands(brandName);
 
+    }
+
+    @GetMapping("/brands/{brandUrl}/details")
+    @ResponseStatus(HttpStatus.OK)
+    public BrandDetailedAdminResponse getDetailsAboutBrand(
+            @PathVariable(value = "brandUrl") String brandUrl) {
+        return brandAdminService.getDetailsAboutBrand(brandUrl);
     }
 
     @PostMapping("/brands/create")

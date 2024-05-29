@@ -1,8 +1,8 @@
 package com.company.product.exception.handler;
 
 import com.company.product.exception.entity.ErrorEntity;
-import com.company.product.exception.exceptions.CategoryNotFoundException;
-import com.company.product.exception.exceptions.CategoryVersionNotValidException;
+import com.company.product.exception.exceptions.category.CategoryNotFoundException;
+import com.company.product.exception.exceptions.category.CategoryVersionNotValidException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
