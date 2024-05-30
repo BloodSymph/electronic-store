@@ -30,7 +30,7 @@ public class CategoryAdminController {
                     sort = "name",
                     direction = Sort.Direction.ASC,
                     page = 0,
-                    size = 10) Pageable pageable) {
+                    size = 5) Pageable pageable) {
 
         return categoryAdminService.getAllCategories(pageable);
 
@@ -38,12 +38,17 @@ public class CategoryAdminController {
 
     @GetMapping("/categories/search")
     @ResponseStatus(HttpStatus.OK)
-    public List<CategoryAdminResponse> searchCategory(
+    public Page<CategoryAdminResponse> searchCategory(
+            @PageableDefault(
+                    sort = "name",
+                    direction = Sort.Direction.ASC,
+                    page = 0,
+                    size = 5) Pageable pageable,
             @RequestParam(
                     value = "categoryName",
                     required = false,
                     defaultValue = "") String categoryName) {
-        return categoryAdminService.searchCategories(categoryName);
+        return categoryAdminService.searchCategories(pageable, categoryName);
     }
 
     @GetMapping("/categories/{categoryUrl}/details")

@@ -13,14 +13,12 @@ public interface ProductClientService {
 
     Page<ProductClientResponse> getAllProducts(Pageable pageable);
 
-    List<ProductClientResponse> searchProducts(String searchText);
+    Page<ProductClientResponse> searchProducts(Pageable pageable, String searchText);
 
     ProductDetailedClientResponse getDetailsAboutProduct(String productUrl);
 
-    String getProductPhotoByProductUrl(String productUrl);
+    Page<ProductClientResponse> getProductsByCategory(Pageable pageable, String categoryUrl);
 
-    List<ProductClientResponse> getProductsByCategory(String categoryUrl);
-
-    List<ProductClientResponse> getProductsByBrand(String brandUrl);
+    Page<ProductClientResponse> getProductsByBrand(Pageable pageable, String brandUrl);
 
 }

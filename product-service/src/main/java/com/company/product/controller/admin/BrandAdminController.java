@@ -30,7 +30,7 @@ public class BrandAdminController {
                     sort = "name",
                     direction = Sort.Direction.ASC,
                     page = 0,
-                    size = 10) Pageable pageable) {
+                    size = 5) Pageable pageable) {
 
         return brandAdminService.getAllBrands(pageable);
 
@@ -38,13 +38,18 @@ public class BrandAdminController {
 
     @GetMapping("/brands/search")
     @ResponseStatus(HttpStatus.OK)
-    public List<BrandAdminResponse> searchBrands(
+    public Page<BrandAdminResponse> searchBrands(
+            @PageableDefault(
+                    sort = "name",
+                    direction = Sort.Direction.ASC,
+                    page = 0,
+                    size = 5) Pageable pageable,
             @RequestParam(
                     value = "brandName",
                     required = false,
                     defaultValue = "") String brandName) {
 
-        return brandAdminService.searchBrands(brandName);
+        return brandAdminService.searchBrands(pageable, brandName);
 
     }
 

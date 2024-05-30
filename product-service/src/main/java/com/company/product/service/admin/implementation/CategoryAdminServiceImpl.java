@@ -10,8 +10,14 @@ import com.company.product.mapper.admin.CategoryAdminMapper;
 import com.company.product.repository.CategoryRepository;
 import com.company.product.service.admin.CategoryAdminService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,15 +25,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.company.product.mapper.admin.CategoryAdminMapper.*;
+import static com.company.product.util.CacheEvictUtil.evictAllCaches;
 import static com.company.product.util.URLGenerator.toUrlAddress;
 
 @Service
 @RequiredArgsConstructor
+@CacheConfig(cacheNames = {"categories"})
 public class CategoryAdminServiceImpl implements CategoryAdminService {
 
     private final CategoryRepository categoryRepository;
 
     @Override
+    @Cacheable(unless = "#result == null ")
     public Page<CategoryAdminResponse> getAllCategories(Pageable pageable) {
         return categoryRepository
                 .findAll(pageable)
@@ -35,11 +44,12 @@ public class CategoryAdminServiceImpl implements CategoryAdminService {
     }
 
     @Override
-    public List<CategoryAdminResponse> searchCategories(String categoryName) {
-        List<CategoryEntity> categoryEntities = categoryRepository.searchByNameIgnoreCase(categoryName);
-        return categoryEntities.stream()
-                .map(CategoryAdminMapper::mapToCategoryAdminResponse)
-                .collect(Collectors.toList());
+    @Cacheable(unless = "#result == null ")
+    public Page<CategoryAdminResponse> searchCategories(Pageable pageable, String categoryName) {
+
+        return categoryRepository
+                .searchByNameIgnoreCase(pageable, categoryName)
+                .map(CategoryAdminMapper::mapToCategoryAdminResponse);
     }
 
     @Override
@@ -55,6 +65,7 @@ public class CategoryAdminServiceImpl implements CategoryAdminService {
     }
 
     @Override
+    @CachePut(unless = "#result == null ")
     public CategoryAdminResponse createNewCategory(CategoryAdminRequest categoryAdminRequest) {
         CategoryEntity category = mapRequestToCategoryEntity(categoryAdminRequest);
         category.setUrl(toUrlAddress(categoryAdminRequest.getName()));
@@ -64,6 +75,7 @@ public class CategoryAdminServiceImpl implements CategoryAdminService {
 
     @Override
     @Transactional
+    @CachePut(unless = "#result == null ")
     public CategoryAdminResponse updateCurrentCategory(CategoryAdminRequest categoryAdminRequest,
                                                        String categoryUrl) {
         CategoryEntity category = categoryRepository
@@ -89,6 +101,7 @@ public class CategoryAdminServiceImpl implements CategoryAdminService {
 
     @Override
     @Transactional
+    @CacheEvict(allEntries = true)
     public void deleteCurrentCategory(String categoryUrl, Long categoryVersion) {
         if (!categoryRepository.existsByUrlIgnoreCase(categoryUrl)) {
             throw new CategoryNotFoundException(
@@ -101,6 +114,11 @@ public class CategoryAdminServiceImpl implements CategoryAdminService {
             );
         }
         categoryRepository.deleteByUrlIgnoreCase(categoryUrl);
+    }
+
+    @Override
+    public void evictAllCacheWithTime() {
+        evictAllCaches();
     }
 
 }

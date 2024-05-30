@@ -13,6 +13,10 @@ import com.company.product.repository.BrandRepository;
 import com.company.product.repository.CategoryRepository;
 import com.company.product.service.admin.BrandAdminService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,10 +26,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.company.product.mapper.admin.BrandAdminMapper.*;
+import static com.company.product.util.CacheEvictUtil.evictAllCaches;
 import static com.company.product.util.URLGenerator.toUrlAddress;
 
 @Service
 @RequiredArgsConstructor
+@CacheConfig(cacheNames = {"brands"})
 public class BrandAdminServiceImpl implements BrandAdminService {
 
     private final BrandRepository brandRepository;
@@ -33,6 +39,7 @@ public class BrandAdminServiceImpl implements BrandAdminService {
     private final CategoryRepository categoryRepository;
 
     @Override
+    @Cacheable(unless = "#result == null ")
     public Page<BrandAdminResponse> getAllBrands(Pageable pageable) {
         return brandRepository
                 .findAll(pageable)
@@ -40,11 +47,11 @@ public class BrandAdminServiceImpl implements BrandAdminService {
     }
 
     @Override
-    public List<BrandAdminResponse> searchBrands(String brandName) {
-        List<BrandEntity> brandEntities = brandRepository.searchByNameIgnoreCase(brandName);
-        return brandEntities.stream()
-                .map(BrandAdminMapper::mapToBrandAdminResponse)
-                .collect(Collectors.toList());
+    @Cacheable(unless = "#result == null ")
+    public Page<BrandAdminResponse> searchBrands(Pageable pageable, String brandName) {
+        return brandRepository
+                .searchByNameIgnoreCase(pageable, brandName)
+                .map(BrandAdminMapper::mapToBrandAdminResponse);
     }
 
     @Override
@@ -61,6 +68,7 @@ public class BrandAdminServiceImpl implements BrandAdminService {
 
     @Override
     @Transactional
+    @CachePut(unless = "#result == null ")
     public BrandAdminResponse createNewBrand(BrandAdminRequest brandAdminRequest) {
 
         CategoryEntity category = categoryRepository
@@ -84,6 +92,7 @@ public class BrandAdminServiceImpl implements BrandAdminService {
 
     @Override
     @Transactional
+    @CachePut(unless = "#result == null ")
     public BrandAdminResponse updateCurrentBrand(
             BrandAdminRequest brandAdminRequest, String brandUrl) {
 
@@ -122,6 +131,7 @@ public class BrandAdminServiceImpl implements BrandAdminService {
 
     @Override
     @Transactional
+    @CacheEvict(allEntries = true)
     public void deleteCurrentBrand(String brandUrl, Long brandVersion) {
         if (!brandRepository.existsByUrlIgnoreCase(brandUrl)) {
             throw new BrandNotFoundException(
@@ -136,4 +146,8 @@ public class BrandAdminServiceImpl implements BrandAdminService {
         brandRepository.deleteByUrlIgnoreCase(brandUrl);
     }
 
+    @Override
+    public void evictAllCacheWithTime() {
+        evictAllCaches();
+    }
 }

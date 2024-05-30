@@ -25,4 +25,11 @@ public class CategoryClientServiceImpl implements CategoryClientService {
                 collect(Collectors.toList());
     }
 
+    @Override
+    public List<CategoryClientResponse> getCategoriesByBrand(String brandUrl) {
+        return categoryRepository.findCategoriesByBrand(brandUrl)
+                .stream()
+                .map(CategoryClientMapper::mapToCategoryClientResponse)
+                .collect(Collectors.toList());
+    }
 }

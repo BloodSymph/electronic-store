@@ -2,6 +2,8 @@ package com.company.product.repository;
 
 import com.company.product.entity.BrandEntity;
 import com.company.product.entity.CategoryEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,7 +19,8 @@ public interface BrandRepository extends JpaRepository<BrandEntity, Long> {
     @Query("SELECT brand FROM Brand brand " +
             "WHERE LOWER(brand.name) " +
             "LIKE LOWER(CONCAT('%', :brandName, '%') ) ")
-    List<BrandEntity> searchByNameIgnoreCase(
+    Page<BrandEntity> searchByNameIgnoreCase(
+            Pageable pageable,
             @Param(value = "brandName") String brandName
     );
 

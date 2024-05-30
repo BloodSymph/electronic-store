@@ -5,6 +5,7 @@ import com.company.product.dto.admin.brand.BrandAdminResponse;
 import com.company.product.dto.admin.brand.BrandDetailedAdminResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public interface BrandAdminService {
 
     Page<BrandAdminResponse> getAllBrands(Pageable pageable);
 
-    List<BrandAdminResponse> searchBrands(String brandName);
+    Page<BrandAdminResponse> searchBrands(Pageable pageable, String brandName);
 
     BrandDetailedAdminResponse getDetailsAboutBrand(String brandUrl);
 
@@ -26,5 +27,8 @@ public interface BrandAdminService {
     );
 
     void deleteCurrentBrand(String brandUrl, Long brandVersion);
+
+    @Scheduled(fixedRate = 6000)
+    void evictAllCacheWithTime();
 
 }
