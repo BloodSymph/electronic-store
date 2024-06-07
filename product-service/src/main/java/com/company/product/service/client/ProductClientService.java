@@ -4,6 +4,7 @@ import com.company.product.dto.client.product.ProductClientResponse;
 import com.company.product.dto.client.product.ProductDetailedClientResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,5 +21,8 @@ public interface ProductClientService {
     Page<ProductClientResponse> getProductsByCategory(Pageable pageable, String categoryUrl);
 
     Page<ProductClientResponse> getProductsByBrand(Pageable pageable, String brandUrl);
+
+    @Scheduled(fixedRate = 6000)
+    void evictAllCacheWithTime();
 
 }
