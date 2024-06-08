@@ -22,12 +22,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import static com.company.product.mapper.admin.BrandAdminMapper.*;
-import static com.company.product.util.CacheEvictUtil.evictAllCaches;
-import static com.company.product.util.URLGenerator.toUrlAddress;
+import static com.company.product.util.CacheEvictUtility.evictAllCaches;
+import static com.company.product.util.URLGeneratorUtility.toUrlAddress;
 
 @Service
 @RequiredArgsConstructor

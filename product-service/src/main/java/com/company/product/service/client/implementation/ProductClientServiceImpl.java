@@ -11,7 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import static com.company.product.util.CacheEvictUtil.evictAllCaches;
+import static com.company.product.util.CacheEvictUtility.evictAllCaches;
 
 @Service
 @RequiredArgsConstructor
@@ -19,9 +19,6 @@ import static com.company.product.util.CacheEvictUtil.evictAllCaches;
 public class ProductClientServiceImpl implements ProductClientService {
 
     private final ProductRepository productRepository;
-
-    @Value("${config.location}")
-    private static String filePath;
 
     @Override
     public Page<ProductClientResponse> getAllProducts(Pageable pageable)  {

@@ -7,7 +7,7 @@ import java.util.Objects;
 
 
 @UtilityClass
-public class CacheEvictUtil {
+public class CacheEvictUtility {
     private static CacheManager cacheManager;
 
     public static void evictAllCaches(){

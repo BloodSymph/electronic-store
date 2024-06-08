@@ -74,6 +74,16 @@ public class DescriptionAdminImp implements DescriptionAdminService {
     @Override
     @Transactional
     public void deleteCurrentDescription(String productUrl, Long descriptionVersion) {
-
+        if (!descriptionRepository.existsByProduct_Url(productUrl)) {
+            throw new DescriptionNotFoundException(
+                    "Can not description by product url: " + productUrl + " !"
+            );
+        }
+        if (!descriptionRepository.existsByVersion(descriptionVersion)) {
+            throw new DescriptionVersionNotValidException(
+                    "Description Entity version: " + descriptionVersion + " not valid!"
+            );
+        }
+        descriptionRepository.deleteByProduct_Url(productUrl);
     }
 }

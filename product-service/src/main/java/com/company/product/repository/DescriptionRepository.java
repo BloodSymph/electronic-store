@@ -18,7 +18,8 @@ public interface DescriptionRepository extends JpaRepository<DescriptionEntity, 
            @Param(value = "productUrl") String productUrl
     );
 
-    @Query
+    @Query("SELECT description FROM Description description " +
+            "WHERE description.product.url LIKE (LOWER(:productUrl) )")
     Boolean existsByProduct_Url(
             @Param(value = "productUrl") String productUrl
     );
@@ -26,7 +27,8 @@ public interface DescriptionRepository extends JpaRepository<DescriptionEntity, 
     Boolean existsByVersion(Long version);
 
     @Modifying
-    @Query
+    @Query("DELETE FROM Description description " +
+            "WHERE description.product.url LIKE LOWER(:productUrl) ")
     void deleteByProduct_Url(
             @Param(value = "productUrl") String productUrl
     );

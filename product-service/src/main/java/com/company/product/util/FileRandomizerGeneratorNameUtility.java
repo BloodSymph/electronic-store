@@ -4,7 +4,7 @@ import lombok.experimental.UtilityClass;
 import org.apache.commons.lang.RandomStringUtils;
 
 @UtilityClass
-public class FileRandomizerGeneratorName {
+public class FileRandomizerGeneratorNameUtility {
 
     private static final int LIMIT = 15;
 

@@ -12,7 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import static com.company.product.util.CacheEvictUtil.evictAllCaches;
+import static com.company.product.util.CacheEvictUtility.evictAllCaches;
 
 @Service
 @RequiredArgsConstructor

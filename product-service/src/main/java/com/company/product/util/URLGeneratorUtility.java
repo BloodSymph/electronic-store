@@ -7,7 +7,7 @@ import java.util.Locale;
 import java.util.regex.Pattern;
 
 @UtilityClass
-public class URLGenerator {
+public class URLGeneratorUtility {
 
     private static final Pattern NON_LATIN = Pattern.compile("[^\\w-]");
 

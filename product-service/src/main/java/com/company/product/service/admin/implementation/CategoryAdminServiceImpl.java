@@ -10,23 +10,18 @@ import com.company.product.mapper.admin.CategoryAdminMapper;
 import com.company.product.repository.CategoryRepository;
 import com.company.product.service.admin.CategoryAdminService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import static com.company.product.mapper.admin.CategoryAdminMapper.*;
-import static com.company.product.util.CacheEvictUtil.evictAllCaches;
-import static com.company.product.util.URLGenerator.toUrlAddress;
+import static com.company.product.util.CacheEvictUtility.evictAllCaches;
+import static com.company.product.util.URLGeneratorUtility.toUrlAddress;
 
 @Service
 @RequiredArgsConstructor

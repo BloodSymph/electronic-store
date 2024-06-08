@@ -8,8 +8,7 @@ import org.springframework.stereotype.Service;
 public interface DiscountAdminService {
 
     DiscountAdminResponse createDiscountForProduct(
-            DiscountAdminRequest discountAdminRequest,
-            String productUrl
+            DiscountAdminRequest discountAdminRequest
     );
 
     DiscountAdminResponse updateDiscountForProduct(
