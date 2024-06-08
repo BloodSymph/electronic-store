@@ -8,8 +8,7 @@ import org.springframework.stereotype.Service;
 public interface DescriptionAdminService {
 
     DescriptionAdminResponse createProductDescription(
-            DescriptionAdminRequest descriptionAdminRequest,
-            String productUrl
+            DescriptionAdminRequest descriptionAdminRequest
     );
 
     DescriptionAdminResponse updateProductDescription(
