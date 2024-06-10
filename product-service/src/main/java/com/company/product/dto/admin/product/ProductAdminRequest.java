@@ -27,7 +27,7 @@ public class ProductAdminRequest {
 
     @NotNull(message = "Product photo path field shod not contains null value!")
     @NotBlank(message = "Product photo path field shod not be empty!")
-    @Length(max = 25, message = "Product photo path field shod have maximum of {max} characters!")
+    @Length(max = 200, message = "Product photo path field shod have maximum of {max} characters!")
     private String photo;
 
     @NotNull(message = "Product version field shod not contains null value!")

@@ -40,7 +40,7 @@ public class ProductEntity {
     private Double price;
 
     //todo: Think about file saving and manipulation
-    @Column(name = "product_photo_rout", nullable = false, unique = true, length = 25)
+    @Column(name = "product_photo_rout", nullable = false, unique = true, length = 200)
     private String photo;
 
     @CreationTimestamp
