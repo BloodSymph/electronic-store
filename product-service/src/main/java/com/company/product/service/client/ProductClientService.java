@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -14,13 +15,19 @@ public interface ProductClientService {
 
     Page<ProductClientResponse> getAllProducts(Pageable pageable);
 
-    Page<ProductClientResponse> searchProducts(Pageable pageable, String searchText);
+    Page<ProductClientResponse> searchProducts(
+            Pageable pageable, String searchText
+    );
 
-    ProductDetailedClientResponse getDetailsAboutProduct(String productUrl);
+    ProductDetailedClientResponse getDetailsAboutProduct(String productUrl) throws IOException;
 
-    Page<ProductClientResponse> getProductsByCategory(Pageable pageable, String categoryUrl);
+    Page<ProductClientResponse> getProductsByCategory(
+            Pageable pageable, String categoryUrl
+    );
 
-    Page<ProductClientResponse> getProductsByBrand(Pageable pageable, String brandUrl);
+    Page<ProductClientResponse> getProductsByBrand(
+            Pageable pageable, String brandUrl
+    );
 
     @Scheduled(fixedRate = 6000)
     void evictAllCacheWithTime();

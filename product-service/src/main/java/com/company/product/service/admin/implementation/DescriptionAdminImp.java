@@ -49,7 +49,8 @@ public class DescriptionAdminImp implements DescriptionAdminService {
     @Override
     @Transactional
     public DescriptionAdminResponse updateProductDescription(
-            DescriptionAdminRequest descriptionAdminRequest, String productUrl) {
+            DescriptionAdminRequest descriptionAdminRequest,
+            String productUrl) {
 
         DescriptionEntity description = descriptionRepository
                 .findByProduct_Url(productUrl)
@@ -73,7 +74,8 @@ public class DescriptionAdminImp implements DescriptionAdminService {
 
     @Override
     @Transactional
-    public void deleteCurrentDescription(String productUrl, Long descriptionVersion) {
+    public void deleteCurrentDescription(
+            String productUrl, Long descriptionVersion) {
         if (!descriptionRepository.existsByProduct_Url(productUrl)) {
             throw new DescriptionNotFoundException(
                     "Can not description by product url: " + productUrl + " !"

@@ -48,7 +48,9 @@ public class CategoryAdminController {
                     value = "categoryName",
                     required = false,
                     defaultValue = "") String categoryName) {
-        return categoryAdminService.searchCategories(pageable, categoryName);
+        return categoryAdminService.searchCategories(
+                pageable, categoryName
+        );
     }
 
     @GetMapping("/categories/{categoryUrl}/details")
@@ -71,7 +73,9 @@ public class CategoryAdminController {
             @Valid @RequestBody CategoryAdminRequest categoryAdminRequest,
             @PathVariable(value = "categoryUrl") String categoryUrl) {
 
-        return categoryAdminService.updateCurrentCategory(categoryAdminRequest, categoryUrl);
+        return categoryAdminService.updateCurrentCategory(
+                categoryAdminRequest, categoryUrl
+        );
     }
 
     @DeleteMapping("/categories/{categoryUrl}/delete")
@@ -80,7 +84,9 @@ public class CategoryAdminController {
             @PathVariable("categoryUrl") String categoryUrl,
             @RequestParam(value = "categoryVersion") Long categoryVersion) {
 
-        categoryAdminService.deleteCurrentCategory(categoryUrl, categoryVersion);
+        categoryAdminService.deleteCurrentCategory(
+                categoryUrl, categoryVersion
+        );
 
         return new ResponseEntity<>(
                 "Category successful deleted by url: " + categoryUrl + " !",

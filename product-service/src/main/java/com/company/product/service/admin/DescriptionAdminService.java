@@ -12,10 +12,11 @@ public interface DescriptionAdminService {
     );
 
     DescriptionAdminResponse updateProductDescription(
-            DescriptionAdminRequest descriptionAdminRequest,
-            String productUrl
+            DescriptionAdminRequest descriptionAdminRequest, String productUrl
     );
 
-    void deleteCurrentDescription(String productUrl, Long descriptionVersion);
+    void deleteCurrentDescription(
+            String productUrl, Long descriptionVersion
+    );
 
 }

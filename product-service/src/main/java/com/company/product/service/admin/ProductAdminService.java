@@ -15,17 +15,23 @@ public interface ProductAdminService {
 
     Page<ProductAdminResponse> getAllProducts(Pageable pageable);
 
-    Page<ProductAdminResponse> searchProducts(Pageable pageable, String searchText);
+    Page<ProductAdminResponse> searchProducts(
+            Pageable pageable, String searchText
+    );
 
     ProductDetailedAdminResponse getDetailsAboutProduct(String productUrl);
 
-    ProductAdminResponse createNewProduct(ProductAdminRequest productAdminRequest);
+    ProductAdminResponse createNewProduct(
+            ProductAdminRequest productAdminRequest
+    );
 
     ProductAdminResponse updateCurrentProduct(
             ProductAdminRequest productAdminRequest, String productUrl
     );
 
-    void deleteCurrentProduct(String productUrl, Long productVersion);
+    void deleteCurrentProduct(
+            String productUrl, Long productVersion
+    );
 
     @Scheduled(fixedRate = 6000)
     void evictAllCacheWithTime();

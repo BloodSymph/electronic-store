@@ -12,10 +12,11 @@ public interface DiscountAdminService {
     );
 
     DiscountAdminResponse updateDiscountForProduct(
-            DiscountAdminRequest discountAdminRequest,
-            String productUrl
+            DiscountAdminRequest discountAdminRequest, String productUrl
     );
 
-    void deleteCurrentDiscount(String productUrl, Long discountVersion);
+    void deleteCurrentDiscount(
+            String productUrl, Long discountVersion
+    );
 
 }

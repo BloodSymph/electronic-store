@@ -29,7 +29,8 @@ public class DiscountAdminServiceImpl implements DiscountAdminService {
 
     @Override
     @Transactional
-    public DiscountAdminResponse createDiscountForProduct(DiscountAdminRequest discountAdminRequest) {
+    public DiscountAdminResponse createDiscountForProduct(
+            DiscountAdminRequest discountAdminRequest) {
 
         ProductEntity product = productRepository
                 .findByUrlIgnoreCase(discountAdminRequest.getProductUrl())
@@ -86,7 +87,8 @@ public class DiscountAdminServiceImpl implements DiscountAdminService {
 
     @Override
     @Transactional
-    public void deleteCurrentDiscount(String productUrl, Long discountVersion) {
+    public void deleteCurrentDiscount(
+            String productUrl, Long discountVersion) {
         if (!discountRepository.existsByProduct_Url(productUrl)) {
             throw new DiscountNotFoundException(
                     "Can not discount by product url: " + productUrl + " !"

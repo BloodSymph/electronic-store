@@ -45,7 +45,8 @@ public class BrandAdminServiceImpl implements BrandAdminService {
 
     @Override
     @Cacheable(unless = "#result == null ")
-    public Page<BrandAdminResponse> searchBrands(Pageable pageable, String brandName) {
+    public Page<BrandAdminResponse> searchBrands(
+            Pageable pageable, String brandName) {
         return brandRepository
                 .searchByNameIgnoreCase(pageable, brandName)
                 .map(BrandAdminMapper::mapToBrandAdminResponse);
@@ -66,7 +67,8 @@ public class BrandAdminServiceImpl implements BrandAdminService {
     @Override
     @Transactional
     @CachePut(unless = "#result == null ")
-    public BrandAdminResponse createNewBrand(BrandAdminRequest brandAdminRequest) {
+    public BrandAdminResponse createNewBrand(
+            BrandAdminRequest brandAdminRequest) {
 
         CategoryEntity category = categoryRepository
                 .findByUrlIgnoreCase(brandAdminRequest.getCategoryUrl())

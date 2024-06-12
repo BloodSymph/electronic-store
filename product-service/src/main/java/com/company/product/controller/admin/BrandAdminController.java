@@ -49,7 +49,9 @@ public class BrandAdminController {
                     required = false,
                     defaultValue = "") String brandName) {
 
-        return brandAdminService.searchBrands(pageable, brandName);
+        return brandAdminService.searchBrands(
+                pageable, brandName
+        );
 
     }
 
@@ -75,7 +77,9 @@ public class BrandAdminController {
             @Valid @RequestBody BrandAdminRequest brandAdminRequest,
             @PathVariable(value = "brandUrl") String brandUrl) {
 
-        return brandAdminService.updateCurrentBrand(brandAdminRequest, brandUrl);
+        return brandAdminService.updateCurrentBrand(
+                brandAdminRequest, brandUrl
+        );
 
     }
 
@@ -85,7 +89,9 @@ public class BrandAdminController {
             @PathVariable(value = "brandUrl") String brandUrl,
             @RequestParam(value = "brandVersion") Long brandVersion) {
 
-        brandAdminService.deleteCurrentBrand(brandUrl, brandVersion);
+        brandAdminService.deleteCurrentBrand(
+                brandUrl, brandVersion
+        );
         return new ResponseEntity<>(
                 "Brand successful deleted by url: " + brandUrl + " !",
                 HttpStatus.OK

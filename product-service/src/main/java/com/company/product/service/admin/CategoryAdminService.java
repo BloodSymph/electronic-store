@@ -15,18 +15,23 @@ public interface CategoryAdminService {
 
     Page<CategoryAdminResponse> getAllCategories(Pageable pageable);
 
-    Page<CategoryAdminResponse> searchCategories(Pageable pageable, String categoryName);
+    Page<CategoryAdminResponse> searchCategories(
+            Pageable pageable, String categoryName
+    );
 
     CategoryDetailedAdminResponse getDetailsAboutCategory(String categoryUrl);
 
-    CategoryAdminResponse createNewCategory(CategoryAdminRequest categoryAdminRequest);
-
-    CategoryAdminResponse updateCurrentCategory(
-            CategoryAdminRequest categoryAdminRequest,
-            String categoryUrl
+    CategoryAdminResponse createNewCategory(
+            CategoryAdminRequest categoryAdminRequest
     );
 
-    void deleteCurrentCategory(String categoryUrl, Long categoryVersion);
+    CategoryAdminResponse updateCurrentCategory(
+            CategoryAdminRequest categoryAdminRequest, String categoryUrl
+    );
+
+    void deleteCurrentCategory(
+            String categoryUrl, Long categoryVersion
+    );
 
     @Scheduled(fixedRate = 6000)
     void evictAllCacheWithTime();

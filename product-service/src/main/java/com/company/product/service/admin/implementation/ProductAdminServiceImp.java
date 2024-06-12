@@ -36,7 +36,7 @@ public class ProductAdminServiceImp implements ProductAdminService {
         Page<ProductEntity> products = productRepository.findAll(pageable);
         products.forEach(product -> {
             try {
-                encodeFile(product.getPhoto());
+                product.setPhoto(encodeFile(product.getPhoto()));
             } catch (IOException e) {
                 throw new SearchingFileDirectoryException(
                         "Can not find file by source directory: " + product.getPhoto() + " !"
@@ -47,7 +47,8 @@ public class ProductAdminServiceImp implements ProductAdminService {
     }
 
     @Override
-    public Page<ProductAdminResponse> searchProducts(Pageable pageable, String searchText) {
+    public Page<ProductAdminResponse> searchProducts(
+            Pageable pageable, String searchText) {
         return null;
     }
 
@@ -57,17 +58,20 @@ public class ProductAdminServiceImp implements ProductAdminService {
     }
 
     @Override
-    public ProductAdminResponse createNewProduct(ProductAdminRequest productAdminRequest) {
+    public ProductAdminResponse createNewProduct(
+            ProductAdminRequest productAdminRequest) {
         return null;
     }
 
     @Override
-    public ProductAdminResponse updateCurrentProduct(ProductAdminRequest productAdminRequest, String productUrl) {
+    public ProductAdminResponse updateCurrentProduct(
+            ProductAdminRequest productAdminRequest, String productUrl) {
         return null;
     }
 
     @Override
-    public void deleteCurrentProduct(String productUrl, Long productVersion) {
+    public void deleteCurrentProduct(
+            String productUrl, Long productVersion) {
 
     }
 

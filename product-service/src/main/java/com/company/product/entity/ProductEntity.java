@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.validator.constraints.URL;
 
 import java.time.LocalDateTime;
 
@@ -40,7 +41,8 @@ public class ProductEntity {
     private Double price;
 
     //todo: Think about file saving and manipulation
-    @Column(name = "product_photo_rout", nullable = false, unique = true, length = 200)
+    @Column(name = "product_photo_rout", nullable = false, length = 255)
+    @URL
     private String photo;
 
     @CreationTimestamp

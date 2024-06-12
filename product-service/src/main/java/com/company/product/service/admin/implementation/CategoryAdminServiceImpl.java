@@ -40,7 +40,8 @@ public class CategoryAdminServiceImpl implements CategoryAdminService {
 
     @Override
     @Cacheable(unless = "#result == null ")
-    public Page<CategoryAdminResponse> searchCategories(Pageable pageable, String categoryName) {
+    public Page<CategoryAdminResponse> searchCategories(
+            Pageable pageable, String categoryName) {
 
         return categoryRepository
                 .searchByNameIgnoreCase(pageable, categoryName)
@@ -48,7 +49,8 @@ public class CategoryAdminServiceImpl implements CategoryAdminService {
     }
 
     @Override
-    public CategoryDetailedAdminResponse getDetailsAboutCategory(String categoryUrl) {
+    public CategoryDetailedAdminResponse getDetailsAboutCategory(
+            String categoryUrl) {
         CategoryEntity category = categoryRepository
                 .getDetailsAboutCategory(categoryUrl)
                 .orElseThrow(
@@ -61,7 +63,8 @@ public class CategoryAdminServiceImpl implements CategoryAdminService {
 
     @Override
     @CachePut(unless = "#result == null ")
-    public CategoryAdminResponse createNewCategory(CategoryAdminRequest categoryAdminRequest) {
+    public CategoryAdminResponse createNewCategory(
+            CategoryAdminRequest categoryAdminRequest) {
         CategoryEntity category = mapRequestToCategoryEntity(categoryAdminRequest);
         category.setUrl(toUrlAddress(categoryAdminRequest.getName()));
         categoryRepository.save(category);
@@ -71,8 +74,8 @@ public class CategoryAdminServiceImpl implements CategoryAdminService {
     @Override
     @Transactional
     @CachePut(unless = "#result == null ")
-    public CategoryAdminResponse updateCurrentCategory(CategoryAdminRequest categoryAdminRequest,
-                                                       String categoryUrl) {
+    public CategoryAdminResponse updateCurrentCategory(
+            CategoryAdminRequest categoryAdminRequest, String categoryUrl) {
         CategoryEntity category = categoryRepository
                 .findByUrlIgnoreCase(categoryUrl)
                 .orElseThrow(
@@ -97,7 +100,8 @@ public class CategoryAdminServiceImpl implements CategoryAdminService {
     @Override
     @Transactional
     @CacheEvict(allEntries = true)
-    public void deleteCurrentCategory(String categoryUrl, Long categoryVersion) {
+    public void deleteCurrentCategory(
+            String categoryUrl, Long categoryVersion) {
         if (!categoryRepository.existsByUrlIgnoreCase(categoryUrl)) {
             throw new CategoryNotFoundException(
                     "Can not find category by current url: " + categoryUrl + " !"
