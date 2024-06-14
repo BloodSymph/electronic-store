@@ -33,7 +33,6 @@ public class ProductAdminMapper {
                 .title(productAdminRequest.getTitle())
                 .url(productAdminRequest.getUrl())
                 .price(productAdminRequest.getPrice())
-                .photo(productAdminRequest.getPhoto())
                 .version(productAdminRequest.getVersion())
                 .build();
     }

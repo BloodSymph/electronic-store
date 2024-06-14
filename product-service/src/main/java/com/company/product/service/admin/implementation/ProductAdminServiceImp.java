@@ -3,23 +3,38 @@ package com.company.product.service.admin.implementation;
 import com.company.product.dto.admin.product.ProductAdminRequest;
 import com.company.product.dto.admin.product.ProductAdminResponse;
 import com.company.product.dto.admin.product.ProductDetailedAdminResponse;
+import com.company.product.entity.BrandEntity;
+import com.company.product.entity.CategoryEntity;
 import com.company.product.entity.ProductEntity;
+import com.company.product.exception.exceptions.brand.BrandNotFoundException;
+import com.company.product.exception.exceptions.category.CategoryNotFoundException;
 import com.company.product.exception.exceptions.file.SearchingFileDirectoryException;
+import com.company.product.exception.exceptions.product.ProductNotFoundException;
+import com.company.product.exception.exceptions.product.ProductVersionNotValidException;
 import com.company.product.mapper.admin.ProductAdminMapper;
+import com.company.product.repository.BrandRepository;
+import com.company.product.repository.CategoryRepository;
 import com.company.product.repository.ProductRepository;
 import com.company.product.service.admin.ProductAdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 
+import static com.company.product.mapper.admin.ProductAdminMapper.*;
 import static com.company.product.util.CacheEvictUtility.evictAllCaches;
+import static com.company.product.util.FileUtility.decodeAndWriteFile;
 import static com.company.product.util.FileUtility.encodeFile;
+import static com.company.product.util.URLGeneratorUtility.toUrlAddress;
 
 @Service
 @RequiredArgsConstructor
@@ -28,10 +43,15 @@ public class ProductAdminServiceImp implements ProductAdminService {
 
     private final ProductRepository productRepository;
 
+    private final CategoryRepository categoryRepository;
+
+    private final BrandRepository brandRepository;
+
     @Value("${web.resources.static-locations}")
     private static String filePath;
 
     @Override
+    @Cacheable(unless = "#result == null ")
     public Page<ProductAdminResponse> getAllProducts(Pageable pageable) {
         Page<ProductEntity> products = productRepository.findAll(pageable);
         products.forEach(product -> {
@@ -47,32 +67,150 @@ public class ProductAdminServiceImp implements ProductAdminService {
     }
 
     @Override
+    @Cacheable(unless = "#result == null ")
     public Page<ProductAdminResponse> searchProducts(
             Pageable pageable, String searchText) {
-        return null;
+        Page<ProductEntity> products = productRepository.searchProducts(pageable, searchText);
+        products.forEach(product -> {
+            try {
+                product.setPhoto(encodeFile(product.getPhoto()));
+            } catch (IOException e) {
+                throw new SearchingFileDirectoryException(
+                        "Can not find file by source directory: " + product.getPhoto() + " !"
+                );
+            }
+        });
+        return products.map(ProductAdminMapper::mapToProductAdminResponse);
     }
 
     @Override
-    public ProductDetailedAdminResponse getDetailsAboutProduct(String productUrl) {
-        return null;
+    public ProductDetailedAdminResponse getDetailsAboutProduct(String productUrl) throws IOException {
+        ProductEntity product = productRepository
+                .getDetailsAboutProduct(productUrl)
+                .orElseThrow(
+                        () -> new ProductNotFoundException(
+                                "Can not find product by current url: " + productUrl + " !"
+                        )
+                );
+
+        product.setPhoto(encodeFile(product.getPhoto()));
+
+        return mapToProductDetailedAdminResponse(product);
     }
 
     @Override
+    @Transactional
+    @CachePut(unless = "#result == null ")
     public ProductAdminResponse createNewProduct(
             ProductAdminRequest productAdminRequest) {
+
+        CategoryEntity category = categoryRepository
+                .findByUrlIgnoreCase(productAdminRequest.getCategoryUrl())
+                .orElseThrow(
+                        () -> new CategoryNotFoundException(
+                                "Can not find category by current url: " + productAdminRequest.getCategoryUrl() + " !"
+                        )
+                );
+
+        BrandEntity brand = brandRepository
+                .findByUrlIgnoreCase(productAdminRequest.getBrandUrl())
+                .orElseThrow(
+                        () -> new BrandNotFoundException(
+                                "Can not find brand by current url: " + productAdminRequest.getBrandUrl() + " !"
+                        )
+                );
+
+        ProductEntity product = mapRequestToProductEntity(productAdminRequest);
+        product.setPhoto(filePath);
+        product.setUrl(toUrlAddress(productAdminRequest.getTitle()));
+        product.setCategory(category);
+        product.setBrand(brand);
+
+        productRepository.save(product);
+
         return null;
     }
 
     @Override
+    @Transactional
+    public ProductAdminResponse createPhotoForProduct(String encodedFile, String productUrl) throws IOException {
+        ProductEntity product = productRepository
+                .getDetailsAboutProduct(productUrl)
+                .orElseThrow(
+                        () -> new ProductNotFoundException(
+                                "Can not find product by current url: " + productUrl + " !"
+                        )
+                );
+
+        product.setPhoto(decodeAndWriteFile(encodedFile, product.getPhoto()));
+
+        productRepository.save(product);
+
+        return mapToProductAdminResponse(product);
+    }
+
+    @Override
+    @Transactional
+    @CachePut(unless = "#result == null ")
     public ProductAdminResponse updateCurrentProduct(
             ProductAdminRequest productAdminRequest, String productUrl) {
-        return null;
+
+        CategoryEntity category = categoryRepository
+                .findByUrlIgnoreCase(productAdminRequest.getCategoryUrl())
+                .orElseThrow(
+                        () -> new CategoryNotFoundException(
+                                "Can not find category by current url: " + productAdminRequest.getCategoryUrl() + " !"
+                        )
+                );
+
+        BrandEntity brand = brandRepository
+                .findByUrlIgnoreCase(productAdminRequest.getBrandUrl())
+                .orElseThrow(
+                        () -> new BrandNotFoundException(
+                                "Can not find brand by current url: " + productAdminRequest.getBrandUrl() + " !"
+                        )
+                );
+
+        ProductEntity product = productRepository
+                .findByUrlIgnoreCase(productUrl)
+                .orElseThrow(
+                        () -> new ProductNotFoundException(
+                                "Can not find product by current url: " + productUrl + " !"
+                        )
+                );
+
+        if (!product.getVersion().equals(productAdminRequest.getVersion())) {
+            throw new ProductVersionNotValidException(
+                    "Product Entity version: " + productAdminRequest.getVersion() + " not valid!"
+            );
+        }
+
+        product = mapRequestToProductEntity(productAdminRequest);
+        product.setUrl(toUrlAddress(product.getTitle()));
+        product.setCategory(category);
+        product.setBrand(brand);
+
+        productRepository.save(product);
+
+        return mapToProductAdminResponse(product);
     }
 
     @Override
+    @Transactional
+    @CacheEvict(allEntries = true)
     public void deleteCurrentProduct(
             String productUrl, Long productVersion) {
-
+        if (!productRepository.existsByUrlIgnoreCase(productUrl)) {
+            throw new ProductNotFoundException(
+                    "Can not find product by current url: " + productUrl + " !"
+            );
+        }
+        if (!productRepository.existsByVersion(productVersion)) {
+            throw new ProductVersionNotValidException(
+                    "Product Entity version: " + productVersion + " not valid!"
+            );
+        }
+        productRepository.deleteByUrlIgnoreCase(productUrl);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.company.product.util;
 
 import lombok.experimental.UtilityClass;
+import org.hibernate.validator.constraints.URL;
 
 
 import java.io.IOException;
@@ -15,8 +16,9 @@ public class FileUtility {
         return Base64.getEncoder().encodeToString(Files.readAllBytes(Paths.get(filePath)));
     }
 
-    public static void decodeAndWriteFile(String encodedFile, String filePath) throws IOException {
+    public static  String decodeAndWriteFile(String encodedFile, String filePath) throws IOException {
         Files.write(Paths.get(filePath), Base64.getDecoder().decode(encodedFile));
+        return encodedFile;
     }
 
 }
