@@ -84,7 +84,8 @@ public class ProductAdminServiceImp implements ProductAdminService {
     }
 
     @Override
-    public ProductDetailedAdminResponse getDetailsAboutProduct(String productUrl) throws IOException {
+    public ProductDetailedAdminResponse getDetailsAboutProduct(
+            String productUrl) throws IOException {
         ProductEntity product = productRepository
                 .getDetailsAboutProduct(productUrl)
                 .orElseThrow(
@@ -133,7 +134,8 @@ public class ProductAdminServiceImp implements ProductAdminService {
 
     @Override
     @Transactional
-    public ProductAdminResponse createPhotoForProduct(String encodedFile, String productUrl) throws IOException {
+    public ProductAdminResponse createPhotoForProduct(
+            String encodedFile, String productUrl) throws IOException {
         ProductEntity product = productRepository
                 .getDetailsAboutProduct(productUrl)
                 .orElseThrow(

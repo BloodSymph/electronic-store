@@ -19,13 +19,16 @@ public interface ProductAdminService {
             Pageable pageable, String searchText
     );
 
-    ProductDetailedAdminResponse getDetailsAboutProduct(String productUrl) throws IOException;
+    ProductDetailedAdminResponse getDetailsAboutProduct(
+            String productUrl) throws IOException;
 
     ProductAdminResponse createNewProduct(
             ProductAdminRequest productAdminRequest
     );
 
-    ProductAdminResponse createPhotoForProduct(String encodedFile, String productUrl) throws IOException;
+    ProductAdminResponse createPhotoForProduct(
+            String encodedFile, String productUrl
+    ) throws IOException;
 
     ProductAdminResponse updateCurrentProduct(
             ProductAdminRequest productAdminRequest, String productUrl
