@@ -37,12 +37,10 @@ public class ProductEntity {
     @Column(name = "product_url", nullable = false, unique = true, length = 25)
     private String url;
 
-    @Column(name = "product_price", nullable = false, length = 999999)
+    @Column(name = "product_price", nullable = false, length = 99999)
     private Double price;
 
-    //todo: Think about file saving and manipulation
-    @Column(name = "product_photo_rout", nullable = false, length = 255)
-    @URL
+    @Column(name = "product_photo_rout", length = 350, nullable = false)
     private String photo;
 
     @CreationTimestamp

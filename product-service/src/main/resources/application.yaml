@@ -3,6 +3,8 @@ spring:
     name: product-service
   config:
     import: optional:configserver:http://localhost:8888/
-  web:
-    resources:
-      static-locations: D:\PetProjects\static\img\
+
+
+
+
+

@@ -2,7 +2,6 @@ package com.company.product.mapper.admin;
 
 import com.company.product.dto.admin.category.CategoryAdminRequest;
 import com.company.product.dto.admin.category.CategoryAdminResponse;
-import com.company.product.dto.admin.category.CategoryDetailedAdminResponse;
 import com.company.product.entity.CategoryEntity;
 import org.springframework.stereotype.Component;
 
@@ -33,27 +32,5 @@ public class CategoryAdminMapper {
                 .build();
     }
 
-    public static CategoryDetailedAdminResponse mapToCategoryDetailedAdminResponse(
-            CategoryEntity category) {
-        return CategoryDetailedAdminResponse.builder()
-                .id(category.getId())
-                .name(category.getName())
-                .url(category.getUrl())
-                .created(category.getCreated())
-                .updated(category.getUpdated())
-                .version(category.getVersion())
-                .brands(
-                        category.getBrands()
-                                .stream()
-                                .map(BrandAdminMapper::mapToBrandAdminResponse)
-                                .collect(Collectors.toSet())
-                )
-                .products(
-                        category.getProducts()
-                                .stream()
-                                .map(ProductAdminMapper::mapToProductAdminResponse)
-                                .collect(Collectors.toSet())
-                )
-                .build();
-    }
+
 }

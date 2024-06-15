@@ -17,18 +17,20 @@ import com.company.product.repository.CategoryRepository;
 import com.company.product.repository.ProductRepository;
 import com.company.product.service.admin.ProductAdminService;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+
 
 import static com.company.product.mapper.admin.ProductAdminMapper.*;
 import static com.company.product.util.CacheEvictUtility.evictAllCaches;
@@ -41,14 +43,13 @@ import static com.company.product.util.URLGeneratorUtility.toUrlAddress;
 @CacheConfig(cacheNames = {"products"})
 public class ProductAdminServiceImp implements ProductAdminService {
 
+    private static final String FILE_PATH = "D:/PetProjects/static/img/";
+
     private final ProductRepository productRepository;
 
     private final CategoryRepository categoryRepository;
 
     private final BrandRepository brandRepository;
-
-    @Value("${web.resources.static-locations}")
-    private static String filePath;
 
     @Override
     @Cacheable(unless = "#result == null ")
@@ -103,7 +104,7 @@ public class ProductAdminServiceImp implements ProductAdminService {
     @Transactional
     @CachePut(unless = "#result == null ")
     public ProductAdminResponse createNewProduct(
-            ProductAdminRequest productAdminRequest) {
+            ProductAdminRequest productAdminRequest){
 
         CategoryEntity category = categoryRepository
                 .findByUrlIgnoreCase(productAdminRequest.getCategoryUrl())
@@ -121,15 +122,18 @@ public class ProductAdminServiceImp implements ProductAdminService {
                         )
                 );
 
+
+
         ProductEntity product = mapRequestToProductEntity(productAdminRequest);
-        product.setPhoto(filePath);
-        product.setUrl(toUrlAddress(productAdminRequest.getTitle()));
+        product.setUrl(productAdminRequest.getTitle());
+        product.setPhoto(FILE_PATH);
         product.setCategory(category);
         product.setBrand(brand);
 
+
         productRepository.save(product);
 
-        return null;
+        return mapToProductAdminResponse(product);
     }
 
     @Override
@@ -157,22 +161,6 @@ public class ProductAdminServiceImp implements ProductAdminService {
     public ProductAdminResponse updateCurrentProduct(
             ProductAdminRequest productAdminRequest, String productUrl) {
 
-        CategoryEntity category = categoryRepository
-                .findByUrlIgnoreCase(productAdminRequest.getCategoryUrl())
-                .orElseThrow(
-                        () -> new CategoryNotFoundException(
-                                "Can not find category by current url: " + productAdminRequest.getCategoryUrl() + " !"
-                        )
-                );
-
-        BrandEntity brand = brandRepository
-                .findByUrlIgnoreCase(productAdminRequest.getBrandUrl())
-                .orElseThrow(
-                        () -> new BrandNotFoundException(
-                                "Can not find brand by current url: " + productAdminRequest.getBrandUrl() + " !"
-                        )
-                );
-
         ProductEntity product = productRepository
                 .findByUrlIgnoreCase(productUrl)
                 .orElseThrow(
@@ -187,10 +175,9 @@ public class ProductAdminServiceImp implements ProductAdminService {
             );
         }
 
-        product = mapRequestToProductEntity(productAdminRequest);
+        product.setTitle(productAdminRequest.getTitle());
         product.setUrl(toUrlAddress(product.getTitle()));
-        product.setCategory(category);
-        product.setBrand(brand);
+        product.setPrice(productAdminRequest.getPrice());
 
         productRepository.save(product);
 

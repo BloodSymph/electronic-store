@@ -2,7 +2,6 @@ package com.company.product.controller.admin;
 
 import com.company.product.dto.admin.category.CategoryAdminRequest;
 import com.company.product.dto.admin.category.CategoryAdminResponse;
-import com.company.product.dto.admin.category.CategoryDetailedAdminResponse;
 import com.company.product.service.admin.CategoryAdminService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +12,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/product-service/admin")
@@ -51,13 +48,6 @@ public class CategoryAdminController {
         return categoryAdminService.searchCategories(
                 pageable, categoryName
         );
-    }
-
-    @GetMapping("/categories/{categoryUrl}/details")
-    @ResponseStatus(HttpStatus.OK)
-    public CategoryDetailedAdminResponse getDetailsAboutCategory(
-            @PathVariable(value = "categoryUrl") String categoryUrl) {
-        return categoryAdminService.getDetailsAboutCategory(categoryUrl);
     }
 
     @PostMapping("/categories/create")

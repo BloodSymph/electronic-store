@@ -2,7 +2,6 @@ package com.company.product.controller.admin;
 
 import com.company.product.dto.admin.brand.BrandAdminRequest;
 import com.company.product.dto.admin.brand.BrandAdminResponse;
-import com.company.product.dto.admin.brand.BrandDetailedAdminResponse;
 import com.company.product.service.admin.BrandAdminService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +12,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/product-service/admin")
@@ -53,13 +50,6 @@ public class BrandAdminController {
                 pageable, brandName
         );
 
-    }
-
-    @GetMapping("/brands/{brandUrl}/details")
-    @ResponseStatus(HttpStatus.OK)
-    public BrandDetailedAdminResponse getDetailsAboutBrand(
-            @PathVariable(value = "brandUrl") String brandUrl) {
-        return brandAdminService.getDetailsAboutBrand(brandUrl);
     }
 
     @PostMapping("/brands/create")

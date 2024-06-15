@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.Range;
+import org.hibernate.validator.constraints.URL;
 
 @Data
 @Builder
@@ -27,12 +29,9 @@ public class ProductAdminRequest {
     @Length(max = 25, message = "Brand url field shod have maximum of {max} characters!")
     private String brandUrl;
 
-    @Size(max = 999999, message ="Product price field shod have maximum of {max} characters!")
+    @Range(max = 99999, message ="Product price field shod have maximum of {max} characters!")
     @NotNull(message = "Product price field shod not contains null value!")
     private Double price;
-
-    @Length(max = 255, message = "Product photo path field shod have maximum of {max} characters!")
-    private String photo;
 
     @NotNull(message = "Product version field shod not contains null value!")
     private Long version;

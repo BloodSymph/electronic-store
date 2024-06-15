@@ -2,7 +2,6 @@ package com.company.product.service.admin.implementation;
 
 import com.company.product.dto.admin.category.CategoryAdminRequest;
 import com.company.product.dto.admin.category.CategoryAdminResponse;
-import com.company.product.dto.admin.category.CategoryDetailedAdminResponse;
 import com.company.product.entity.CategoryEntity;
 import com.company.product.exception.exceptions.category.CategoryNotFoundException;
 import com.company.product.exception.exceptions.category.CategoryVersionNotValidException;
@@ -49,19 +48,6 @@ public class CategoryAdminServiceImpl implements CategoryAdminService {
     }
 
     @Override
-    public CategoryDetailedAdminResponse getDetailsAboutCategory(
-            String categoryUrl) {
-        CategoryEntity category = categoryRepository
-                .getDetailsAboutCategory(categoryUrl)
-                .orElseThrow(
-                        () -> new CategoryNotFoundException(
-                                "Can not find category by current url: " + categoryUrl + " !"
-                        )
-                );
-        return mapToCategoryDetailedAdminResponse(category);
-    }
-
-    @Override
     @CachePut(unless = "#result == null ")
     public CategoryAdminResponse createNewCategory(
             CategoryAdminRequest categoryAdminRequest) {
@@ -90,7 +76,7 @@ public class CategoryAdminServiceImpl implements CategoryAdminService {
             );
         }
 
-        category = mapRequestToCategoryEntity(categoryAdminRequest);
+        category.setName(categoryAdminRequest.getName());
         category.setUrl(toUrlAddress(categoryAdminRequest.getName()));
         categoryRepository.save(category);
 

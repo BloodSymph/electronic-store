@@ -5,6 +5,8 @@ import com.company.product.dto.client.product.ProductDetailedClientResponse;
 import com.company.product.entity.ProductEntity;
 import org.springframework.stereotype.Component;
 
+import static com.company.product.mapper.client.BrandClientMapper.mapToBrandClientResponse;
+import static com.company.product.mapper.client.CategoryClientMapper.mapToCategoryClientResponse;
 import static com.company.product.mapper.client.DescriptionClientMapper.mapToDescriptionClientResponse;
 import static com.company.product.mapper.client.DiscountClientMapper.mapToDiscountClientResponse;
 
@@ -43,6 +45,16 @@ public class ProductClientMapper {
                 .discount(
                         mapToDiscountClientResponse(
                                 product.getDiscount()
+                        )
+                )
+                .category(
+                        mapToCategoryClientResponse(
+                                product.getCategory()
+                        )
+                )
+                .brand(
+                        mapToBrandClientResponse(
+                                product.getBrand()
                         )
                 )
                 .build();

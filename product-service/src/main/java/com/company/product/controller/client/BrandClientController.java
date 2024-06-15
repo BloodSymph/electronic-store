@@ -21,7 +21,7 @@ public class BrandClientController {
         return brandClientService.getAllBrands();
     }
 
-    @GetMapping("categories/{categoryUrl}/brands")
+    @GetMapping("/categories/{categoryUrl}/brands")
     @ResponseStatus(HttpStatus.OK)
     public List<BrandClientResponse> getBrandsByCategories(
             @PathVariable(value = "categoryUrl") String categoryUrl) {

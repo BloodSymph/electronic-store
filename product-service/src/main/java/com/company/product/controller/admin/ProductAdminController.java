@@ -38,7 +38,11 @@ public class ProductAdminController {
     @GetMapping("/products/search")
     @ResponseStatus(HttpStatus.OK)
     public Page<ProductAdminResponse> searchProducts(
-            @RequestParam(value = "searchText") String searchText,
+            @RequestParam(
+                    value = "searchText",
+                    required = false,
+                    defaultValue = ""
+            ) String searchText,
             @PageableDefault(
                     sort = "title",
                     direction = Sort.Direction.ASC,
