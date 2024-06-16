@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FileAdminRequest {
 
+
     private String encodedFile;
 
 }

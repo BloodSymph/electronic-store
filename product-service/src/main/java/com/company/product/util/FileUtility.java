@@ -1,9 +1,13 @@
 package com.company.product.util;
 
 import lombok.experimental.UtilityClass;
+import org.apache.commons.lang.RandomStringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -17,11 +21,12 @@ public class FileUtility {
         return Base64.getEncoder().encodeToString(Files.readAllBytes(Paths.get(filePath)));
     }
 
-    public static String decodeFile(String filePath) throws IOException {
-          return null;
+    public static String decodeFile(String randomName, String encodedFile) throws IOException {
+       return Files.write(Paths.get(randomName.concat(".jpeg")), Base64.getDecoder().decode(encodedFile)).getFileName().toString();
     }
 
-    public static void writeDecodedFile(String filePath) throws IOException {
-
+    public static void writeFile(String decodedFile) throws IOException {
+        Files.createFile(Path.of(decodedFile));
     }
+
 }

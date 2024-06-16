@@ -36,6 +36,7 @@ import java.io.IOException;
 import static com.company.product.mapper.admin.ProductAdminMapper.*;
 import static com.company.product.util.CacheEvictUtility.evictAllCaches;
 import static com.company.product.util.FileUtility.*;
+import static com.company.product.util.RandomFileNameGenerator.randomFileNameGenerator;
 import static com.company.product.util.URLGeneratorUtility.toUrlAddress;
 
 @Service
@@ -148,12 +149,14 @@ public class ProductAdminServiceImp implements ProductAdminService {
                         )
                 );
 
-//        product.setPhoto(decodeFile(propertiesConfig.getFilePath()));
+       String decodedFile = decodeFile(
+               randomFileNameGenerator(), fileAdminRequest.getEncodedFile()
+       );
 
-//        writeDecodedFile(product.getPhoto());
+       product.setPhoto(product.getPhoto().concat(decodedFile));
 
 
-        return mapToProductAdminResponse(product);
+       return mapToProductAdminResponse(product);
     }
 
     @Override
