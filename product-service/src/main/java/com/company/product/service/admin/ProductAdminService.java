@@ -1,5 +1,6 @@
 package com.company.product.service.admin;
 
+import com.company.product.dto.admin.file.FileAdminRequest;
 import com.company.product.dto.admin.product.ProductAdminRequest;
 import com.company.product.dto.admin.product.ProductAdminResponse;
 import com.company.product.dto.admin.product.ProductDetailedAdminResponse;
@@ -27,7 +28,7 @@ public interface ProductAdminService {
     );
 
     ProductAdminResponse createPhotoForProduct(
-            String encodedFile, String productUrl
+            FileAdminRequest fileAdminRequest, String productUrl
     ) throws IOException;
 
     ProductAdminResponse updateCurrentProduct(

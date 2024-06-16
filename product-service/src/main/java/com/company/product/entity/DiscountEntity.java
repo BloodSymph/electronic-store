@@ -33,7 +33,7 @@ public class DiscountEntity {
     private LocalDateTime updated;
 
     @OneToOne
-    @JoinColumn(name = "product_url", referencedColumnName = "product_url", nullable = false)
+    @JoinColumn(name = "product_url", referencedColumnName = "product_url")
     private ProductEntity product;
 
     @Column(name = "discount_version", nullable = false, unique = true)

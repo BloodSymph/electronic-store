@@ -1,5 +1,7 @@
 package com.company.product.service.admin.implementation;
 
+import com.company.product.config.PropertiesConfig;
+import com.company.product.dto.admin.file.FileAdminRequest;
 import com.company.product.dto.admin.product.ProductAdminRequest;
 import com.company.product.dto.admin.product.ProductAdminResponse;
 import com.company.product.dto.admin.product.ProductDetailedAdminResponse;
@@ -18,7 +20,6 @@ import com.company.product.repository.ProductRepository;
 import com.company.product.service.admin.ProductAdminService;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -34,8 +35,7 @@ import java.io.IOException;
 
 import static com.company.product.mapper.admin.ProductAdminMapper.*;
 import static com.company.product.util.CacheEvictUtility.evictAllCaches;
-import static com.company.product.util.FileUtility.decodeAndWriteFile;
-import static com.company.product.util.FileUtility.encodeFile;
+import static com.company.product.util.FileUtility.*;
 import static com.company.product.util.URLGeneratorUtility.toUrlAddress;
 
 @Service
@@ -43,7 +43,7 @@ import static com.company.product.util.URLGeneratorUtility.toUrlAddress;
 @CacheConfig(cacheNames = {"products"})
 public class ProductAdminServiceImp implements ProductAdminService {
 
-    private static final String FILE_PATH = "D:/PetProjects/static/img/";
+    private final PropertiesConfig propertiesConfig;
 
     private final ProductRepository productRepository;
 
@@ -125,8 +125,8 @@ public class ProductAdminServiceImp implements ProductAdminService {
 
 
         ProductEntity product = mapRequestToProductEntity(productAdminRequest);
-        product.setUrl(productAdminRequest.getTitle());
-        product.setPhoto(FILE_PATH);
+        product.setUrl(toUrlAddress(productAdminRequest.getTitle()));
+        product.setPhoto(propertiesConfig.getFilePath());
         product.setCategory(category);
         product.setBrand(brand);
 
@@ -139,7 +139,7 @@ public class ProductAdminServiceImp implements ProductAdminService {
     @Override
     @Transactional
     public ProductAdminResponse createPhotoForProduct(
-            String encodedFile, String productUrl) throws IOException {
+            FileAdminRequest fileAdminRequest, String productUrl) throws IOException {
         ProductEntity product = productRepository
                 .getDetailsAboutProduct(productUrl)
                 .orElseThrow(
@@ -148,9 +148,10 @@ public class ProductAdminServiceImp implements ProductAdminService {
                         )
                 );
 
-        product.setPhoto(decodeAndWriteFile(encodedFile, product.getPhoto()));
+//        product.setPhoto(decodeFile(propertiesConfig.getFilePath()));
 
-        productRepository.save(product);
+//        writeDecodedFile(product.getPhoto());
+
 
         return mapToProductAdminResponse(product);
     }

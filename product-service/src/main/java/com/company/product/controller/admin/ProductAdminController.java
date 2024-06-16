@@ -1,5 +1,6 @@
 package com.company.product.controller.admin;
 
+import com.company.product.dto.admin.file.FileAdminRequest;
 import com.company.product.dto.admin.product.ProductAdminRequest;
 import com.company.product.dto.admin.product.ProductAdminResponse;
 import com.company.product.dto.admin.product.ProductDetailedAdminResponse;
@@ -72,8 +73,10 @@ public class ProductAdminController {
     @ResponseStatus(HttpStatus.CREATED)
     public ProductAdminResponse createPhotoForProduct(
             @PathVariable(value = "productUrl") String productUrl,
-            @Valid @RequestBody String encodedFile) throws IOException {
-        return productAdminService.createPhotoForProduct(encodedFile, productUrl);
+            @Valid @RequestBody FileAdminRequest fileAdminRequest) throws IOException {
+        return productAdminService.createPhotoForProduct(
+                fileAdminRequest, productUrl
+        );
     }
 
     @PutMapping("/products/{productUrl}/update")
@@ -81,7 +84,9 @@ public class ProductAdminController {
     public ProductAdminResponse updateCurrentProduct(
             @PathVariable(value = "productUrl") String productUrl,
             @Valid @RequestBody ProductAdminRequest productAdminRequest) {
-        return productAdminService.updateCurrentProduct(productAdminRequest, productUrl);
+        return productAdminService.updateCurrentProduct(
+                productAdminRequest, productUrl
+        );
     }
 
     @DeleteMapping("/products/{productUrl}/update")

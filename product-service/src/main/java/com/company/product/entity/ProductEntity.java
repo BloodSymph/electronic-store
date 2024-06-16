@@ -40,7 +40,7 @@ public class ProductEntity {
     @Column(name = "product_price", nullable = false, length = 99999)
     private Double price;
 
-    @Column(name = "product_photo_rout", length = 350, nullable = false)
+    @Column(name = "product_photo_rout", length = 350)
     private String photo;
 
     @CreationTimestamp

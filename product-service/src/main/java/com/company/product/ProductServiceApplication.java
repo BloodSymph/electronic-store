@@ -12,6 +12,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableDiscoveryClient
 @EnableCaching
 @EnableScheduling
+@ConfigurationPropertiesScan
 public class ProductServiceApplication {
 
 	public static void main(String[] args) {

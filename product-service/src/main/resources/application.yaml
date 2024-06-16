@@ -4,7 +4,5 @@ spring:
   config:
     import: optional:configserver:http://localhost:8888/
 
-
-
-
-
+product:
+  file-path: D:\PetProjects\static\img\
