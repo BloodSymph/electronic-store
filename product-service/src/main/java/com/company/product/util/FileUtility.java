@@ -22,11 +22,11 @@ public class FileUtility {
     }
 
     public static String decodeFile(String randomName, String encodedFile) throws IOException {
-       return Files.write(Paths.get(randomName.concat(".jpeg")), Base64.getDecoder().decode(encodedFile)).getFileName().toString();
+       return Files.write(Paths.get(randomName.concat(".jpg")), Base64.getDecoder().decode(encodedFile)).getFileName().toString();
     }
 
-    public static void writeFile(String decodedFile) throws IOException {
-        Files.createFile(Path.of(decodedFile));
+    public static void writeFile(String randomName, String fileRoutes, String encoded) throws IOException {
+        Files.write(Paths.get(fileRoutes.concat(randomName).concat(".jpg")), Base64.getDecoder().decode(encoded));
     }
 
 }

@@ -153,6 +153,12 @@ public class ProductAdminServiceImp implements ProductAdminService {
                randomFileNameGenerator(), fileAdminRequest.getEncodedFile()
        );
 
+       writeFile(
+               randomFileNameGenerator(),
+               propertiesConfig.getFilePath(),
+               fileAdminRequest.getEncodedFile()
+       );
+
        product.setPhoto(product.getPhoto().concat(decodedFile));
 
 
