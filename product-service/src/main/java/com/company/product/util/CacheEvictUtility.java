@@ -1,21 +1,25 @@
 package com.company.product.util;
 
 
+
 import lombok.experimental.UtilityClass;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
-import java.util.Objects;
+import org.springframework.stereotype.Component;
 
 
 @UtilityClass
 public class CacheEvictUtility {
-    private static CacheManager cacheManager;
 
-    public static void evictAllCaches(){
+    CacheManager cacheManager;
+
+    public static void evictAllCaches() {
         cacheManager.getCacheNames()
                 .forEach(
-                        cacheName -> Objects.requireNonNull(
-                                cacheManager.getCache(cacheName)
-                        ).clear()
+                        cacheName -> cacheManager
+                                .getCache(
+                                        cacheName
+                                ).clear()
                 );
     }
 

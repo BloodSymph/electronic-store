@@ -12,12 +12,12 @@ import java.util.concurrent.Executor;
 @EnableAsync
 public class ExecutorConfig {
     @Bean
-    public Executor taskExecutor() {
+    public Executor fileExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(4);
         executor.setMaxPoolSize(10);
         executor.setQueueCapacity(500);
-        executor.setThreadNamePrefix("FileExecutor");
+        executor.setThreadNamePrefix("FileExecutor-");
         executor.initialize();
         return executor;
     }

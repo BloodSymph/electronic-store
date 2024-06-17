@@ -142,7 +142,7 @@ public class ProductAdminServiceImp implements ProductAdminService {
     }
 
     @Override
-    @Async("taskExecutor")
+    @Async("fileExecutor")
     public CompletableFuture<ProductAdminResponse> createPhotoForProduct(
             FileAdminRequest fileAdminRequest, String productUrl) throws IOException {
         ProductEntity product = productRepository

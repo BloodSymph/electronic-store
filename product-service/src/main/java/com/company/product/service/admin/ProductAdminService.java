@@ -42,7 +42,7 @@ public interface ProductAdminService {
             String productUrl, Long productVersion
     );
 
-    @Scheduled(fixedRate = 6000)
+    @Scheduled(fixedRate = 120)
     void evictAllCacheWithTime();
 
 }

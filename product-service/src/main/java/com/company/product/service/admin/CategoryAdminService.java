@@ -31,7 +31,7 @@ public interface CategoryAdminService {
             String categoryUrl, Long categoryVersion
     );
 
-    @Scheduled(fixedRate = 6000)
+    @Scheduled(fixedRate = 120)
     void evictAllCacheWithTime();
 
 }

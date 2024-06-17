@@ -26,7 +26,7 @@ public interface BrandAdminService {
             String brandUrl, Long brandVersion
     );
 
-    @Scheduled(fixedRate = 6000)
+    @Scheduled(fixedRate = 120)
     void evictAllCacheWithTime();
 
 }

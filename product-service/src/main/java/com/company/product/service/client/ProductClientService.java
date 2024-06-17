@@ -29,7 +29,7 @@ public interface ProductClientService {
             Pageable pageable, String brandUrl
     );
 
-    @Scheduled(fixedRate = 6000)
+    @Scheduled(fixedRate = 120)
     void evictAllCacheWithTime();
 
 }
