@@ -4,7 +4,7 @@ server:
 products:
   service:
     store:
-      file-path: D:\PetProjects\static\img\
+      file-path: D:\PetFiles\static\img\
 
 
 eureka:
