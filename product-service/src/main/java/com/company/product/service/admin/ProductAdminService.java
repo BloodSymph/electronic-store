@@ -10,6 +10,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public interface ProductAdminService {
@@ -27,9 +28,11 @@ public interface ProductAdminService {
             ProductAdminRequest productAdminRequest
     );
 
-    ProductAdminResponse createPhotoForProduct(
+    CompletableFuture<ProductAdminResponse> createPhotoForProduct(
             FileAdminRequest fileAdminRequest, String productUrl
     ) throws IOException;
+
+    void deletePhotoForProduct(String productUrl) throws IOException;
 
     ProductAdminResponse updateCurrentProduct(
             ProductAdminRequest productAdminRequest, String productUrl

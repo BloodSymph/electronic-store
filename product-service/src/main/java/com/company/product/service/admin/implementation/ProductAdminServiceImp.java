@@ -20,6 +20,7 @@ import com.company.product.repository.ProductRepository;
 import com.company.product.service.admin.ProductAdminService;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -27,10 +28,12 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
 
 
 import static com.company.product.mapper.admin.ProductAdminMapper.*;
@@ -44,7 +47,8 @@ import static com.company.product.util.URLGeneratorUtility.toUrlAddress;
 @CacheConfig(cacheNames = {"products"})
 public class ProductAdminServiceImp implements ProductAdminService {
 
-    private final PropertiesConfig propertiesConfig;
+    @Autowired
+    private PropertiesConfig propertiesConfig;
 
     private final ProductRepository productRepository;
 
@@ -138,8 +142,8 @@ public class ProductAdminServiceImp implements ProductAdminService {
     }
 
     @Override
-    @Transactional
-    public ProductAdminResponse createPhotoForProduct(
+    @Async("taskExecutor")
+    public CompletableFuture<ProductAdminResponse> createPhotoForProduct(
             FileAdminRequest fileAdminRequest, String productUrl) throws IOException {
         ProductEntity product = productRepository
                 .getDetailsAboutProduct(productUrl)
@@ -162,7 +166,22 @@ public class ProductAdminServiceImp implements ProductAdminService {
        product.setPhoto(product.getPhoto().concat(decodedFile));
 
 
-       return mapToProductAdminResponse(product);
+       return CompletableFuture.completedFuture(mapToProductAdminResponse(product));
+    }
+
+    @Override
+    @Async
+    public void deletePhotoForProduct(String productUrl) throws IOException {
+        ProductEntity product = productRepository
+                .getDetailsAboutProduct(productUrl)
+                .orElseThrow(
+                        () -> new ProductNotFoundException(
+                                "Can not find product by current url: " + productUrl + " !"
+                        )
+                );
+
+        deleteFile(product.getPhoto());
+        product.setPhoto("");
     }
 
     @Override

@@ -18,15 +18,33 @@ import java.util.Base64;
 public class FileUtility {
 
     public static String encodeFile(String filePath) throws IOException {
-        return Base64.getEncoder().encodeToString(Files.readAllBytes(Paths.get(filePath)));
+        return Base64.getEncoder()
+                .encodeToString(
+                        Files.readAllBytes(
+                                Paths.get(filePath)
+                        )
+                );
     }
 
     public static String decodeFile(String randomName, String encodedFile) throws IOException {
-       return Files.write(Paths.get(randomName.concat(".jpg")), Base64.getDecoder().decode(encodedFile)).getFileName().toString();
+       return Files.write(
+               Paths.get(
+                       randomName.concat(".jpg")
+               ),
+               Base64.getDecoder()
+                       .decode(encodedFile))
+               .getFileName().toString();
     }
 
     public static void writeFile(String randomName, String fileRoutes, String encoded) throws IOException {
-        Files.write(Paths.get(fileRoutes.concat(randomName).concat(".jpg")), Base64.getDecoder().decode(encoded));
+        Files.write(
+                Paths.get(
+                        fileRoutes.concat(randomName).concat(".jpg")
+                ), Base64.getDecoder().decode(encoded));
+    }
+
+    public static void deleteFile(String fileRoutes) throws IOException {
+        Files.delete(Path.of(fileRoutes));
     }
 
 }

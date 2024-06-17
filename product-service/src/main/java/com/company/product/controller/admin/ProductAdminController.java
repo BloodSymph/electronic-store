@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequiredArgsConstructor
@@ -71,13 +72,20 @@ public class ProductAdminController {
 
     @PostMapping("/products/{productUrl}/photo/create")
     @ResponseStatus(HttpStatus.CREATED)
-    public ProductAdminResponse createPhotoForProduct(
+    public CompletableFuture<ProductAdminResponse> createPhotoForProduct(
             @PathVariable(value = "productUrl") String productUrl,
             @Valid @RequestBody FileAdminRequest fileAdminRequest) throws IOException {
         return productAdminService.createPhotoForProduct(
                 fileAdminRequest, productUrl
         );
     }
+
+//    @DeleteMapping("/products/{productUrl}/photo/delete")
+//    @ResponseStatus(HttpStatus.OK)
+//    public CompletableFuture<String> deleteFileForProduct(
+//            @PathVariable(value = "productUrl") String productUrl) throws IOException {
+//        productAdminService.deletePhotoForProduct(productUrl);
+//    }
 
     @PutMapping("/products/{productUrl}/update")
     @ResponseStatus(HttpStatus.CREATED)

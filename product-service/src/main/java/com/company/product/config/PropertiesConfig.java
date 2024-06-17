@@ -1,21 +1,18 @@
 package com.company.product.config;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
+
+
+@Setter
+@Getter
 @Component
-@ConfigurationProperties(prefix = "product")
+@ConfigurationProperties(prefix = "products.service.store")
 public class PropertiesConfig {
     private String filePath;
-
-    public String getFilePath() {
-        return filePath;
-    }
-
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
-    }
-
 }

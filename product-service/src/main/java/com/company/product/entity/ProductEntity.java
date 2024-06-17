@@ -54,8 +54,7 @@ public class ProductEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "brand_url",
-            referencedColumnName = "brand_url",
-            nullable = false
+            referencedColumnName = "brand_url"
     )
     private BrandEntity brand;
 
@@ -68,8 +67,7 @@ public class ProductEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "category_url",
-            referencedColumnName = "category_url",
-            nullable = false
+            referencedColumnName = "category_url"
     )
     private CategoryEntity category;
 
