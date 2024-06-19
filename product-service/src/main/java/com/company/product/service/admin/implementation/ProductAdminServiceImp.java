@@ -10,7 +10,6 @@ import com.company.product.entity.CategoryEntity;
 import com.company.product.entity.ProductEntity;
 import com.company.product.exception.exceptions.brand.BrandNotFoundException;
 import com.company.product.exception.exceptions.category.CategoryNotFoundException;
-import com.company.product.exception.exceptions.file.SearchingFileDirectoryException;
 import com.company.product.exception.exceptions.product.ProductNotFoundException;
 import com.company.product.exception.exceptions.product.ProductVersionNotValidException;
 import com.company.product.mapper.admin.ProductAdminMapper;
@@ -20,7 +19,6 @@ import com.company.product.repository.ProductRepository;
 import com.company.product.service.admin.ProductAdminService;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -47,8 +45,7 @@ import static com.company.product.util.URLGeneratorUtility.toUrlAddress;
 @CacheConfig(cacheNames = {"products"})
 public class ProductAdminServiceImp implements ProductAdminService {
 
-    @Autowired
-    private PropertiesConfig propertiesConfig;
+    private final PropertiesConfig propertiesConfig;
 
     private final ProductRepository productRepository;
 
@@ -62,11 +59,13 @@ public class ProductAdminServiceImp implements ProductAdminService {
         Page<ProductEntity> products = productRepository.findAll(pageable);
         products.forEach(product -> {
             try {
-                product.setPhoto(encodeFile(product.getPhoto()));
+                if (product.getPhoto().equals(propertiesConfig.getFilePath())) {
+                    product.setPhoto(encodeFile(product.getPhoto()));
+                } else {
+                    return;
+                }
             } catch (IOException e) {
-                throw new SearchingFileDirectoryException(
-                        "Can not find file by source directory: " + product.getPhoto() + " !"
-                );
+                throw new RuntimeException(e);
             }
         });
         return products.map(ProductAdminMapper::mapToProductAdminResponse);
@@ -79,11 +78,13 @@ public class ProductAdminServiceImp implements ProductAdminService {
         Page<ProductEntity> products = productRepository.searchProducts(pageable, searchText);
         products.forEach(product -> {
             try {
-                product.setPhoto(encodeFile(product.getPhoto()));
+                if (product.getPhoto().equals(propertiesConfig.getFilePath())) {
+                    product.setPhoto(encodeFile(product.getPhoto()));
+                } else {
+                    return;
+                }
             } catch (IOException e) {
-                throw new SearchingFileDirectoryException(
-                        "Can not find file by source directory: " + product.getPhoto() + " !"
-                );
+                throw new RuntimeException(e);
             }
         });
         return products.map(ProductAdminMapper::mapToProductAdminResponse);
@@ -100,7 +101,9 @@ public class ProductAdminServiceImp implements ProductAdminService {
                         )
                 );
 
-        product.setPhoto(encodeFile(product.getPhoto()));
+        if (product.getPhoto().equals(propertiesConfig.getFilePath())) {
+            product.setPhoto(encodeFile(product.getPhoto()));
+        }
 
         return mapToProductDetailedAdminResponse(product);
     }
@@ -142,6 +145,7 @@ public class ProductAdminServiceImp implements ProductAdminService {
     }
 
     @Override
+    @Transactional
     @Async("fileExecutor")
     public CompletableFuture<ProductAdminResponse> createPhotoForProduct(
             FileAdminRequest fileAdminRequest, String productUrl) throws IOException {
@@ -157,21 +161,24 @@ public class ProductAdminServiceImp implements ProductAdminService {
                randomFileNameGenerator(), fileAdminRequest.getEncodedFile()
        );
 
+       product.setPhoto(product.getPhoto().concat(decodedFile));
+
+       productRepository.save(product);
+
        writeFile(
                randomFileNameGenerator(),
                propertiesConfig.getFilePath(),
                fileAdminRequest.getEncodedFile()
        );
 
-       product.setPhoto(product.getPhoto().concat(decodedFile));
-
 
        return CompletableFuture.completedFuture(mapToProductAdminResponse(product));
     }
 
     @Override
-    @Async
-    public void deletePhotoForProduct(String productUrl) throws IOException {
+    @Async("fileExecutor")
+    @Transactional
+    public CompletableFuture<ProductAdminResponse> deletePhotoForProduct(String productUrl) throws IOException {
         ProductEntity product = productRepository
                 .getDetailsAboutProduct(productUrl)
                 .orElseThrow(
@@ -182,6 +189,8 @@ public class ProductAdminServiceImp implements ProductAdminService {
 
         deleteFile(product.getPhoto());
         product.setPhoto("");
+        productRepository.save(product);
+        return CompletableFuture.completedFuture(mapToProductAdminResponse(product));
     }
 
     @Override

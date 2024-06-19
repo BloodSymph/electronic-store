@@ -32,7 +32,7 @@ public interface ProductAdminService {
             FileAdminRequest fileAdminRequest, String productUrl
     ) throws IOException;
 
-    void deletePhotoForProduct(String productUrl) throws IOException;
+    CompletableFuture<ProductAdminResponse> deletePhotoForProduct(String productUrl) throws IOException;
 
     ProductAdminResponse updateCurrentProduct(
             ProductAdminRequest productAdminRequest, String productUrl

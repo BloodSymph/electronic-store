@@ -4,7 +4,7 @@ server:
 products:
   service:
     store:
-      file-path: D:\PetFiles\static\img\
+      file-path: D:\PetProjects\Electronic Store Backend\electronic-store\static\img\
 
 
 eureka:
@@ -29,7 +29,5 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
-
-
 
 

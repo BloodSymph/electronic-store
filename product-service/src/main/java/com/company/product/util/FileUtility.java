@@ -44,7 +44,7 @@ public class FileUtility {
     }
 
     public static void deleteFile(String fileRoutes) throws IOException {
-        Files.delete(Path.of(fileRoutes));
+        Files.delete(Path.of(String.valueOf(fileRoutes.contains(".jpg"))).getFileName());
     }
 
 }

@@ -1,20 +1,19 @@
 package com.company.product.service.client.implementation;
 
+import com.company.product.config.PropertiesConfig;
 import com.company.product.dto.client.product.ProductClientResponse;
 import com.company.product.dto.client.product.ProductDetailedClientResponse;
 import com.company.product.entity.ProductEntity;
-import com.company.product.exception.exceptions.file.SearchingFileDirectoryException;
 import com.company.product.exception.exceptions.product.ProductNotFoundException;
 import com.company.product.mapper.client.ProductClientMapper;
 import com.company.product.repository.ProductRepository;
 import com.company.product.service.client.ProductClientService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Scheduled;
+
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -31,17 +30,21 @@ public class ProductClientServiceImpl implements ProductClientService {
 
     private final ProductRepository productRepository;
 
+    private final PropertiesConfig propertiesConfig;
+
     @Override
     @Cacheable(unless = "#result == null ")
     public Page<ProductClientResponse> getAllProducts(Pageable pageable)  {
         Page<ProductEntity> products = productRepository.findAll(pageable);
         products.forEach(product -> {
             try {
-                product.setPhoto(encodeFile(product.getPhoto()));
+                if (product.getPhoto().equals(propertiesConfig.getFilePath())) {
+                    product.setPhoto(encodeFile(product.getPhoto()));
+                } else {
+                    return;
+                }
             } catch (IOException e) {
-                throw new SearchingFileDirectoryException(
-                        "Can not find file by source directory: " + product.getPhoto() + " !"
-                );
+                throw new RuntimeException(e);
             }
         });
         return products.map(ProductClientMapper::mapToProductClientResponse);
@@ -54,11 +57,13 @@ public class ProductClientServiceImpl implements ProductClientService {
         Page<ProductEntity> products = productRepository.searchProducts(pageable, searchText);
         products.forEach(product -> {
             try {
-                product.setPhoto(encodeFile(product.getPhoto()));
+                if (product.getPhoto().equals(propertiesConfig.getFilePath())) {
+                    product.setPhoto(encodeFile(product.getPhoto()));
+                } else {
+                    return;
+                }
             } catch (IOException e) {
-                throw new SearchingFileDirectoryException(
-                        "Can not find file by source directory: " + product.getPhoto() + " !"
-                );
+                throw new RuntimeException(e);
             }
         });
         return products.map(ProductClientMapper::mapToProductClientResponse);
@@ -75,7 +80,9 @@ public class ProductClientServiceImpl implements ProductClientService {
                         )
                 );
 
-        product.setPhoto(encodeFile(product.getPhoto()));
+        if (product.getPhoto().equals(propertiesConfig.getFilePath())) {
+            product.setPhoto(encodeFile(product.getPhoto()));
+        }
 
         return mapToProductDetailedClientResponse(product);
     }
@@ -87,11 +94,13 @@ public class ProductClientServiceImpl implements ProductClientService {
         Page<ProductEntity> products = productRepository.findByCategory(pageable, categoryUrl);
         products.forEach(product -> {
             try {
-                product.setPhoto(encodeFile(product.getPhoto()));
+                if (product.getPhoto().equals(propertiesConfig.getFilePath())) {
+                    product.setPhoto(encodeFile(product.getPhoto()));
+                } else {
+                    return;
+                }
             } catch (IOException e) {
-                throw new SearchingFileDirectoryException(
-                        "Can not find file by source directory: " + product.getPhoto() + " !"
-                );
+                throw new RuntimeException(e);
             }
         });
         return products.map(ProductClientMapper::mapToProductClientResponse);
@@ -104,11 +113,13 @@ public class ProductClientServiceImpl implements ProductClientService {
         Page<ProductEntity> products = productRepository.findByBrand(pageable, brandUrl);
         products.forEach(product -> {
             try {
-                product.setPhoto(encodeFile(product.getPhoto()));
+                if (product.getPhoto().equals(propertiesConfig.getFilePath())) {
+                    product.setPhoto(encodeFile(product.getPhoto()));
+                } else {
+                    return;
+                }
             } catch (IOException e) {
-                throw new SearchingFileDirectoryException(
-                        "Can not find file by source directory: " + product.getPhoto() + " !"
-                );
+                throw new RuntimeException(e);
             }
         });
         return products.map(ProductClientMapper::mapToProductClientResponse);

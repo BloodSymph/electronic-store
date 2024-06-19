@@ -56,6 +56,7 @@ public class ProductAdminController {
         );
     }
 
+    //todo:Test method!
     @GetMapping("/products/{productUrl}/details")
     @ResponseStatus(HttpStatus.OK)
     public ProductDetailedAdminResponse getProductDetails(
@@ -80,12 +81,12 @@ public class ProductAdminController {
         );
     }
 
-//    @DeleteMapping("/products/{productUrl}/photo/delete")
-//    @ResponseStatus(HttpStatus.OK)
-//    public CompletableFuture<String> deleteFileForProduct(
-//            @PathVariable(value = "productUrl") String productUrl) throws IOException {
-//        productAdminService.deletePhotoForProduct(productUrl);
-//    }
+    @DeleteMapping("/products/{productUrl}/photo/delete")
+    @ResponseStatus(HttpStatus.OK)
+    public CompletableFuture<ProductAdminResponse> deleteFileForProduct(
+            @PathVariable(value = "productUrl") String productUrl) throws IOException {
+        return productAdminService.deletePhotoForProduct(productUrl);
+    }
 
     @PutMapping("/products/{productUrl}/update")
     @ResponseStatus(HttpStatus.CREATED)
@@ -97,7 +98,7 @@ public class ProductAdminController {
         );
     }
 
-    @DeleteMapping("/products/{productUrl}/update")
+    @DeleteMapping("/products/{productUrl}/delete")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> deleteCurrentProduct(
             @PathVariable(value = "productUrl") String productUrl,
