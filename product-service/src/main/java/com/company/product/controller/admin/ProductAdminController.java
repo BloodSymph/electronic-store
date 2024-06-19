@@ -56,7 +56,6 @@ public class ProductAdminController {
         );
     }
 
-    //todo:Test method!
     @GetMapping("/products/{productUrl}/details")
     @ResponseStatus(HttpStatus.OK)
     public ProductDetailedAdminResponse getProductDetails(

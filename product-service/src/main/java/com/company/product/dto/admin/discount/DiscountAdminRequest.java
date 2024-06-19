@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.Range;
 
 @Data
 @Builder
@@ -12,7 +13,7 @@ import org.hibernate.validator.constraints.Length;
 @ToString
 public class DiscountAdminRequest {
 
-    @Size(max = 5, message ="Discount field shod have maximum of {max} characters!")
+    @Range(max = 5, message ="Discount field shod have maximum of {max} characters!")
     @NotNull(message = "Discount field shod not contains null value!")
     private Double discount;
 

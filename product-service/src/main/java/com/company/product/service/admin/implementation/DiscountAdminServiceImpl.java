@@ -56,10 +56,10 @@ public class DiscountAdminServiceImpl implements DiscountAdminService {
             DiscountAdminRequest discountAdminRequest, String productUrl) {
 
         ProductEntity product = productRepository
-                .findByUrlIgnoreCase(discountAdminRequest.getProductUrl())
+                .findByUrlIgnoreCase(productUrl)
                 .orElseThrow(
                         () -> new ProductNotFoundException(
-                                "Can not product by current url: " + discountAdminRequest.getProductUrl() + " !"
+                                "Can not product by current url: " + productUrl + " !"
                         )
                 );
 
@@ -67,18 +67,18 @@ public class DiscountAdminServiceImpl implements DiscountAdminService {
                 .findByProduct_Url(productUrl)
                 .orElseThrow(
                         () -> new DiscountNotFoundException(
-                                "Can not discount by product url: " + productUrl + " !"
+                                "Can not find discount by product url: " + productUrl + " !"
                         )
                 );
 
         if (!discount.getVersion().equals(discountAdminRequest.getVersion())) {
             throw new DiscountVersionNotValidException(
-                    "Description Entity version: " + discountAdminRequest.getVersion() + " not valid!"
+                    "Discount Entity version: " + discountAdminRequest.getVersion() + " not valid!"
             );
         }
 
 
-        discount = mapRequestToDiscountEntity(discountAdminRequest);
+        discount.setDiscount(discountAdminRequest.getDiscount());
         discountRepository.save(discount);
         product.setPrice(calculateDiscount(product.getPrice(), discount.getDiscount()));
 

@@ -1,16 +1,12 @@
 package com.company.product.util;
 
 import lombok.experimental.UtilityClass;
-import org.apache.commons.lang.RandomStringUtils;
-import org.springframework.web.multipart.MultipartFile;
 
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
+
+
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
 
@@ -44,7 +40,7 @@ public class FileUtility {
     }
 
     public static void deleteFile(String fileRoutes) throws IOException {
-        Files.delete(Path.of(String.valueOf(fileRoutes.contains(".jpg"))).getFileName());
+        Files.delete(Paths.get(fileRoutes).getFileName());
     }
 
 }
