@@ -178,7 +178,8 @@ public class ProductAdminServiceImp implements ProductAdminService {
     @Override
     @Async("fileExecutor")
     @Transactional
-    public CompletableFuture<ProductAdminResponse> deletePhotoForProduct(String productUrl) throws IOException {
+    public CompletableFuture<ProductAdminResponse> deletePhotoForProduct(
+            String productUrl) throws IOException {
         ProductEntity product = productRepository
                 .getDetailsAboutProduct(productUrl)
                 .orElseThrow(
