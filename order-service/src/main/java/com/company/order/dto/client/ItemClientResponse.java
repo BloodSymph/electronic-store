@@ -7,16 +7,8 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class ProductClientResponse {
+public class ItemClientResponse {
 
     private Long id;
-
-    private String title;
-
-    private String url;
-
-    private Double price;
-
-    private String photo;
 
 }

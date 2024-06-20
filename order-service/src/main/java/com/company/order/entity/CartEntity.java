@@ -23,6 +23,9 @@ public class CartEntity {
     @Column(name = "cart_id")
     private Long id;
 
+    //todo user relation
+    //private String username;
+
     @CreationTimestamp
     @Column(name = "cart_created")
     private LocalDateTime created;
