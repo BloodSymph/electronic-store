@@ -1,4 +1,4 @@
-package com.company.order.dto;
+package com.company.order.dto.client;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class ItemRequest {
+public class ItemClientRequest {
 
     private Long productId;
 

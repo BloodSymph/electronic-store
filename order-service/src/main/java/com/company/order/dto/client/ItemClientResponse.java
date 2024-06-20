@@ -1,4 +1,4 @@
-package com.company.order.dto;
+package com.company.order.dto.client;
 
 import lombok.*;
 
@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class ItemResponse {
+public class ItemClientResponse {
 
     private Long id;
 

@@ -1,4 +1,4 @@
-package com.company.order.dto;
+package com.company.order.dto.client;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -10,9 +10,9 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class CartRequest {
+public class CartClientRequest {
 
-    private Set<ItemResponse> items;
+    private Set<ItemClientResponse> items;
 
     @NotNull(message = "Cart version field shod not contains null value!")
     private Long version;

@@ -1,6 +1,6 @@
 package com.company.order.dto.admin;
 
-import com.company.order.dto.ItemResponse;
+import com.company.order.dto.client.ItemClientResponse;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -22,7 +22,7 @@ public class CartAdminResponse {
     @DateTimeFormat(pattern = "E, dd MMM yyyy HH:mm:ss z")
     private LocalDateTime updated;
 
-    private Set<ItemResponse> items;
+    private Set<ItemClientResponse> items;
 
     private Long version;
 
