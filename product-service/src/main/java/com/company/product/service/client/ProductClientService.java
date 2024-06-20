@@ -19,6 +19,8 @@ public interface ProductClientService {
             Pageable pageable, String searchText
     );
 
+    ProductClientResponse getProductForCartAdd(Long productId) throws IOException;
+
     ProductDetailedClientResponse getDetailsAboutProduct(String productUrl) throws IOException;
 
     Page<ProductClientResponse> getProductsByCategory(

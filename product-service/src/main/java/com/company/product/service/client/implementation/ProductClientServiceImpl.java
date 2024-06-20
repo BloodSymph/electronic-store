@@ -70,6 +70,23 @@ public class ProductClientServiceImpl implements ProductClientService {
     }
 
     @Override
+    public ProductClientResponse getProductForCartAdd(Long productId) throws IOException {
+        ProductEntity product = productRepository
+                .findById(productId)
+                .orElseThrow(
+                        () -> new ProductNotFoundException(
+                                "Can not find product by current id: " + productId + " !"
+                        )
+                );
+
+        if (product.getPhoto().equals(propertiesConfig.getFilePath())) {
+            product.setPhoto(encodeFile(product.getPhoto()));
+        }
+
+        return mapToProductDetailedClientResponse(product);
+    }
+
+    @Override
     public ProductDetailedClientResponse getDetailsAboutProduct(
             String productUrl) throws IOException {
         ProductEntity product = productRepository

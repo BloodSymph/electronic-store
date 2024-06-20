@@ -17,7 +17,6 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity(name = "Category")
 @Table(name = "categories")
-
 public class CategoryEntity {
 
     @Id

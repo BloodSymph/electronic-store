@@ -16,6 +16,12 @@ import java.util.Set;
 @ToString
 @Entity(name = "Cart")
 @Table(name = "carts")
+@NamedEntityGraph(
+        name = "cart-entity-graph-with-items",
+        attributeNodes = {
+                @NamedAttributeNode("items")
+        }
+)
 public class CartEntity {
 
     @Id
@@ -24,7 +30,7 @@ public class CartEntity {
     private Long id;
 
     //todo user relation
-    //private String username;
+    //private Long profile id;
 
     @CreationTimestamp
     @Column(name = "cart_created")
