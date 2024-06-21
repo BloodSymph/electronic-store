@@ -54,14 +54,6 @@ public class ProductClientController {
         return productClientService.getDetailsAboutProduct(productUrl);
     }
 
-    @GetMapping("/products/{productId}/cart/get")
-    @ResponseStatus(HttpStatus.OK)
-    public ProductClientResponse getProductForCartAdd(
-            @PathVariable("productId") Long productId) throws IOException {
-
-        return productClientService.getProductForCartAdd(productId);
-    }
-
     @GetMapping("/categories/{categoryUrl}/products")
     @ResponseStatus(HttpStatus.OK)
     public Page<ProductClientResponse> getProductByCategory(
