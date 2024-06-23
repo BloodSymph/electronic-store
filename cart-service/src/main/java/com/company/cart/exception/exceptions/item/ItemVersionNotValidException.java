@@ -1,4 +1,4 @@
-package com.company.cart.exception.exceptions.cart;
+package com.company.cart.exception.exceptions.item;
 
-public class CartVersionNotValidException {
+public class ItemVersionNotValidException {
 }

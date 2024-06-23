@@ -1,4 +1,4 @@
-package com.company.product.exception.entity;
+package com.company.cart.exception.entity;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

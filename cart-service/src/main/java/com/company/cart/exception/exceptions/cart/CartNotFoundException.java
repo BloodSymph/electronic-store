@@ -1,2 +1,4 @@
-package com.company.cart.exception;public class CartNotFoundException {
+package com.company.cart.exception.exceptions.cart;
+
+public class CartNotFoundException {
 }

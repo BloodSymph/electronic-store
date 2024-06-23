@@ -8,15 +8,15 @@ import org.springframework.stereotype.Service;
 @Service
 public interface CartClientService {
 
-    CartClientResponse getAllItemsInCart();
+    CartClientResponse getAllItemsInCart(Long cartId);
 
     ItemClientResponse addItemToCart(String itemUrl);
 
-    Integer calculatePriseOfItemsInCart();
+    Integer calculatePriseOfItemsInCart(Long cartId);
 
     void removeItemFromCart(String itemUrl, Long itemVersion);
 
-    void clearCart(Long cartVersion);
+    void clearCart(Long itemVersion);
 
     @Scheduled(fixedRate = 120)
     void evictAllCacheWithTime();

@@ -1,2 +1,4 @@
-package com.company.cart.exception.handler;public class CartExceptionHandler {
+package com.company.cart.exception.handler;
+
+public class CartExceptionHandler {
 }
