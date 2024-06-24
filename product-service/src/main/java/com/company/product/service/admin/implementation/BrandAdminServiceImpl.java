@@ -53,7 +53,7 @@ public class BrandAdminServiceImpl implements BrandAdminService {
 
     @Override
     @Transactional
-    @CachePut(unless = "#result == null ")
+    @CachePut(unless = "#result == null")
     public BrandAdminResponse createNewBrand(
             BrandAdminRequest brandAdminRequest) {
 
@@ -78,7 +78,7 @@ public class BrandAdminServiceImpl implements BrandAdminService {
 
     @Override
     @Transactional
-    @CachePut(unless = "#result == null ")
+    @CachePut(unless = "#result == null")
     public BrandAdminResponse updateCurrentBrand(
             BrandAdminRequest brandAdminRequest, String brandUrl) {
 

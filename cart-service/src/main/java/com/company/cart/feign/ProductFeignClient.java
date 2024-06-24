@@ -1,6 +1,6 @@
 package com.company.cart.feign;
 
-import com.company.cart.dto.client.ItemClientResponse;
+import com.company.cart.dto.feign.ItemFeignClientDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +15,7 @@ public interface ProductFeignClient {
 
     @GetMapping("/{productUrl}/cart/get")
     @ResponseStatus(HttpStatus.OK)
-    ItemClientResponse getProductForCart(
+    ItemFeignClientDto getProductForCart(
             @PathVariable(value = "productUrl") String productUrl
     );
 

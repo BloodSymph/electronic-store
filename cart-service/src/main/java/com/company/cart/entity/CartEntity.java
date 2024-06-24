@@ -30,7 +30,8 @@ public class CartEntity {
     private Long id;
 
     //todo: field user profile id
-    //private Long profileId;
+    @Column(name = "cart_user_profile_id", nullable = false)
+    private Long profileId;
 
     @CreationTimestamp
     @Column(name = "cart_created")

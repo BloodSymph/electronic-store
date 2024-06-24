@@ -1,4 +1,4 @@
-package com.company.cart.dto.client;
+package com.company.cart.dto.feign;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,7 +11,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class ItemClientResponse {
+public class ItemFeignClientDto {
 
     private Long id;
 
@@ -22,5 +22,7 @@ public class ItemClientResponse {
     private Double price;
 
     private String photo;
+
+    private Long version;
 
 }

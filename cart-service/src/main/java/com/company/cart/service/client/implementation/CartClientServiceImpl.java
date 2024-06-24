@@ -1,10 +1,13 @@
 package com.company.cart.service.client.implementation;
 
-import com.company.cart.dto.client.CartClientResponse;
-import com.company.cart.dto.client.ItemClientResponse;
+import com.company.cart.dto.client.cart.CartClientRequest;
+import com.company.cart.dto.client.cart.CartClientResponse;
+import com.company.cart.dto.feign.ItemFeignClientDto;
 import com.company.cart.entity.CartEntity;
+import com.company.cart.entity.ItemEntity;
+import com.company.cart.exception.exceptions.cart.CartNotFoundException;
+import com.company.cart.exception.exceptions.cart.CartProfileIdNotValidException;
 import com.company.cart.feign.ProductFeignClient;
-import com.company.cart.mapper.client.CartClientMapper;
 import com.company.cart.repository.CartRepository;
 import com.company.cart.repository.ItemRepository;
 import com.company.cart.service.client.CartClientService;
@@ -13,15 +16,23 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
+
 import static com.company.cart.mapper.client.CartClientMapper.mapToCartClientResponse;
-import static com.company.cart.util.CacheEvictUtility.evictAllCaches;
+import static com.company.cart.mapper.client.CartClientMapper.mapToCartEntity;
+import static com.company.cart.mapper.feign.ItemFeignClientMapper.mapToItemEntity;
+import static com.company.cart.util.FileUtility.encodeFile;
+
+
 
 @Service
 @RequiredArgsConstructor
-@CacheConfig(cacheNames = {"carts", "items"})
+@CacheConfig(cacheNames = {"carts"})
 public class CartClientServiceImpl implements CartClientService {
 
     private final CartRepository cartRepository;
@@ -30,44 +41,85 @@ public class CartClientServiceImpl implements CartClientService {
 
     private final ProductFeignClient productFeignClient;
 
+
     @Override
-    @Cacheable(value = "carts", unless = "#result == null ")
-    //todo: Make getting items by username or profile id
-    public CartClientResponse getAllItemsInCart(Long cartId) {
-        CartEntity cart = cartRepository.findAllById(cartId);
+    @Cacheable(unless = "#result == null ", key = "#profileId")
+    public CartClientResponse getCartWithItems(Long profileId) {
+        CartEntity cart = cartRepository
+                .findByProfileId(profileId)
+                .orElseThrow(
+                        () -> new CartNotFoundException(
+                                "Can not find cart by current profile id: " + profileId + " !"
+                        )
+                );
         return mapToCartClientResponse(cart);
     }
 
     @Override
     @Transactional
-    @CachePut(value = "items", unless = "#result == null ")
-    //todo: Make adding items by username or profile id
-    public ItemClientResponse addItemToCart(String itemUrl) {
-        ItemClientResponse item = productFeignClient.getProductForCart(itemUrl);
+    @Async("fileExecutor")
+    @CachePut(unless = "#result == null ", key = "#cartClientRequest.profileId")
+    public CompletableFuture<CartClientResponse> addItemToTheCart(
+            CartClientRequest cartClientRequest, String itemUrl) throws IOException {
+
+        CartEntity cart = cartRepository
+                .findByProfileId(cartClientRequest.getProfileId())
+                .orElseThrow(
+                        () -> new CartNotFoundException(
+                                "Can not find cart by current profile id: "
+                                        + cartClientRequest.getProfileId() + " !"
+                        )
+                );
+
+        if (!cart.getProfileId().equals(cartClientRequest.getProfileId())) {
+            cartRepository.save(mapToCartEntity(cartClientRequest));
+        } else {
+            throw new CartProfileIdNotValidException(
+                    "Users profile id not valid for current cart: "
+                            + cartClientRequest.getProfileId() + " !"
+            );
+        }
+
+        ItemFeignClientDto item = productFeignClient.getProductForCart(itemUrl);
+
+        ItemEntity itemEntity = mapToItemEntity(item);
+
+        itemEntity.setPhoto(encodeFile(itemEntity.getPhoto()));
+
+        cart.getItems().add(itemEntity);
+
+        itemRepository.save(itemEntity);
+
+        return CompletableFuture.completedFuture(mapToCartClientResponse(cart));
+    }
+
+    @Override
+    @Transactional
+    @Cacheable(unless = "#result == null ", key = "#profileId")
+    public Integer calculateItemsPriseInCart(Long profileId) {
+
+        CartEntity cart = cartRepository
+                .findByProfileId(profileId)
+                .orElseThrow(
+                        () -> new CartNotFoundException(
+                                "Can not find cart by current profile id: " + profileId + " !"
+                        )
+                );
 
         return null;
     }
 
     @Override
     @Transactional
-    //todo: Make calculation price of items by username or profile id
-    public Integer calculatePriseOfItemsInCart(Long cartId) {
-        return null;
-    }
-
-    @Override
-    @Transactional
-    @CacheEvict(allEntries = true)
-    //todo: Make removing items by username or profile id
-    public void removeItemFromCart(String itemUrl, Long itemVersion) {
+    @CacheEvict(key = "#profileId")
+    public void removeItemFromCart(String itemUrl, Long itemVersion, Long profileId) {
 
     }
 
     @Override
     @Transactional
-    @CacheEvict(allEntries = true)
-    //todo: Make clear cart by username or profile id
-    public void clearCart(Long itemVersion) {
+    @CacheEvict(key = "#profileId")
+    public void clearCart(Long profileId) {
 
     }
 

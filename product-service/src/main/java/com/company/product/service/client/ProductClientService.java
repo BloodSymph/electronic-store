@@ -2,6 +2,7 @@ package com.company.product.service.client;
 
 import com.company.product.dto.client.product.ProductClientResponse;
 import com.company.product.dto.client.product.ProductDetailedClientResponse;
+import com.company.product.dto.feign.ProductFeignClientDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -19,7 +20,11 @@ public interface ProductClientService {
             Pageable pageable, String searchText
     );
 
-    ProductDetailedClientResponse getDetailsAboutProduct(String productUrl) throws IOException;
+    ProductDetailedClientResponse getDetailsAboutProduct(
+            String productUrl) throws IOException;
+
+    ProductFeignClientDto getProductForCart(
+            String productUrl) throws IOException;
 
     Page<ProductClientResponse> getProductsByCategory(
             Pageable pageable, String categoryUrl

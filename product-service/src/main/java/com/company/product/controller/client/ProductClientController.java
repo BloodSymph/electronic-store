@@ -2,6 +2,7 @@ package com.company.product.controller.client;
 
 import com.company.product.dto.client.product.ProductClientResponse;
 import com.company.product.dto.client.product.ProductDetailedClientResponse;
+import com.company.product.dto.feign.ProductFeignClientDto;
 import com.company.product.service.client.ProductClientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -52,6 +53,13 @@ public class ProductClientController {
     public ProductDetailedClientResponse getProductDetails(
             @PathVariable(value = "productUrl") String productUrl) throws IOException {
         return productClientService.getDetailsAboutProduct(productUrl);
+    }
+
+    @GetMapping("/products/{productUrl}/cart/get")
+    @ResponseStatus(HttpStatus.OK)
+    public ProductFeignClientDto getProductForCart(
+            @PathVariable(value = "productUrl") String productUrl) throws IOException {
+        return productClientService.getProductForCart(productUrl);
     }
 
     @GetMapping("/categories/{categoryUrl}/products")

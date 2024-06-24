@@ -1,6 +1,6 @@
-package com.company.cart.dto.client;
+package com.company.cart.dto.client.cart;
 
-import com.company.cart.entity.ItemEntity;
+import com.company.cart.dto.feign.ItemFeignClientDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +18,8 @@ public class CartClientResponse {
 
     private Long id;
 
-    private Set<ItemClientResponse> items;
+    private Long profileId;
+
+    private Set<ItemFeignClientDto> items;
 
 }
