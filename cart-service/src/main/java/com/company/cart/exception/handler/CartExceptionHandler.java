@@ -17,7 +17,7 @@ public class CartExceptionHandler {
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(CartNotFoundException.class)
-    public ResponseEntity<ErrorEntity> categoryNotFoundException(
+    public ResponseEntity<ErrorEntity> cartNotFoundException(
             CartNotFoundException cartNotFoundException) {
 
         ErrorEntity errorEntity = new ErrorEntity();
@@ -29,7 +29,7 @@ public class CartExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(CartVersionNotValidException.class)
-    public ResponseEntity<ErrorEntity> categoryVersionException(
+    public ResponseEntity<ErrorEntity> cartVersionException(
             CartVersionNotValidException cartVersionNotValidException) {
 
         ErrorEntity errorEntity = new ErrorEntity();
@@ -41,7 +41,7 @@ public class CartExceptionHandler {
     }
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(CartProfileIdNotValidException.class)
-    public ResponseEntity<ErrorEntity> categoryVersionException(
+    public ResponseEntity<ErrorEntity> cartProfileIdException(
             CartProfileIdNotValidException cartProfileIdNotValidException) {
 
         ErrorEntity errorEntity = new ErrorEntity();
