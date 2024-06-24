@@ -19,19 +19,12 @@ public class ItemFeignClientDto {
 
     private Long id;
 
-    @NotNull(message = "Item title field shod not contains null value!")
-    @NotBlank(message = "Item title field shod not be empty!")
-    @Length(max = 120, message = "Item title field shod have maximum of {max} characters!")
     private String title;
 
-    @Length(max = 25, message = "Item url field shod have maximum of {max} characters!")
     private String url;
 
-    @Range(max = 99999, message ="Item price field shod have maximum of {max} characters!")
-    @NotNull(message = "Item price field shod not contains null value!")
     private Double price;
 
-    @NotNull(message = "Product version field shod not contains null value!")
     private Long version;
 
 }
