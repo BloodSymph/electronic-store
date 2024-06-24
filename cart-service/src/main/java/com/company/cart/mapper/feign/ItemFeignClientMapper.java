@@ -13,7 +13,6 @@ public class ItemFeignClientMapper {
                 .title(item.getTitle())
                 .url(item.getUrl())
                 .price(item.getPrice())
-                .photo(item.getPhoto())
                 .build();
     }
 
@@ -23,7 +22,6 @@ public class ItemFeignClientMapper {
                 .title(item.getTitle())
                 .url(item.getUrl())
                 .price(item.getPrice())
-                .photo(item.getPhoto())
                 .version(item.getVersion())
                 .build();
     }

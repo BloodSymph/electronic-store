@@ -13,13 +13,17 @@ public interface CartClientService {
 
     CartClientResponse getCartWithItems(Long profileId);
 
-    CompletableFuture<CartClientResponse> addItemToTheCart(CartClientRequest cartClientRequest, String itemUrl) throws IOException;
+    CartClientResponse addItemToTheCart(
+            CartClientRequest cartClientRequest, String itemUrl
+    );
 
-    Integer calculateItemsPriseInCart(Long profileId);
+    Double calculateItemsPriseInCart(Long profileId);
 
-    void removeItemFromCart(String itemUrl, Long itemVersion, Long profileId);
+    void removeItemFromCart(
+            String itemUrl, Long itemVersion, Long profileId
+    );
 
-    void clearCart(Long profileId);
+    void clearCart(Long cartVersion, Long profileId);
 
     @Scheduled(fixedRate = 120)
     void evictAllCacheWithTime();

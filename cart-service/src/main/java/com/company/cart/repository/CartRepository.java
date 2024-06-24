@@ -14,4 +14,6 @@ public interface CartRepository extends JpaRepository<CartEntity, Long> {
     @EntityGraph(value = "cart-items-entity-graph", type = EntityGraph.EntityGraphType.FETCH)
     Optional<CartEntity> findByProfileId(Long profileId);
 
+    Boolean existsByVersion(Long cartVersion);
+
 }

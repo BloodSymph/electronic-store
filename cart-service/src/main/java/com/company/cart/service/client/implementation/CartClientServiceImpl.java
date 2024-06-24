@@ -16,18 +16,14 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
-import java.util.concurrent.CompletableFuture;
 
 import static com.company.cart.mapper.client.CartClientMapper.mapToCartClientResponse;
 import static com.company.cart.mapper.client.CartClientMapper.mapToCartEntity;
 import static com.company.cart.mapper.feign.ItemFeignClientMapper.mapToItemEntity;
-import static com.company.cart.util.FileUtility.encodeFile;
-
+import static com.company.cart.util.CacheEvictUtility.evictAllCaches;
 
 
 @Service
@@ -57,10 +53,9 @@ public class CartClientServiceImpl implements CartClientService {
 
     @Override
     @Transactional
-    @Async("fileExecutor")
     @CachePut(unless = "#result == null ", key = "#cartClientRequest.profileId")
-    public CompletableFuture<CartClientResponse> addItemToTheCart(
-            CartClientRequest cartClientRequest, String itemUrl) throws IOException {
+    public CartClientResponse addItemToTheCart(
+            CartClientRequest cartClientRequest, String itemUrl) {
 
         CartEntity cart = cartRepository
                 .findByProfileId(cartClientRequest.getProfileId())
@@ -84,47 +79,37 @@ public class CartClientServiceImpl implements CartClientService {
 
         ItemEntity itemEntity = mapToItemEntity(item);
 
-        itemEntity.setPhoto(encodeFile(itemEntity.getPhoto()));
-
         cart.getItems().add(itemEntity);
 
         itemRepository.save(itemEntity);
 
-        return CompletableFuture.completedFuture(mapToCartClientResponse(cart));
+        return mapToCartClientResponse(cart);
     }
 
     @Override
     @Transactional
     @Cacheable(unless = "#result == null ", key = "#profileId")
-    public Integer calculateItemsPriseInCart(Long profileId) {
-
-        CartEntity cart = cartRepository
-                .findByProfileId(profileId)
-                .orElseThrow(
-                        () -> new CartNotFoundException(
-                                "Can not find cart by current profile id: " + profileId + " !"
-                        )
-                );
-
-        return null;
+    public Double calculateItemsPriseInCart(Long profileId) {
+        return itemRepository.countAllByPrice(profileId);
     }
 
     @Override
     @Transactional
     @CacheEvict(key = "#profileId")
     public void removeItemFromCart(String itemUrl, Long itemVersion, Long profileId) {
-
+        itemRepository.deleteByUrlIgnoreCaseAndCart_ProfileId(itemUrl, profileId);
     }
 
     @Override
     @Transactional
     @CacheEvict(key = "#profileId")
-    public void clearCart(Long profileId) {
+    public void clearCart(Long cartVersion, Long profileId) {
 
+        itemRepository.deleteAllByCart_ProfileId(profileId);
     }
 
     @Override
     public void evictAllCacheWithTime() {
-
+        evictAllCaches();
     }
 }

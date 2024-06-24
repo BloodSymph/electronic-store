@@ -13,7 +13,6 @@ public class ProductFeignClientMapper {
                 .title(product.getTitle())
                 .url(product.getUrl())
                 .price(product.getPrice())
-                .photo(product.getPhoto())
                 .version(product.getVersion())
                 .build();
     }

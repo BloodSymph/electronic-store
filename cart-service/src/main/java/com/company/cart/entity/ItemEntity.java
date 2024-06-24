@@ -26,9 +26,6 @@ public class ItemEntity {
     @Column(name = "item_price", nullable = false, length = 99999)
     private Double price;
 
-    @Column(name = "item_photo_rout", length = 350)
-    private String photo;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "cart_id",

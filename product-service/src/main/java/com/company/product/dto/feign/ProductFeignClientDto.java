@@ -18,8 +18,6 @@ public class ProductFeignClientDto {
 
     private Double price;
 
-    private String photo;
-
     private Long version;
 
 }
