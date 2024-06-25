@@ -41,8 +41,14 @@ public class CartClientServiceImpl implements CartClientService {
 
 
     @Override
+    @Transactional
     @Cacheable(unless = "#result == null ", key = "#profileId")
     public CartClientResponse getCartWithItems(Long profileId) {
+        if (!cartRepository.existsByProfileId(profileId)) {
+            throw new CartProfileIdNotValidException(
+                    "Users profile id not valid for current cart: " + profileId + " !"
+            );
+        }
         CartEntity cart = cartRepository
                 .findByProfileId(profileId)
                 .orElseThrow(
@@ -94,6 +100,11 @@ public class CartClientServiceImpl implements CartClientService {
     @Transactional
     @Cacheable(unless = "#result == null ", key = "#profileId")
     public Double calculateItemsPriseInCart(Long profileId) {
+        if (!cartRepository.existsByProfileId(profileId)) {
+            throw new CartProfileIdNotValidException(
+                    "Users profile id not valid for current cart: " + profileId + " !"
+            );
+        }
         return itemRepository.countAllByPrice(profileId);
     }
 
@@ -123,6 +134,11 @@ public class CartClientServiceImpl implements CartClientService {
     @Transactional
     @CacheEvict(key = "#profileId")
     public void clearCart(Long profileId, Long cartVersion) {
+        if (!cartRepository.existsByProfileId(profileId)) {
+            throw new CartProfileIdNotValidException(
+                    "Users profile id not valid for current cart: " + profileId + " !"
+            );
+        }
         if (!cartRepository.existsByVersion(cartVersion)) {
             throw new ItemVersionNotValidException(
                     "Cart Entity version: " + cartVersion + " not valid!"
