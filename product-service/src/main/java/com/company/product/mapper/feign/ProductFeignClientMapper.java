@@ -9,11 +9,8 @@ public class ProductFeignClientMapper {
 
     public static ProductFeignClientDto mapToProductFeignClientDto(ProductEntity product) {
         return ProductFeignClientDto.builder()
-                .id(product.getId())
-                .title(product.getTitle())
-                .url(product.getUrl())
+                .productId(product.getId())
                 .price(product.getPrice())
-                .version(product.getVersion())
                 .build();
     }
 

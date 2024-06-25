@@ -23,8 +23,7 @@ public interface ProductClientService {
     ProductDetailedClientResponse getDetailsAboutProduct(
             String productUrl) throws IOException;
 
-    ProductFeignClientDto getProductForCart(
-            String productUrl) throws IOException;
+    ProductFeignClientDto getProductForCart(Long productId);
 
     Page<ProductClientResponse> getProductsByCategory(
             Pageable pageable, String categoryUrl

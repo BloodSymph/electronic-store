@@ -1,14 +1,16 @@
-package com.company.product.dto.feign;
+package com.company.cart.dto.client.item;
 
 import lombok.*;
-
+import lombok.experimental.SuperBuilder;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class ProductFeignClientDto {
+public class ItemClientResponse {
+
+    private Long id;
 
     private Long productId;
 

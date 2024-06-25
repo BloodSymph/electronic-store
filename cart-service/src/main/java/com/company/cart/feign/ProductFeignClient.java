@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 )
 public interface ProductFeignClient {
 
-    @GetMapping("/{productUrl}/cart/get")
+    @GetMapping("/{productId}/cart/get")
     @ResponseStatus(HttpStatus.OK)
     ItemFeignClientDto getProductForCart(
-            @PathVariable(value = "productUrl") String productUrl
+            @PathVariable(value = "productId") Long productId
     );
 
 }

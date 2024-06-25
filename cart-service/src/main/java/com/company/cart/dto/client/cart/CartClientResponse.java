@@ -1,16 +1,12 @@
 package com.company.cart.dto.client.cart;
 
-import com.company.cart.dto.feign.ItemFeignClientDto;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-import lombok.experimental.SuperBuilder;
+import com.company.cart.dto.client.item.ItemClientResponse;
+import lombok.*;
 
 import java.util.Set;
 
 @Data
-@SuperBuilder
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
@@ -20,6 +16,6 @@ public class CartClientResponse {
 
     private Long profileId;
 
-    private Set<ItemFeignClientDto> items;
+    private Set<ItemClientResponse> items;
 
 }

@@ -7,6 +7,8 @@ import com.company.cart.entity.CartEntity;
 import com.company.cart.entity.ItemEntity;
 import com.company.cart.exception.exceptions.cart.CartNotFoundException;
 import com.company.cart.exception.exceptions.cart.CartProfileIdNotValidException;
+import com.company.cart.exception.exceptions.item.ItemNotFoundException;
+import com.company.cart.exception.exceptions.item.ItemVersionNotValidException;
 import com.company.cart.feign.ProductFeignClient;
 import com.company.cart.repository.CartRepository;
 import com.company.cart.repository.ItemRepository;
@@ -55,7 +57,7 @@ public class CartClientServiceImpl implements CartClientService {
     @Transactional
     @CachePut(unless = "#result == null ", key = "#cartClientRequest.profileId")
     public CartClientResponse addItemToTheCart(
-            CartClientRequest cartClientRequest, String itemUrl) {
+            CartClientRequest cartClientRequest, Long itemId, Long itemVersion) {
 
         CartEntity cart = cartRepository
                 .findByProfileId(cartClientRequest.getProfileId())
@@ -75,9 +77,11 @@ public class CartClientServiceImpl implements CartClientService {
             );
         }
 
-        ItemFeignClientDto item = productFeignClient.getProductForCart(itemUrl);
+        ItemFeignClientDto item = productFeignClient.getProductForCart(itemId);
 
         ItemEntity itemEntity = mapToItemEntity(item);
+
+        itemEntity.setVersion(itemVersion);
 
         cart.getItems().add(itemEntity);
 
@@ -96,15 +100,34 @@ public class CartClientServiceImpl implements CartClientService {
     @Override
     @Transactional
     @CacheEvict(key = "#profileId")
-    public void removeItemFromCart(String itemUrl, Long itemVersion, Long profileId) {
-        itemRepository.deleteByUrlIgnoreCaseAndCart_ProfileId(itemUrl, profileId);
+    public void removeItemFromCart(Long profileId, Long itemId, Long itemVersion) {
+        if (!cartRepository.existsByProfileId(profileId)) {
+            throw new CartProfileIdNotValidException(
+                    "Users profile id not valid for current cart: " + profileId + " !"
+            );
+        }
+        if (!itemRepository.existsById(itemId)) {
+            throw new ItemNotFoundException(
+                    "Can not find item by current id: " + itemId + " !"
+            );
+        }
+        if (!itemRepository.existsByVersion(itemVersion)) {
+            throw new ItemVersionNotValidException(
+                    "Item Entity version: " + itemVersion + " not valid!"
+            );
+        }
+        itemRepository.deleteByIdAndCart_ProfileId(itemId, profileId);
     }
 
     @Override
     @Transactional
     @CacheEvict(key = "#profileId")
-    public void clearCart(Long cartVersion, Long profileId) {
-
+    public void clearCart(Long profileId, Long cartVersion) {
+        if (!cartRepository.existsByVersion(cartVersion)) {
+            throw new ItemVersionNotValidException(
+                    "Cart Entity version: " + cartVersion + " not valid!"
+            );
+        }
         itemRepository.deleteAllByCart_ProfileId(profileId);
     }
 

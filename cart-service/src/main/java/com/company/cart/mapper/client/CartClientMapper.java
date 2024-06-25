@@ -18,7 +18,7 @@ public class CartClientMapper {
                 .items(
                         cart.getItems()
                                 .stream()
-                                .map(ItemFeignClientMapper::mapToItemFeignClientResponse)
+                                .map(ItemClientMapper::mapToItemClientResponse)
                                 .collect(Collectors.toSet())
                 )
                 .build();

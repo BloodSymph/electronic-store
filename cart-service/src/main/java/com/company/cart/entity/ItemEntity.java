@@ -2,6 +2,10 @@ package com.company.cart.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -17,14 +21,19 @@ public class ItemEntity {
     @Column(name = "item_id")
     private Long id;
 
-    @Column(name = "item_title", nullable = false, length = 120)
-    private String title;
+    @Column(name = "item_product_id")
+    private Long productId;
 
-    @Column(name = "item_url", nullable = false, unique = true, length = 25)
-    private String url;
-
-    @Column(name = "item_price", nullable = false, length = 99999)
+    @Column(name = "item_product_price", nullable = false, length = 99999)
     private Double price;
+
+    @CreationTimestamp
+    @Column(name = "item_created")
+    private LocalDateTime created;
+
+    @UpdateTimestamp
+    @Column(name = "item_updated")
+    private LocalDateTime updated;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(

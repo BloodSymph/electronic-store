@@ -1,6 +1,7 @@
 package com.company.product.repository;
 
 import com.company.product.entity.ProductEntity;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -8,6 +9,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import reactor.util.annotation.NonNull;
+import reactor.util.annotation.NonNullApi;
+
 
 import java.util.Optional;
 
@@ -47,6 +51,9 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
     );
 
     Optional<ProductEntity> findByUrlIgnoreCase(String productUrl);
+
+    @NonNull
+    Optional<ProductEntity> findById(@NonNull Long productId);
 
     void deleteByUrlIgnoreCase(String productUrl);
 

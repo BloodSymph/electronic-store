@@ -55,11 +55,11 @@ public class ProductClientController {
         return productClientService.getDetailsAboutProduct(productUrl);
     }
 
-    @GetMapping("/products/{productUrl}/cart/get")
+    @GetMapping("/products/{productId}/cart/get")
     @ResponseStatus(HttpStatus.OK)
     public ProductFeignClientDto getProductForCart(
-            @PathVariable(value = "productUrl") String productUrl) throws IOException {
-        return productClientService.getProductForCart(productUrl);
+            @PathVariable(value = "productId") Long productId) {
+        return productClientService.getProductForCart(productId);
     }
 
     @GetMapping("/categories/{categoryUrl}/products")

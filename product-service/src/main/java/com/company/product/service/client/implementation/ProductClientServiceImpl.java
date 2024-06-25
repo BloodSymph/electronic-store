@@ -91,18 +91,14 @@ public class ProductClientServiceImpl implements ProductClientService {
     }
 
     @Override
-    public ProductFeignClientDto getProductForCart(String productUrl) throws IOException {
+    public ProductFeignClientDto getProductForCart(Long productId) {
         ProductEntity product = productRepository
-                .findByUrlIgnoreCase(productUrl)
+                .findById(productId)
                 .orElseThrow(
                         () -> new ProductNotFoundException(
-                                "Can not find product by current url: " + productUrl + " !"
+                                "Can not find product by current id: " + productId + " !"
                         )
                 );
-
-        if (product.getPhoto().equals(propertiesConfig.getFilePath())) {
-            product.setPhoto(encodeFile(product.getPhoto()));
-        }
 
         return mapToProductFeignClientDto(product);
     }

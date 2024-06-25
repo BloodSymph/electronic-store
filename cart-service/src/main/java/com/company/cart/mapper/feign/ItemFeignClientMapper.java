@@ -9,20 +9,15 @@ public class ItemFeignClientMapper {
 
     public static ItemFeignClientDto mapToItemFeignClientResponse(ItemEntity item) {
         return ItemFeignClientDto.builder()
-                .id(item.getId())
-                .title(item.getTitle())
-                .url(item.getUrl())
+                .productId(item.getProductId())
                 .price(item.getPrice())
                 .build();
     }
 
     public static ItemEntity mapToItemEntity(ItemFeignClientDto item) {
         return ItemEntity.builder()
-                .id(item.getId())
-                .title(item.getTitle())
-                .url(item.getUrl())
+                .productId(item.getProductId())
                 .price(item.getPrice())
-                .version(item.getVersion())
                 .build();
     }
 
