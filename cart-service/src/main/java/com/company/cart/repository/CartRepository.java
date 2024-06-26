@@ -26,5 +26,4 @@ public interface CartRepository extends JpaRepository<CartEntity, Long> {
     void deleteByProfileId(Long profileId);
     Boolean existsByVersion(Long cartVersion);
     Boolean existsByProfileId(Long profileId);
-
 }

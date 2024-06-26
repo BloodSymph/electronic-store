@@ -13,6 +13,9 @@ import com.company.cart.feign.ProductFeignClient;
 import com.company.cart.repository.CartRepository;
 import com.company.cart.repository.ItemRepository;
 import com.company.cart.service.client.CartClientService;
+import jakarta.inject.Singleton;
+import jakarta.validation.constraints.NotNull;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -21,6 +24,8 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+import java.util.Objects;
 
 import static com.company.cart.mapper.client.CartClientMapper.mapToCartClientResponse;
 import static com.company.cart.mapper.client.CartClientMapper.mapToCartEntity;
@@ -60,30 +65,16 @@ public class CartClientServiceImpl implements CartClientService {
     public CartClientResponse addItemToTheCart(
             CartClientRequest cartClientRequest, Long itemId, Long itemVersion) {
 
-        CartEntity cart = cartRepository
-                .findByProfileId(cartClientRequest.getProfileId())
-                .orElseThrow(
-                        () -> new CartNotFoundException(
-                                "Can not find cart by current profile id: "
-                                        + cartClientRequest.getProfileId() + " !"
-                        )
-                );
-
         ItemFeignClientDto item = productFeignClient.getProductForCart(itemId);
 
         ItemEntity itemEntity = mapToItemEntity(item);
 
         itemEntity.setVersion(itemVersion);
 
-        if (!cart.getProfileId().equals(cartClientRequest.getProfileId())) {
-            cartRepository.save(mapToCartEntity(cartClientRequest));
-        } else {
-            cart.getItems().add(itemEntity);
-        }
-
         itemRepository.save(itemEntity);
 
-        return mapToCartClientResponse(cart);
+//        return mapToCartClientResponse(cartEntity);
+        return null;
     }
 
     @Override

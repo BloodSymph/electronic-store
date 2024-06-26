@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @FeignClient(
         name = "product-client",
-        url = "/api/v1/product-service/client/products"
+        url = "http://localhost:8081/api/v1/product-service/client/products"
 )
 public interface ProductFeignClient {
 
