@@ -44,11 +44,6 @@ public class CartClientServiceImpl implements CartClientService {
     @Transactional
     @Cacheable(unless = "#result == null ", key = "#profileId")
     public CartClientResponse getCartWithItems(Long profileId) {
-        if (!cartRepository.existsByProfileId(profileId)) {
-            throw new CartProfileIdNotValidException(
-                    "Users profile id not valid for current cart: " + profileId + " !"
-            );
-        }
         CartEntity cart = cartRepository
                 .findByProfileId(profileId)
                 .orElseThrow(
@@ -74,22 +69,17 @@ public class CartClientServiceImpl implements CartClientService {
                         )
                 );
 
-        if (!cart.getProfileId().equals(cartClientRequest.getProfileId())) {
-            cartRepository.save(mapToCartEntity(cartClientRequest));
-        } else {
-            throw new CartProfileIdNotValidException(
-                    "Users profile id not valid for current cart: "
-                            + cartClientRequest.getProfileId() + " !"
-            );
-        }
-
         ItemFeignClientDto item = productFeignClient.getProductForCart(itemId);
 
         ItemEntity itemEntity = mapToItemEntity(item);
 
         itemEntity.setVersion(itemVersion);
 
-        cart.getItems().add(itemEntity);
+        if (!cart.getProfileId().equals(cartClientRequest.getProfileId())) {
+            cartRepository.save(mapToCartEntity(cartClientRequest));
+        } else {
+            cart.getItems().add(itemEntity);
+        }
 
         itemRepository.save(itemEntity);
 
@@ -100,11 +90,6 @@ public class CartClientServiceImpl implements CartClientService {
     @Transactional
     @Cacheable(unless = "#result == null ", key = "#profileId")
     public Double calculateItemsPriseInCart(Long profileId) {
-        if (!cartRepository.existsByProfileId(profileId)) {
-            throw new CartProfileIdNotValidException(
-                    "Users profile id not valid for current cart: " + profileId + " !"
-            );
-        }
         return itemRepository.countAllByPrice(profileId);
     }
 

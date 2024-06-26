@@ -1,9 +1,13 @@
 package com.company.cart.controller.client;
 
+import com.company.cart.dto.client.cart.CartClientRequest;
+import com.company.cart.dto.client.cart.CartClientResponse;
 import com.company.cart.service.client.CartClientService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -11,5 +15,60 @@ import org.springframework.web.bind.annotation.RestController;
 public class CartClientController {
 
     private final CartClientService cartClientService;
+
+    @GetMapping("/{profileId}/cart")
+    @ResponseStatus(HttpStatus.OK)
+    public CartClientResponse getCartWithItems(
+            @PathVariable(value = "profileId") Long profileId){
+        return cartClientService.getCartWithItems(profileId);
+    }
+
+    @PostMapping("/cart/{itemId}/add")
+    @ResponseStatus(HttpStatus.CREATED)
+    public CartClientResponse addItemToTheCart(
+            @Valid @RequestBody CartClientRequest cartClientRequest,
+            @PathVariable(value = "itemId") Long itemId,
+            @RequestParam(value = "itemVersion") Long itemVersion) {
+        return cartClientService.addItemToTheCart(
+                cartClientRequest, itemId, itemVersion
+        );
+    }
+
+    @GetMapping("/{profileId}/cart/calculate/price")
+    @ResponseStatus(HttpStatus.OK)
+    public Double calculatePricesOfItemsInCart(
+            @PathVariable(value = "profileId") Long profileId) {
+        return cartClientService.calculateItemsPriseInCart(profileId);
+    }
+
+    @DeleteMapping("/{profileId}/cart/{itemId}/remove")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<String> removeItemFromCart(
+            @PathVariable(value = "profileId") Long profileId,
+            @PathVariable(value = "itemId") Long itemId,
+            @RequestParam(value = "itemVersion") Long itemVersion) {
+
+        cartClientService.removeItemFromCart(profileId, itemId, itemVersion);
+
+        return new ResponseEntity<>(
+                "Item successful removed by profileId and itemId: "
+                        + profileId + " " + itemId + " !",
+                HttpStatus.OK
+        );
+    }
+
+    @DeleteMapping("/{profileId}/cart/clear")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<String> clearCart(
+            @PathVariable(value = "profileId") Long profileId,
+            @RequestParam(value = "cartVersion") Long cartVersion) {
+
+        cartClientService.clearCart(profileId, cartVersion);
+
+        return new ResponseEntity<>(
+                "Cart successful cleared by profileId: " + profileId + " !",
+                HttpStatus.OK
+        );
+    }
 
 }

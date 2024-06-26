@@ -45,7 +45,7 @@ public class CartAdminServiceImpl implements CartAdminService {
     }
 
     @Override
-    public CartDetailedAdminResponse getCartItems(Long profileId) {
+    public CartDetailedAdminResponse getCartUserItems(Long profileId) {
         CartEntity cart = cartRepository
                 .findByProfileId(profileId)
                 .orElseThrow(

@@ -14,7 +14,7 @@ public interface CartAdminService {
 
     Page<CartAdminResponse> searchCarts(Pageable pageable, Long profileId);
 
-    CartDetailedAdminResponse getCartItems(Long profileId);
+    CartDetailedAdminResponse getCartUserItems(Long profileId);
 
     void deleteCart(Long profileId, Long cartVersion);
 
