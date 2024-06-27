@@ -12,9 +12,10 @@ public interface CartClientService {
 
     CartClientResponse getCartWithItems(Long profileId);
 
+    CartClientResponse createCart(CartClientRequest cartClientRequest);
+
     CartClientResponse addItemToTheCart(
-            CartClientRequest cartClientRequest,
-            Long itemId, Long itemVersion
+            Long profileId, Long itemId, Long itemVersion
     );
 
     Double calculateItemsPriseInCart(Long profileId);

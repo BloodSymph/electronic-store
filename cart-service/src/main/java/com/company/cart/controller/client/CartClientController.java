@@ -23,14 +23,21 @@ public class CartClientController {
         return cartClientService.getCartWithItems(profileId);
     }
 
-    @PostMapping("/cart/{itemId}/add")
+    @PostMapping("/create/cart")
+    @ResponseStatus(HttpStatus.CREATED)
+    public CartClientResponse createCart(
+            @Valid @RequestBody CartClientRequest cartClientRequest){
+        return cartClientService.createCart(cartClientRequest);
+    }
+
+    @PostMapping("/{profileId}/cart/{itemId}/add")
     @ResponseStatus(HttpStatus.CREATED)
     public CartClientResponse addItemToTheCart(
-            @Valid @RequestBody CartClientRequest cartClientRequest,
+            @PathVariable(value = "profileId") Long profileId,
             @PathVariable(value = "itemId") Long itemId,
             @RequestParam(value = "itemVersion") Long itemVersion) {
         return cartClientService.addItemToTheCart(
-                cartClientRequest, itemId, itemVersion
+                profileId, itemId, itemVersion
         );
     }
 

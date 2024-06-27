@@ -46,7 +46,6 @@ public class CartClientServiceImpl implements CartClientService {
 
 
     @Override
-    @Transactional
     @Cacheable(unless = "#result == null ", key = "#profileId")
     public CartClientResponse getCartWithItems(Long profileId) {
         CartEntity cart = cartRepository
@@ -60,10 +59,26 @@ public class CartClientServiceImpl implements CartClientService {
     }
 
     @Override
-    @Transactional
     @CachePut(unless = "#result == null ", key = "#cartClientRequest.profileId")
+    public CartClientResponse createCart(CartClientRequest cartClientRequest) {
+        CartEntity cart = mapToCartEntity(cartClientRequest);
+        cartRepository.save(cart);
+        return mapToCartClientResponse(cart);
+    }
+
+    @Override
+    @Transactional
+    @CachePut(unless = "#result == null ", key = "#profileId")
     public CartClientResponse addItemToTheCart(
-            CartClientRequest cartClientRequest, Long itemId, Long itemVersion) {
+            Long profileId, Long itemId, Long itemVersion) {
+
+        CartEntity cart = cartRepository
+                .findByProfileId(profileId)
+                .orElseThrow(
+                        () -> new CartNotFoundException(
+                                "Can not find cart by current profile id: " + profileId + " !"
+                        )
+                );
 
         ItemFeignClientDto item = productFeignClient.getProductForCart(itemId);
 
@@ -71,15 +86,15 @@ public class CartClientServiceImpl implements CartClientService {
 
         itemEntity.setVersion(itemVersion);
 
+        cart.getItems().add(itemEntity);
+
         itemRepository.save(itemEntity);
 
-//        return mapToCartClientResponse(cartEntity);
-        return null;
+        return mapToCartClientResponse(cart);
     }
 
     @Override
     @Transactional
-    @Cacheable(unless = "#result == null ", key = "#profileId")
     public Double calculateItemsPriseInCart(Long profileId) {
         return itemRepository.countAllByPrice(profileId);
     }
