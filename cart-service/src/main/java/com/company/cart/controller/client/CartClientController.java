@@ -1,7 +1,9 @@
 package com.company.cart.controller.client;
 
 import com.company.cart.dto.client.cart.CartClientRequest;
+import com.company.cart.dto.client.cart.CartClientDetailedResponse;
 import com.company.cart.dto.client.cart.CartClientResponse;
+import com.company.cart.dto.client.item.ItemClientResponse;
 import com.company.cart.service.client.CartClientService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +20,7 @@ public class CartClientController {
 
     @GetMapping("/{profileId}/cart")
     @ResponseStatus(HttpStatus.OK)
-    public CartClientResponse getCartWithItems(
+    public CartClientDetailedResponse getCartWithItems(
             @PathVariable(value = "profileId") Long profileId){
         return cartClientService.getCartWithItems(profileId);
     }
@@ -32,7 +34,7 @@ public class CartClientController {
 
     @PostMapping("/{profileId}/cart/{itemId}/add")
     @ResponseStatus(HttpStatus.CREATED)
-    public CartClientResponse addItemToTheCart(
+    public ItemClientResponse addItemToTheCart(
             @PathVariable(value = "profileId") Long profileId,
             @PathVariable(value = "itemId") Long itemId,
             @RequestParam(value = "itemVersion") Long itemVersion) {

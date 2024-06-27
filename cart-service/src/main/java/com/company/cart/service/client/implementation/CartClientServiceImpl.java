@@ -1,7 +1,9 @@
 package com.company.cart.service.client.implementation;
 
 import com.company.cart.dto.client.cart.CartClientRequest;
+import com.company.cart.dto.client.cart.CartClientDetailedResponse;
 import com.company.cart.dto.client.cart.CartClientResponse;
+import com.company.cart.dto.client.item.ItemClientResponse;
 import com.company.cart.dto.feign.ItemFeignClientDto;
 import com.company.cart.entity.CartEntity;
 import com.company.cart.entity.ItemEntity;
@@ -13,9 +15,6 @@ import com.company.cart.feign.ProductFeignClient;
 import com.company.cart.repository.CartRepository;
 import com.company.cart.repository.ItemRepository;
 import com.company.cart.service.client.CartClientService;
-import jakarta.inject.Singleton;
-import jakarta.validation.constraints.NotNull;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -25,17 +24,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import java.util.Objects;
-
-import static com.company.cart.mapper.client.CartClientMapper.mapToCartClientResponse;
-import static com.company.cart.mapper.client.CartClientMapper.mapToCartEntity;
+import static com.company.cart.mapper.client.CartClientMapper.*;
+import static com.company.cart.mapper.client.ItemClientMapper.mapToItemClientResponse;
 import static com.company.cart.mapper.feign.ItemFeignClientMapper.mapToItemEntity;
 import static com.company.cart.util.CacheEvictUtility.evictAllCaches;
 
 
 @Service
 @RequiredArgsConstructor
-@CacheConfig(cacheNames = {"carts"})
 public class CartClientServiceImpl implements CartClientService {
 
     private final CartRepository cartRepository;
@@ -46,8 +42,8 @@ public class CartClientServiceImpl implements CartClientService {
 
 
     @Override
-    @Cacheable(unless = "#result == null ", key = "#profileId")
-    public CartClientResponse getCartWithItems(Long profileId) {
+    @Transactional
+    public CartClientDetailedResponse getCartWithItems(Long profileId) {
         CartEntity cart = cartRepository
                 .findByProfileId(profileId)
                 .orElseThrow(
@@ -55,11 +51,10 @@ public class CartClientServiceImpl implements CartClientService {
                                 "Can not find cart by current profile id: " + profileId + " !"
                         )
                 );
-        return mapToCartClientResponse(cart);
+        return mapToCartDetailedClientResponse(cart);
     }
 
     @Override
-    @CachePut(unless = "#result == null ", key = "#cartClientRequest.profileId")
     public CartClientResponse createCart(CartClientRequest cartClientRequest) {
         CartEntity cart = mapToCartEntity(cartClientRequest);
         cartRepository.save(cart);
@@ -68,8 +63,7 @@ public class CartClientServiceImpl implements CartClientService {
 
     @Override
     @Transactional
-    @CachePut(unless = "#result == null ", key = "#profileId")
-    public CartClientResponse addItemToTheCart(
+    public ItemClientResponse addItemToTheCart(
             Long profileId, Long itemId, Long itemVersion) {
 
         CartEntity cart = cartRepository
@@ -86,22 +80,20 @@ public class CartClientServiceImpl implements CartClientService {
 
         itemEntity.setVersion(itemVersion);
 
-        cart.getItems().add(itemEntity);
+        itemEntity.setCart(cart);
 
         itemRepository.save(itemEntity);
 
-        return mapToCartClientResponse(cart);
+        return mapToItemClientResponse(itemEntity);
     }
 
     @Override
-    @Transactional
     public Double calculateItemsPriseInCart(Long profileId) {
         return itemRepository.countAllByPrice(profileId);
     }
 
     @Override
     @Transactional
-    @CacheEvict(key = "#profileId")
     public void removeItemFromCart(Long profileId, Long itemId, Long itemVersion) {
         if (!cartRepository.existsByProfileId(profileId)) {
             throw new CartProfileIdNotValidException(
@@ -123,7 +115,6 @@ public class CartClientServiceImpl implements CartClientService {
 
     @Override
     @Transactional
-    @CacheEvict(key = "#profileId")
     public void clearCart(Long profileId, Long cartVersion) {
         if (!cartRepository.existsByProfileId(profileId)) {
             throw new CartProfileIdNotValidException(
@@ -138,8 +129,4 @@ public class CartClientServiceImpl implements CartClientService {
         itemRepository.deleteAllByCart_ProfileId(profileId);
     }
 
-    @Override
-    public void evictAllCacheWithTime() {
-        evictAllCaches();
-    }
 }

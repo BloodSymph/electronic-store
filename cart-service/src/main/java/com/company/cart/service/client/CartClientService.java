@@ -1,7 +1,9 @@
 package com.company.cart.service.client;
 
 import com.company.cart.dto.client.cart.CartClientRequest;
+import com.company.cart.dto.client.cart.CartClientDetailedResponse;
 import com.company.cart.dto.client.cart.CartClientResponse;
+import com.company.cart.dto.client.item.ItemClientResponse;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -10,11 +12,11 @@ import org.springframework.stereotype.Service;
 @Service
 public interface CartClientService {
 
-    CartClientResponse getCartWithItems(Long profileId);
+    CartClientDetailedResponse getCartWithItems(Long profileId);
 
     CartClientResponse createCart(CartClientRequest cartClientRequest);
 
-    CartClientResponse addItemToTheCart(
+    ItemClientResponse addItemToTheCart(
             Long profileId, Long itemId, Long itemVersion
     );
 
@@ -27,8 +29,5 @@ public interface CartClientService {
     void clearCart(
             Long profileId, Long cartVersion
     );
-
-    @Scheduled(fixedRate = 120)
-    void evictAllCacheWithTime();
 
 }

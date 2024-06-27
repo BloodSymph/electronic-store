@@ -1,9 +1,9 @@
 package com.company.cart.mapper.client;
 
 import com.company.cart.dto.client.cart.CartClientRequest;
+import com.company.cart.dto.client.cart.CartClientDetailedResponse;
 import com.company.cart.dto.client.cart.CartClientResponse;
 import com.company.cart.entity.CartEntity;
-import com.company.cart.mapper.feign.ItemFeignClientMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
@@ -11,8 +11,8 @@ import java.util.stream.Collectors;
 @Component
 public class CartClientMapper {
 
-    public static CartClientResponse mapToCartClientResponse(CartEntity cart) {
-        return CartClientResponse.builder()
+    public static CartClientDetailedResponse mapToCartDetailedClientResponse(CartEntity cart) {
+        return CartClientDetailedResponse.builder()
                 .id(cart.getId())
                 .profileId(cart.getProfileId())
                 .items(
@@ -21,6 +21,13 @@ public class CartClientMapper {
                                 .map(ItemClientMapper::mapToItemClientResponse)
                                 .collect(Collectors.toSet())
                 )
+                .build();
+    }
+
+    public static CartClientResponse mapToCartClientResponse(CartEntity cart) {
+        return CartClientResponse.builder()
+                .id(cart.getId())
+                .profileId(cart.getProfileId())
                 .build();
     }
 
