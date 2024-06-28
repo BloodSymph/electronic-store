@@ -7,6 +7,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -29,8 +30,7 @@ public class CartEntity {
     @Column(name = "cart_id")
     private Long id;
 
-    //todo: field user profile id
-    @Column(name = "cart_user_profile_id", nullable = false)
+    @Column(name = "cart_user_profile_id", nullable = false, unique = true)
     private Long profileId;
 
     @CreationTimestamp
@@ -46,7 +46,7 @@ public class CartEntity {
             fetch = FetchType.LAZY,
             cascade = CascadeType.REMOVE
     )
-    private Set<ItemEntity> items = new HashSet<>();
+    private List<ItemEntity> items;
 
     @Column(name = "cart_version", nullable = false, unique = true)
     private Long version;

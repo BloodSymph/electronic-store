@@ -30,4 +30,7 @@ public interface CartClientService {
             Long profileId, Long cartVersion
     );
 
+    @Scheduled(fixedRate = 120)
+    void evictAllCacheWithTime();
+
 }

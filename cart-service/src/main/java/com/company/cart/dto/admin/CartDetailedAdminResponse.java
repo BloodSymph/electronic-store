@@ -3,6 +3,7 @@ package com.company.cart.dto.admin;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.util.List;
 import java.util.Set;
 
 
@@ -14,6 +15,6 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 public class CartDetailedAdminResponse extends CartAdminResponse {
 
-    private Set<ItemAdminResponse> items;
+    private List<ItemAdminResponse> items;
 
 }

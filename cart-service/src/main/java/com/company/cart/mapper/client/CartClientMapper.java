@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
+import static com.company.cart.mapper.client.ItemClientMapper.mapToItemClientResponse;
+
 @Component
 public class CartClientMapper {
 
@@ -19,8 +21,7 @@ public class CartClientMapper {
                         cart.getItems()
                                 .stream()
                                 .map(ItemClientMapper::mapToItemClientResponse)
-                                .collect(Collectors.toSet())
-                )
+                                .collect(Collectors.toList()))
                 .build();
     }
 

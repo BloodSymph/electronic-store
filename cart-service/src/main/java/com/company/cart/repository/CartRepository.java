@@ -1,6 +1,7 @@
 package com.company.cart.repository;
 
 import com.company.cart.entity.CartEntity;
+import com.company.cart.entity.ItemEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -15,7 +16,10 @@ import java.util.Optional;
 public interface CartRepository extends JpaRepository<CartEntity, Long> {
 
     @EntityGraph(value = "cart-items-entity-graph", type = EntityGraph.EntityGraphType.FETCH)
-    Optional<CartEntity> findByProfileId(Long profileId);
+    @Query("SELECT cart FROM Cart cart WHERE cart.profileId = :profileId")
+    Optional<CartEntity> findByProfileId(
+            @Param(value = "profileId") Long profileId
+    );
 
     @Query("SELECT cart FROM Cart cart WHERE cart.profileId = :profileId ")
     Page<CartEntity> searchByProfileId(

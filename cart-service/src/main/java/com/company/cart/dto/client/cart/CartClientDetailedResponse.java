@@ -4,6 +4,7 @@ import com.company.cart.dto.client.item.ItemClientResponse;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.util.List;
 import java.util.Set;
 
 
@@ -15,7 +16,7 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 public class CartClientDetailedResponse extends CartClientResponse {
 
-    private Set<ItemClientResponse> items;
+    private List<ItemClientResponse> items;
 
 }
 

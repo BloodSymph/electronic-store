@@ -30,7 +30,7 @@ public class CartAdminMapper {
                         cart.getItems()
                                 .stream()
                                 .map(ItemAdminMapper::mapToItemAdminResponse)
-                                .collect(Collectors.toSet())
+                                .collect(Collectors.toList())
                 )
                 .version(cart.getVersion())
                 .build();

@@ -4,6 +4,8 @@ import com.company.cart.dto.client.item.ItemClientResponse;
 import com.company.cart.entity.ItemEntity;
 import org.springframework.stereotype.Component;
 
+import static com.company.cart.mapper.client.CartClientMapper.mapToCartClientResponse;
+
 @Component
 public class ItemClientMapper {
 

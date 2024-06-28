@@ -88,6 +88,7 @@ public class CartClientServiceImpl implements CartClientService {
     }
 
     @Override
+    @Transactional
     public Double calculateItemsPriseInCart(Long profileId) {
         return itemRepository.countAllByPrice(profileId);
     }
@@ -129,4 +130,8 @@ public class CartClientServiceImpl implements CartClientService {
         itemRepository.deleteAllByCart_ProfileId(profileId);
     }
 
+    @Override
+    public void evictAllCacheWithTime() {
+        evictAllCaches();
+    }
 }

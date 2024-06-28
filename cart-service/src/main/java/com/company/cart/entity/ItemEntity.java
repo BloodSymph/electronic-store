@@ -21,7 +21,7 @@ public class ItemEntity {
     @Column(name = "item_id")
     private Long id;
 
-    @Column(name = "item_product_id")
+    @Column(name = "item_product_id", nullable = false, unique = true)
     private Long productId;
 
     @Column(name = "item_product_price", nullable = false, length = 99999)
@@ -38,7 +38,8 @@ public class ItemEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "cart_id",
-            referencedColumnName = "cart_id"
+            referencedColumnName = "cart_id",
+            nullable = false
     )
     private CartEntity cart;
 
