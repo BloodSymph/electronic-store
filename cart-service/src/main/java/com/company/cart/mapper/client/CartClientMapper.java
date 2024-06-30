@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
-import static com.company.cart.mapper.client.ItemClientMapper.mapToItemClientResponse;
+
 
 @Component
 public class CartClientMapper {

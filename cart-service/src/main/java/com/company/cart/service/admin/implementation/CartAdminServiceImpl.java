@@ -36,8 +36,9 @@ public class CartAdminServiceImpl implements CartAdminService {
                 .map(CartAdminMapper::mapToCartAdminResponse);
     }
 
-    @Cacheable(unless = "#result == null ")
+
     @Override
+    @Cacheable(unless = "#result == null ")
     public Page<CartAdminResponse> searchCarts(Pageable pageable, Long profileId) {
         return cartRepository
                 .searchByProfileId(pageable, profileId)

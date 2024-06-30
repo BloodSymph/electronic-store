@@ -12,15 +12,15 @@ import java.util.List;
 @Repository
 public interface ItemRepository extends JpaRepository<ItemEntity, Long> {
 
-    @Query("SELECT count(items.price) FROM Item items WHERE items.cart.profileId = :profileId")
+    @Query("SELECT ceiling(items.price) FROM Item items WHERE items.cart.profileId = :profileId")
     Double countAllByPrice(@Param(value = "profileId") Long profileId);
 
-    void deleteByIdAndCart_ProfileId(Long itemId, Long profileId);
+    void deleteByProductIdAndCart_ProfileId(Long itemId, Long profileId);
 
     void deleteAllByCart_ProfileId(Long profileId);
 
     Boolean existsByVersion(Long itemVersion);
 
-    boolean existsById(@NonNull Long itemId);
+    Boolean existsByProductId(Long itemId);
 
 }

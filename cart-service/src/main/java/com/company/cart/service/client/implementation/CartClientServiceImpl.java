@@ -101,7 +101,7 @@ public class CartClientServiceImpl implements CartClientService {
                     "Users profile id not valid for current cart: " + profileId + " !"
             );
         }
-        if (!itemRepository.existsById(itemId)) {
+        if (!itemRepository.existsByProductId(itemId)) {
             throw new ItemNotFoundException(
                     "Can not find item by current id: " + itemId + " !"
             );
@@ -111,7 +111,7 @@ public class CartClientServiceImpl implements CartClientService {
                     "Item Entity version: " + itemVersion + " not valid!"
             );
         }
-        itemRepository.deleteByIdAndCart_ProfileId(itemId, profileId);
+        itemRepository.deleteByProductIdAndCart_ProfileId(itemId, profileId);
     }
 
     @Override
