@@ -1,7 +1,7 @@
 package com.company.cart.controller.admin;
 
-import com.company.cart.dto.admin.CartAdminResponse;
-import com.company.cart.dto.admin.CartDetailedAdminResponse;
+import com.company.cart.dto.admin.cart.CartAdminResponse;
+import com.company.cart.dto.admin.cart.CartDetailedAdminResponse;
 import com.company.cart.service.admin.CartAdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

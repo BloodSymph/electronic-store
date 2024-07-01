@@ -1,7 +1,7 @@
 package com.company.cart.service.admin;
 
-import com.company.cart.dto.admin.CartAdminResponse;
-import com.company.cart.dto.admin.CartDetailedAdminResponse;
+import com.company.cart.dto.admin.cart.CartAdminResponse;
+import com.company.cart.dto.admin.cart.CartDetailedAdminResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;

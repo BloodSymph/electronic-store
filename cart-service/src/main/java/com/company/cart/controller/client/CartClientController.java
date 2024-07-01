@@ -3,6 +3,7 @@ package com.company.cart.controller.client;
 import com.company.cart.dto.client.cart.CartClientRequest;
 import com.company.cart.dto.client.cart.CartClientDetailedResponse;
 import com.company.cart.dto.client.cart.CartClientResponse;
+import com.company.cart.dto.client.item.ItemClientRequest;
 import com.company.cart.dto.client.item.ItemClientResponse;
 import com.company.cart.service.client.CartClientService;
 import jakarta.validation.Valid;
@@ -32,15 +33,12 @@ public class CartClientController {
         return cartClientService.createCart(cartClientRequest);
     }
 
-    @PostMapping("/{profileId}/cart/{itemId}/add")
+    @PostMapping("/{profileId}/cart/item/add")
     @ResponseStatus(HttpStatus.CREATED)
-    public ItemClientResponse addItemToTheCart(
-            @PathVariable(value = "profileId") Long profileId,
-            @PathVariable(value = "itemId") Long itemId,
-            @RequestParam(value = "itemVersion") Long itemVersion) {
-        return cartClientService.addItemToTheCart(
-                profileId, itemId, itemVersion
-        );
+    public ItemClientResponse addItemToCart(
+            @Valid @RequestBody ItemClientRequest itemClientRequest,
+            @PathVariable(value = "profileId") Long profileId) {
+        return cartClientService.addItemToTheCart(itemClientRequest, profileId);
     }
 
     @GetMapping("/{profileId}/cart/calculate/price")

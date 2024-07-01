@@ -1,6 +1,6 @@
 package com.company.cart.mapper.admin;
 
-import com.company.cart.dto.admin.ItemAdminResponse;
+import com.company.cart.dto.admin.item.ItemAdminResponse;
 import com.company.cart.entity.ItemEntity;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +12,7 @@ public class ItemAdminMapper {
                 .id(item.getId())
                 .productId(item.getProductId())
                 .price(item.getPrice())
+                .itemsCount(item.getItemsCount())
                 .created(item.getCreated())
                 .updated(item.getUpdated())
                 .version(item.getVersion())

@@ -17,4 +17,6 @@ public class ItemClientResponse {
 
     private Double price;
 
+    private Integer itemsCount;
+
 }

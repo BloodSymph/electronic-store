@@ -3,6 +3,7 @@ package com.company.cart.service.client.implementation;
 import com.company.cart.dto.client.cart.CartClientRequest;
 import com.company.cart.dto.client.cart.CartClientDetailedResponse;
 import com.company.cart.dto.client.cart.CartClientResponse;
+import com.company.cart.dto.client.item.ItemClientRequest;
 import com.company.cart.dto.client.item.ItemClientResponse;
 import com.company.cart.dto.feign.ItemFeignClientDto;
 import com.company.cart.entity.CartEntity;
@@ -61,10 +62,11 @@ public class CartClientServiceImpl implements CartClientService {
         return mapToCartClientResponse(cart);
     }
 
+
     @Override
     @Transactional
     public ItemClientResponse addItemToTheCart(
-            Long profileId, Long itemId, Long itemVersion) {
+            ItemClientRequest itemClientRequest, Long profileId) {
 
         CartEntity cart = cartRepository
                 .findByProfileId(profileId)
@@ -74,12 +76,12 @@ public class CartClientServiceImpl implements CartClientService {
                         )
                 );
 
-        ItemFeignClientDto item = productFeignClient.getProductForCart(itemId);
+        ItemFeignClientDto itemFeignClientDto = productFeignClient
+                .getProductForCart(itemClientRequest.getProductId());
 
-        ItemEntity itemEntity = mapToItemEntity(item);
-
-        itemEntity.setVersion(itemVersion);
-
+        ItemEntity itemEntity = mapToItemEntity(itemFeignClientDto);
+        itemEntity.setItemsCount(itemClientRequest.getItemsCount());
+        itemEntity.setVersion(itemClientRequest.getVersion());
         itemEntity.setCart(cart);
 
         itemRepository.save(itemEntity);

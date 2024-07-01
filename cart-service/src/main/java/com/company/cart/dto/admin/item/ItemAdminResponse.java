@@ -1,4 +1,4 @@
-package com.company.cart.dto.admin;
+package com.company.cart.dto.admin.item;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -18,6 +18,8 @@ public class ItemAdminResponse {
     private Long productId;
 
     private Double price;
+
+    private Integer itemsCount;
 
     @DateTimeFormat(pattern = "E, dd MMM yyyy HH:mm:ss z")
     private LocalDateTime created;

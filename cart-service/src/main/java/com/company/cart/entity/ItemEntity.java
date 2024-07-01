@@ -27,6 +27,9 @@ public class ItemEntity {
     @Column(name = "item_product_price", nullable = false, length = 99999)
     private Double price;
 
+    @Column(name = "item_count", nullable = false, length = 300)
+    private Integer itemsCount;
+
     @CreationTimestamp
     @Column(name = "item_created")
     private LocalDateTime created;

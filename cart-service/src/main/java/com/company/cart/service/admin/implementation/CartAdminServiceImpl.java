@@ -1,7 +1,7 @@
 package com.company.cart.service.admin.implementation;
 
-import com.company.cart.dto.admin.CartAdminResponse;
-import com.company.cart.dto.admin.CartDetailedAdminResponse;
+import com.company.cart.dto.admin.cart.CartAdminResponse;
+import com.company.cart.dto.admin.cart.CartDetailedAdminResponse;
 import com.company.cart.entity.CartEntity;
 import com.company.cart.exception.exceptions.cart.CartNotFoundException;
 import com.company.cart.exception.exceptions.cart.CartProfileIdNotValidException;

@@ -1,5 +1,6 @@
 package com.company.cart.mapper.client;
 
+import com.company.cart.dto.client.item.ItemClientRequest;
 import com.company.cart.dto.client.item.ItemClientResponse;
 import com.company.cart.entity.ItemEntity;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,7 @@ public class ItemClientMapper {
                 .id(item.getId())
                 .productId(item.getProductId())
                 .price(item.getPrice())
+                .itemsCount(item.getItemsCount())
                 .build();
     }
 

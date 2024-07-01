@@ -1,7 +1,7 @@
 package com.company.cart.mapper.admin;
 
-import com.company.cart.dto.admin.CartAdminResponse;
-import com.company.cart.dto.admin.CartDetailedAdminResponse;
+import com.company.cart.dto.admin.cart.CartAdminResponse;
+import com.company.cart.dto.admin.cart.CartDetailedAdminResponse;
 import com.company.cart.entity.CartEntity;
 import org.springframework.stereotype.Component;
 

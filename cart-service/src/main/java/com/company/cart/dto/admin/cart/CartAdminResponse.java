@@ -1,4 +1,4 @@
-package com.company.cart.dto.admin;
+package com.company.cart.dto.admin.cart;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
