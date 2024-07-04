@@ -44,6 +44,7 @@ public class CartClientServiceImpl implements CartClientService {
 
     @Override
     @Transactional
+    @Cacheable(cacheNames = {"carts_details"}, key = "#profileId", unless = "#result == null ")
     public CartClientDetailedResponse getCartWithItems(Long profileId) {
         CartEntity cart = cartRepository
                 .findByProfileId(profileId)
@@ -56,6 +57,7 @@ public class CartClientServiceImpl implements CartClientService {
     }
 
     @Override
+    @CachePut(cacheNames = {"carts"}, key = "#cartClientRequest.profileId", unless = "#result == null ")
     public CartClientResponse createCart(CartClientRequest cartClientRequest) {
         CartEntity cart = mapToCartEntity(cartClientRequest);
         cartRepository.save(cart);
@@ -65,6 +67,7 @@ public class CartClientServiceImpl implements CartClientService {
 
     @Override
     @Transactional
+    @CachePut(cacheNames = {"items"}, key = "#profileId", unless = "#result == null ")
     public ItemClientResponse addItemToTheCart(
             ItemClientRequest itemClientRequest, Long profileId) {
 
@@ -97,6 +100,7 @@ public class CartClientServiceImpl implements CartClientService {
 
     @Override
     @Transactional
+    @CacheEvict(cacheNames = {"items"}, key = "#profileId")
     public void removeItemFromCart(Long profileId, Long itemId, Long itemVersion) {
         if (!cartRepository.existsByProfileId(profileId)) {
             throw new CartProfileIdNotValidException(
@@ -118,6 +122,7 @@ public class CartClientServiceImpl implements CartClientService {
 
     @Override
     @Transactional
+    @CacheEvict(cacheNames = {"carts"}, key = "#profileId")
     public void clearCart(Long profileId, Long cartVersion) {
         if (!cartRepository.existsByProfileId(profileId)) {
             throw new CartProfileIdNotValidException(

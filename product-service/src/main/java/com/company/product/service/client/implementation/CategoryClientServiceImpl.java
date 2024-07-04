@@ -32,6 +32,7 @@ public class CategoryClientServiceImpl implements CategoryClientService {
     }
 
     @Override
+    @Cacheable(unless = "#result == null ")
     public List<CategoryClientResponse> getCategoriesByBrand(String brandUrl) {
         return categoryRepository.findCategoriesByBrand(brandUrl)
                 .stream()

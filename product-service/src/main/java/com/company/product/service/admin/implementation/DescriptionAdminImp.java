@@ -11,14 +11,20 @@ import com.company.product.repository.DescriptionRepository;
 import com.company.product.repository.ProductRepository;
 import com.company.product.service.admin.DescriptionAdminService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.company.product.mapper.admin.DescriptionAdminMapper.mapRequestToDescriptionEntity;
 import static com.company.product.mapper.admin.DescriptionAdminMapper.mapToDescriptionAdminResponse;
+import static com.company.product.util.CacheEvictUtility.evictAllCaches;
 
 @Service
 @RequiredArgsConstructor
+@CacheConfig(cacheNames = {"descriptions"})
 public class DescriptionAdminImp implements DescriptionAdminService {
 
     private final DescriptionRepository descriptionRepository;
@@ -27,6 +33,7 @@ public class DescriptionAdminImp implements DescriptionAdminService {
 
     @Override
     @Transactional
+    @CachePut(unless = "#result == null ")
     public DescriptionAdminResponse createProductDescription(
             DescriptionAdminRequest descriptionAdminRequest) {
 
@@ -48,6 +55,7 @@ public class DescriptionAdminImp implements DescriptionAdminService {
 
     @Override
     @Transactional
+    @CachePut(unless = "#result == null ")
     public DescriptionAdminResponse updateProductDescription(
             DescriptionAdminRequest descriptionAdminRequest,
             String productUrl) {
@@ -74,6 +82,7 @@ public class DescriptionAdminImp implements DescriptionAdminService {
 
     @Override
     @Transactional
+    @CacheEvict(allEntries = true)
     public void deleteCurrentDescription(
             String productUrl, Long descriptionVersion) {
         if (!descriptionRepository.existsByProduct_Url(productUrl)) {
@@ -88,4 +97,10 @@ public class DescriptionAdminImp implements DescriptionAdminService {
         }
         descriptionRepository.deleteByProduct_Url(productUrl);
     }
+
+    @Override
+    public void evictAllCacheWithTime() {
+        evictAllCaches();
+    }
+
 }

@@ -91,6 +91,7 @@ public class ProductAdminServiceImp implements ProductAdminService {
     }
 
     @Override
+    @Cacheable(unless = "#result == null ")
     public ProductDetailedAdminResponse getDetailsAboutProduct(
             String productUrl) throws IOException {
         ProductEntity product = productRepository

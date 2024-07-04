@@ -32,6 +32,7 @@ public class BrandClientServiceImpl implements BrandClientService {
     }
 
     @Override
+    @Cacheable(unless = "#result == null ")
     public List<BrandClientResponse> getBrandsByCategory(String categoryUrl) {
         List<BrandEntity> brands = brandRepository.getByCategories(categoryUrl);
         return brands.stream()

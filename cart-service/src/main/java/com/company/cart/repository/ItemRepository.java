@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface ItemRepository extends JpaRepository<ItemEntity, Long> {
 
-    @Query("SELECT ceiling(items.price) FROM Item items WHERE items.cart.profileId = :profileId")
+    @Query("SELECT sum(items.price) FROM Item items WHERE items.cart.profileId = :profileId")
     Double countAllByPrice(@Param(value = "profileId") Long profileId);
 
     void deleteByProductIdAndCart_ProfileId(Long itemId, Long profileId);
