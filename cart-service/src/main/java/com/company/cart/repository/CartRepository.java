@@ -26,7 +26,15 @@ public interface CartRepository extends JpaRepository<CartEntity, Long> {
             Pageable pageable, @Param(value = "profileId") Long profileId
     );
 
+    @Query("SELECT cart.id FROM Cart cart WHERE cart.profileId = :profileId")
+    Long getCartIdByProfileId(
+            @Param(value = "profileId") Long profileId
+    );
+
     void deleteByProfileId(Long profileId);
+
     Boolean existsByVersion(Long cartVersion);
+
     Boolean existsByProfileId(Long profileId);
+
 }

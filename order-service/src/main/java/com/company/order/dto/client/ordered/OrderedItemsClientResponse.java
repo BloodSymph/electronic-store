@@ -1,9 +1,10 @@
-package com.company.order.dto.client;
+package com.company.order.dto.client.ordered;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
@@ -11,7 +12,7 @@ public class OrderedItemsClientResponse {
 
     private Long id;
 
-    private Long itemsId;
+    private Long cartId;
 
     private Double orderPrice;
 

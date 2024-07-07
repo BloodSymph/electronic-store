@@ -15,7 +15,8 @@ public class ItemFeignClientDto {
     @NotNull(message = "Product id field shod not contains null value!")
     private Long productId;
 
-    @Range(max = 99999, message ="Items count field shod have maximum of {max} characters!")
+    @Range(max = 99999, message ="Items prise field shod have maximum of {max} characters!")
+    @NotNull(message = "Items price field shod not contains null value!")
     private Double price;
 
 }

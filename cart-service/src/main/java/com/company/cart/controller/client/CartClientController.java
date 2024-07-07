@@ -48,6 +48,13 @@ public class CartClientController {
         return cartClientService.calculateItemsPriseInCart(profileId);
     }
 
+    @GetMapping("/{profileId}/cart/get/id")
+    @ResponseStatus(HttpStatus.OK)
+    public Long getCartIdForOrder(
+            @PathVariable(value = "profileId") Long profileId) {
+        return cartClientService.getCartIdForOrder(profileId);
+    }
+
     @DeleteMapping("/{profileId}/cart/{itemId}/remove")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> removeItemFromCart(

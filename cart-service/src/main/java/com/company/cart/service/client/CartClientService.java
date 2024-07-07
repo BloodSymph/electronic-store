@@ -23,6 +23,8 @@ public interface CartClientService {
 
     Double calculateItemsPriseInCart(Long profileId);
 
+    Long getCartIdForOrder(Long profileId);
+
     void removeItemFromCart(
             Long profileId, Long itemId, Long itemVersion
     );

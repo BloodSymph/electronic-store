@@ -28,7 +28,7 @@ public class OrderEntity {
     @Column(name = "order_id")
     private Long id;
 
-    @Column(name = "order_code", nullable = false, unique = true, length = 1000)
+    @Column(name = "order_code", nullable = false, unique = true, length = 10000)
     private Integer orderCode;
 
     @Column(name = "order_user_first_name", nullable = false, length = 120)
@@ -48,12 +48,8 @@ public class OrderEntity {
     @Column(name = "order_updated")
     private LocalDateTime updated;
 
-    @OneToMany(
-            mappedBy = "order",
-            fetch = FetchType.LAZY,
-            cascade = CascadeType.REMOVE
-    )
-    private List<OrderedItemsEntity> orderedItems;
+    @OneToOne(mappedBy = "order", fetch = FetchType.LAZY)
+    private OrderedItemsEntity orderedItems;
 
     @Column(name = "order_version", nullable = false, unique = true)
     private Long version;

@@ -1,4 +1,4 @@
-package com.company.order.dto.client;
+package com.company.order.dto.client.order;
 
 
 import lombok.*;

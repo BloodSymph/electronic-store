@@ -100,6 +100,12 @@ public class CartClientServiceImpl implements CartClientService {
 
     @Override
     @Transactional
+    public Long getCartIdForOrder(Long profileId) {
+        return cartRepository.getCartIdByProfileId(profileId);
+    }
+
+    @Override
+    @Transactional
     @CacheEvict(cacheNames = {"items"}, key = "#profileId")
     public void removeItemFromCart(Long profileId, Long itemId, Long itemVersion) {
         if (!cartRepository.existsByProfileId(profileId)) {

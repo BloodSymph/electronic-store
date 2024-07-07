@@ -1,10 +1,8 @@
-package com.company.order.dto.client;
+package com.company.order.dto.client.order;
 
+import com.company.order.dto.client.ordered.OrderedItemsClientResponse;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
-import java.util.List;
-
 
 @Data
 @SuperBuilder
@@ -14,6 +12,6 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class OrderClientDetailedResponse extends OrderClientResponse {
 
-    private List<OrderedItemsClientResponse> orderedItems;
+    private OrderedItemsClientResponse orderedItemsClientResponse;
 
 }
