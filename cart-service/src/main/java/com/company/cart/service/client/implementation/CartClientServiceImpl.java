@@ -57,6 +57,7 @@ public class CartClientServiceImpl implements CartClientService {
     }
 
     @Override
+    @Transactional
     @CachePut(cacheNames = {"carts"}, key = "#cartClientRequest.profileId", unless = "#result == null ")
     public CartClientResponse createCart(CartClientRequest cartClientRequest) {
         CartEntity cart = mapToCartEntity(cartClientRequest);

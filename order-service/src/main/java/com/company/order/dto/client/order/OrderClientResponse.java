@@ -13,12 +13,8 @@ public class OrderClientResponse {
 
     private Long id;
 
+    private Long profileId;
+
     private Integer orderCode;
-
-    private String firstName;
-
-    private String lastName;
-
-    private String email;
 
 }

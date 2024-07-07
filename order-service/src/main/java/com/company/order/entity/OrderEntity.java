@@ -28,17 +28,11 @@ public class OrderEntity {
     @Column(name = "order_id")
     private Long id;
 
+    @Column(name = "user_profile_id", nullable = false, unique = true)
+    private Long profileId;
+
     @Column(name = "order_code", nullable = false, unique = true, length = 10000)
     private Integer orderCode;
-
-    @Column(name = "order_user_first_name", nullable = false, length = 120)
-    private String firstName;
-
-    @Column(name = "order_user_last_name", nullable = false, length = 120)
-    private String lastName;
-
-    @Column(name = "order_user_email", nullable = false, unique = true, length = 120)
-    private String email;
 
     @CreationTimestamp
     @Column(name = "order_created")

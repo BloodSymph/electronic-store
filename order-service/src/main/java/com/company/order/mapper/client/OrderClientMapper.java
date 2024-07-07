@@ -14,20 +14,16 @@ public class OrderClientMapper {
     public static OrderClientResponse mapToOrderClientResponse(OrderEntity order) {
         return OrderClientResponse.builder()
                 .id(order.getId())
+                .profileId(order.getProfileId())
                 .orderCode(order.getOrderCode())
-                .firstName(order.getFirstName())
-                .lastName(order.getLastName())
-                .email(order.getEmail())
                 .build();
     }
 
     public static OrderClientDetailedResponse mapToOrderClientDetailedResponse(OrderEntity order) {
         return OrderClientDetailedResponse.builder()
                 .id(order.getId())
+                .profileId(order.getProfileId())
                 .orderCode(order.getOrderCode())
-                .firstName(order.getFirstName())
-                .lastName(order.getLastName())
-                .email(order.getEmail())
                 .orderedItemsClientResponse(
                         mapToOrderedItemsClientResponse(
                                 order.getOrderedItems()
@@ -38,10 +34,8 @@ public class OrderClientMapper {
 
     public static OrderEntity mapOrderClientRequestToOrderEntity(OrderClientRequest order) {
         return OrderEntity.builder()
+                .profileId(order.getProfileId())
                 .orderCode(order.getOrderCode())
-                .firstName(order.getFirstName())
-                .lastName(order.getLastName())
-                .email(order.getEmail())
                 .version(order.getVersion())
                 .build();
     }
