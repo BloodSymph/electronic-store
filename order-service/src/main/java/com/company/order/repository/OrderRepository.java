@@ -22,6 +22,6 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
 
     Boolean existsByProfileId(Long profileId);
 
-    Boolean existsByVersion(Long profileId);
+    Boolean existsByVersion(Long orderVersion);
 
 }

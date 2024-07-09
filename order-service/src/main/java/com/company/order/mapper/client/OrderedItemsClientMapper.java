@@ -20,8 +20,7 @@ public class OrderedItemsClientMapper {
     public static OrderedItemsEntity mapOrderedItemsClientRequestToOrderEntity(
             OrderedItemsClientRequest items) {
         return OrderedItemsEntity.builder()
-                .cartId(items.getCartId())
-                .orderPrice(items.getOrderPrice())
+                .version(items.getVersion())
                 .build();
     }
 
