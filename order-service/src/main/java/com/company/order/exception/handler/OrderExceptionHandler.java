@@ -1,8 +1,8 @@
 package com.company.order.exception.handler;
 
 import com.company.order.exception.entity.ErrorEntity;
-import com.company.order.exception.exceptions.order.OrderNotFoundException;
-import com.company.order.exception.exceptions.order.OrderVersionNotValidException;
+import com.company.order.exception.exceptions.OrderNotFoundException;
+import com.company.order.exception.exceptions.OrderVersionNotValidException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

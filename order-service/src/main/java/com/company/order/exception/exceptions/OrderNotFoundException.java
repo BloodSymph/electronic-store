@@ -1,4 +1,4 @@
-package com.company.order.exception.exceptions.order;
+package com.company.order.exception.exceptions;
 
 public class OrderNotFoundException extends RuntimeException{
 
