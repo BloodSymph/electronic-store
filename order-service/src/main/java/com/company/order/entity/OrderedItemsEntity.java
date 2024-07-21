@@ -37,7 +37,7 @@ public class OrderedItemsEntity {
     private LocalDateTime updated;
 
     @OneToOne
-    @JoinColumn(name = "order_id", referencedColumnName = "order_id", nullable = false)
+    @JoinColumn(name = "order_id", referencedColumnName = "order_id")
     private OrderEntity order;
 
     @Column(name = "ordered_item_version", nullable = false, unique = true)

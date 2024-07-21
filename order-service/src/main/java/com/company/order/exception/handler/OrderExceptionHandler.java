@@ -26,7 +26,7 @@ public class OrderExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(OrderNotFoundException.class)
+    @ExceptionHandler(OrderVersionNotValidException.class)
     public ResponseEntity<ErrorEntity> orderVersionNotValidExceptionHandler(
             OrderVersionNotValidException orderVersionNotValidException) {
         ErrorEntity errorEntity = new ErrorEntity();

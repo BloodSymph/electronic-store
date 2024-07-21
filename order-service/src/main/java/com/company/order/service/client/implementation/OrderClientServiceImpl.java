@@ -88,7 +88,9 @@ public class OrderClientServiceImpl implements OrderClientService {
             );
         }
         if (!orderRepository.existsByVersion(orderVersion)) {
-            throw new OrderVersionNotValidException("Order Entity valid by version: " + orderVersion + " !");
+            throw new OrderVersionNotValidException(
+                    "Order Entity valid by version: " + orderVersion + " !"
+            );
         }
         orderRepository.deleteByProfileId(profileId);
     }
