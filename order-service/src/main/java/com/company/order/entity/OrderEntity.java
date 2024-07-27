@@ -15,12 +15,6 @@ import java.util.List;
 @NoArgsConstructor
 @Entity(name = "Order")
 @Table(name = "orders")
-@NamedEntityGraph(
-        name = "order-entity-graph-with-ordered-items",
-        attributeNodes = {
-                @NamedAttributeNode("orderedItems")
-        }
-)
 public class OrderEntity {
 
     @Id
@@ -34,6 +28,12 @@ public class OrderEntity {
     @Column(name = "order_code", nullable = false, unique = true, length = 10000)
     private Integer orderCode;
 
+    @Column(name = "order_cart_id", nullable = false, unique = true)
+    private Long cartId;
+
+    @Column(name = "order_item_price", nullable = false, length = 99999)
+    private Double orderPrice;
+
     @CreationTimestamp
     @Column(name = "order_created")
     private LocalDateTime created;
@@ -41,9 +41,6 @@ public class OrderEntity {
     @UpdateTimestamp
     @Column(name = "order_updated")
     private LocalDateTime updated;
-
-    @OneToOne(mappedBy = "order", fetch = FetchType.LAZY)
-    private OrderedItemsEntity orderedItems;
 
     @Column(name = "order_version", nullable = false, unique = true)
     private Long version;

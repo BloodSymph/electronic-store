@@ -1,16 +1,19 @@
-package com.company.order.dto.client.ordered;
+package com.company.order.dto.client;
+
 
 import lombok.*;
-import lombok.experimental.SuperBuilder;
+
 
 @Data
-@SuperBuilder
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class OrderedItemsClientResponse {
+public class OrderClientResponse {
 
     private Long id;
+
+    private Integer orderCode;
 
     private Long cartId;
 

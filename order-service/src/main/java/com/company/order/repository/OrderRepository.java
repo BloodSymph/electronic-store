@@ -12,8 +12,7 @@ import java.util.Optional;
 @Repository
 public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
 
-    @EntityGraph(value = "order-entity-graph-with-ordered-items", type = EntityGraph.EntityGraphType.FETCH)
-    @Query("SELECT orders FROM Order orders WHERE orders.profileId = :profileId")
+    @Query("SELECT order FROM Order order WHERE order.profileId = :profileId")
     Optional<OrderEntity> showOrderByProfileId(
             @Param(value = "profileId") Long profileId
     );
