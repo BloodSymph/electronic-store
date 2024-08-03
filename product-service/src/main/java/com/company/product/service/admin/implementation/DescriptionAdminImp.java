@@ -24,7 +24,7 @@ import static com.company.product.util.CacheEvictUtility.evictAllCaches;
 
 @Service
 @RequiredArgsConstructor
-@CacheConfig(cacheNames = {"descriptions"})
+@CacheConfig(cacheNames = {"descriptions_admin"})
 public class DescriptionAdminImp implements DescriptionAdminService {
 
     private final DescriptionRepository descriptionRepository;

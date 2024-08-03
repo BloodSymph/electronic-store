@@ -24,7 +24,7 @@ import static com.company.product.util.URLGeneratorUtility.toUrlAddress;
 
 @Service
 @RequiredArgsConstructor
-@CacheConfig(cacheNames = {"categories"})
+@CacheConfig(cacheNames = {"categories_admin"})
 public class CategoryAdminServiceImpl implements CategoryAdminService {
 
     private final CategoryRepository categoryRepository;

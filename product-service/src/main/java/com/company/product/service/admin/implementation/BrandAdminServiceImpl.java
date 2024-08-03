@@ -27,7 +27,7 @@ import static com.company.product.util.URLGeneratorUtility.toUrlAddress;
 
 @Service
 @RequiredArgsConstructor
-@CacheConfig(cacheNames = {"brands"})
+@CacheConfig(cacheNames = {"brands_admin"})
 public class BrandAdminServiceImpl implements BrandAdminService {
 
     private final BrandRepository brandRepository;

@@ -42,7 +42,7 @@ import static com.company.product.util.URLGeneratorUtility.toUrlAddress;
 
 @Service
 @RequiredArgsConstructor
-@CacheConfig(cacheNames = {"products"})
+@CacheConfig(cacheNames = {"products_admin"})
 public class ProductAdminServiceImp implements ProductAdminService {
 
     private final PropertiesConfig propertiesConfig;

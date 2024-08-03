@@ -23,7 +23,7 @@ import static com.company.cart.util.CacheEvictUtility.evictAllCaches;
 
 @Service
 @RequiredArgsConstructor
-@CacheConfig(cacheNames = {"carts"})
+@CacheConfig(cacheNames = {"carts_admin"})
 public class CartAdminServiceImpl implements CartAdminService {
 
     private final CartRepository cartRepository;

@@ -95,6 +95,7 @@ public class CartClientServiceImpl implements CartClientService {
 
     @Override
     @Transactional
+    //todo: Add counts of same products
     public Double calculateItemsPriseInCart(Long profileId) {
         return itemRepository.countAllByPrice(profileId);
     }

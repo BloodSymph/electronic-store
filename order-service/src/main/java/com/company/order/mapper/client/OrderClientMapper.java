@@ -23,7 +23,6 @@ public class OrderClientMapper {
     public static OrderEntity mapOrderClientRequestToOrderEntity(OrderClientRequest order) {
         return OrderEntity.builder()
                 .profileId(order.getProfileId())
-                .orderCode(order.getOrderCode())
                 .version(order.getVersion())
                 .build();
     }
