@@ -62,6 +62,13 @@ public class ProductClientController {
         return productClientService.getProductForCart(productId);
     }
 
+    @GetMapping("/products/{productUrl}/get-id")
+    @ResponseStatus(HttpStatus.OK)
+    public Long getProductIdForReviewByUrl(
+            @PathVariable(value = "productUrl") String productUrl) {
+        return productClientService.getProductIdForReviewService(productUrl);
+    }
+
     @GetMapping("/categories/{categoryUrl}/products")
     @ResponseStatus(HttpStatus.OK)
     public Page<ProductClientResponse> getProductByCategory(

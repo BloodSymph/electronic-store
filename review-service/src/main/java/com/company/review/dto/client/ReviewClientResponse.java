@@ -1,6 +1,5 @@
-package com.company.review.dto.client.review;
+package com.company.review.dto.client;
 
-import com.company.review.dto.client.rating.RatingClientResponse;
 import lombok.*;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -20,7 +19,7 @@ public class ReviewClientResponse {
 
     private String comment;
 
-    private RatingClientResponse rate;
+    private Integer rate;
 
     @DateTimeFormat(pattern = "E, dd MMM yyyy HH:mm:ss z")
     private LocalDateTime created;

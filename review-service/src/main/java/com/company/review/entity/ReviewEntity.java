@@ -14,12 +14,6 @@ import java.time.LocalDateTime;
 @ToString
 @Entity(name = "Review")
 @Table(name = "reviews")
-@NamedEntityGraph(
-        name = "review-rating-entity-graph",
-        attributeNodes = {
-                @NamedAttributeNode("rating")
-        }
-)
 public class ReviewEntity {
 
     @Id
@@ -36,6 +30,9 @@ public class ReviewEntity {
     @Column(name = "review_comment", length = 2000)
     private String comment;
 
+    @Column(name = "rating_rate")
+    private Integer rate;
+
     @CreationTimestamp
     @Column(name = "review_created")
     private LocalDateTime created;
@@ -43,9 +40,6 @@ public class ReviewEntity {
     @UpdateTimestamp
     @Column(name = "review_updated")
     private LocalDateTime updated;
-
-    @OneToOne(mappedBy = "review", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private RatingEntity rating;
 
     @Column(name = "review_version", nullable = false, unique = true)
     private Long version;

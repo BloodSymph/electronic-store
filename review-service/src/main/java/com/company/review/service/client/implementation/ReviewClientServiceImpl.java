@@ -1,6 +1,5 @@
 package com.company.review.service.client.implementation;
 
-import com.company.review.repository.RatingRepository;
 import com.company.review.repository.ReviewRepository;
 import com.company.review.service.client.ReviewClientService;
 import lombok.RequiredArgsConstructor;

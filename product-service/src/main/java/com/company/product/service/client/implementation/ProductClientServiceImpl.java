@@ -102,6 +102,12 @@ public class ProductClientServiceImpl implements ProductClientService {
                 );
 
         return mapToProductFeignClientDto(product);
+
+    }
+
+    @Override
+    public Long getProductIdForReviewService(String productUrl) {
+        return productRepository.getProductIdByUrlIgnoreCase(productUrl);
     }
 
     @Override
