@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 @Service
 public interface ReviewClientService {
 
-    Page<ReviewClientResponse> getAllReviews(Pageable pageable);
+    Page<ReviewClientResponse> getAllReviews(
+            Pageable pageable, Long productId
+    );
 
     ReviewClientResponse addReview(
             ReviewClientRequest reviewClientRequest, String productUrl

@@ -3,6 +3,8 @@ package com.company.review.service.client.implementation;
 import com.company.review.dto.client.ReviewClientRequest;
 import com.company.review.dto.client.ReviewClientResponse;
 import com.company.review.entity.ReviewEntity;
+import com.company.review.exception.exceptions.ReviewNotFoundException;
+import com.company.review.exception.exceptions.ReviewVersionNotValidException;
 import com.company.review.feign.ProductFeignClient;
 import com.company.review.mapper.client.ReviewClientMapper;
 import com.company.review.repository.ReviewRepository;
@@ -32,9 +34,9 @@ public class ReviewClientServiceImpl implements ReviewClientService {
 
     @Override
     @Cacheable(unless = "#result == null ")
-    public Page<ReviewClientResponse> getAllReviews(Pageable pageable) {
+    public Page<ReviewClientResponse> getAllReviews(Pageable pageable, Long productId) {
         return reviewRepository
-                .findAll(pageable)
+                .findByProductId(pageable, productId)
                 .map(ReviewClientMapper::mapToReviewClientResponse);
     }
 
@@ -50,11 +52,22 @@ public class ReviewClientServiceImpl implements ReviewClientService {
     @Override
     @Transactional
     public void deleteReview(Long profileId, Long reviewVersion) {
-
+        if (!reviewRepository.existsByProfileId(profileId)) {
+            throw new ReviewNotFoundException(
+                    "Can not find review by current profile id: " + profileId + " !"
+            );
+        }
+        if (!reviewRepository.existsByVersion(reviewVersion)) {
+            throw new ReviewVersionNotValidException(
+                    "Review Entity version: " + reviewVersion + " not valid!"
+            );
+        }
+        reviewRepository.deleteByProfileId(profileId);
     }
 
     @Override
     public void evictAllCacheWithTime() {
         evictAllCaches();
     }
+
 }

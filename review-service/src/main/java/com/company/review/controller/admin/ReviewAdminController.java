@@ -1,7 +1,9 @@
-package com.company.review.controller.client;
+package com.company.review.controller.admin;
 
+import com.company.review.dto.admin.ReviewAdminResponse;
 import com.company.review.dto.client.ReviewClientRequest;
 import com.company.review.dto.client.ReviewClientResponse;
+import com.company.review.service.admin.ReviewAdminService;
 import com.company.review.service.client.ReviewClientService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,32 +17,33 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/review-service/client")
-public class ReviewClientController {
+@RequestMapping("/api/v1/review-service/admin")
+public class ReviewAdminController {
 
-    private final ReviewClientService reviewClientService;
+    private final ReviewAdminService reviewAdminService;
 
-    @GetMapping("/{productId}/reviews")
+    @GetMapping("/reviews")
     @ResponseStatus(HttpStatus.OK)
-    public Page<ReviewClientResponse> getAllReviews(
+    public Page<ReviewAdminResponse> getAllReviews(
+            @PageableDefault(
+                    sort = "rate",
+                    direction = Sort.Direction.ASC,
+                    page = 0,
+                    size = 15) Pageable pageable) {
+        return reviewAdminService.getAllReviews(pageable);
+    }
+
+    @GetMapping("/reviews/search")
+    @ResponseStatus(HttpStatus.OK)
+    public Page<ReviewAdminResponse> searchReviews(
             @PageableDefault(
                     sort = "rate",
                     direction = Sort.Direction.ASC,
                     page = 0,
                     size = 15) Pageable pageable,
-            @PathVariable(value = "productId") Long productId) {
-        return reviewClientService.getAllReviews(
-                pageable, productId
-        );
-    }
-
-    @PostMapping("/{productUrl}/add-review")
-    @ResponseStatus(HttpStatus.CREATED)
-    public ReviewClientResponse addReview(
-            @Valid @RequestBody ReviewClientRequest reviewClientRequest,
-            @PathVariable(value = "productUrl") String productUrl) {
-        return reviewClientService.addReview(
-                reviewClientRequest, productUrl
+            @RequestParam("searchParam") Long searchParam) {
+        return reviewAdminService.getReviewsByProfileIdOrProductId(
+                pageable, searchParam
         );
     }
 
@@ -49,7 +52,7 @@ public class ReviewClientController {
     public ResponseEntity<String> deleteReview(
             @PathVariable(value = "profileId") Long profileId,
             @RequestParam(value = "reviewVersion") Long reviewVersion){
-        reviewClientService.deleteReview(profileId, reviewVersion);
+        reviewAdminService.deleteReviewByProfileId(profileId, reviewVersion);
         return new ResponseEntity<>(
                 "Review successful removed by profileId: " + profileId + " !",
                 HttpStatus.OK
