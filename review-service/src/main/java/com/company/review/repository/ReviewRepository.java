@@ -8,8 +8,15 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface ReviewRepository extends JpaRepository<ReviewEntity, Long> {
+
+    @Query("SELECT avg(sum(reviews.rate)) FROM Review reviews WHERE reviews.productId = :productId ")
+    Double getSummaryRatingOfProduct(
+           @Param(value = "productId") Long productId
+    );
 
     Page<ReviewEntity> findByProductId(Pageable pageable, Long productId);
 

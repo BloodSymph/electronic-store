@@ -31,7 +31,7 @@ public class ReviewEntity {
     private String comment;
 
     @Column(name = "rating_rate")
-    private Integer rate;
+    private Double rate;
 
     @CreationTimestamp
     @Column(name = "review_created")

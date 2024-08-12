@@ -1,5 +1,7 @@
 package com.company.review.dto.client;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
@@ -20,7 +22,9 @@ public class ReviewClientRequest {
     private String comment;
 
     @Range(max = 1, message = "Rating field shod have maximum of {max} characters!")
-    private Integer rate;
+    @Min(value = 0, message = "Rating field shod have minimal value 0!")
+    @Max(value = 5, message = "Rating field shod have maximum value 5!")
+    private Double rate;
 
     @NotNull(message = "Review version field shod not contains null value!")
     private Long version;

@@ -34,6 +34,13 @@ public class ReviewClientController {
         );
     }
 
+    @GetMapping("/{productId}/summary-rating")
+    @ResponseStatus(HttpStatus.OK)
+    public Double getSummaryProductRating(
+            @PathVariable(value = "productId") Long productId) {
+        return reviewClientService.getSummaryRateOfProduct(productId);
+    }
+
     @PostMapping("/{productUrl}/add-review")
     @ResponseStatus(HttpStatus.CREATED)
     public ReviewClientResponse addReview(

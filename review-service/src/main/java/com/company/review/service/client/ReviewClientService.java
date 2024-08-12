@@ -18,6 +18,8 @@ public interface ReviewClientService {
             ReviewClientRequest reviewClientRequest, String productUrl
     );
 
+    Double getSummaryRateOfProduct(Long productId);
+
     void deleteReview(
             Long profileId, Long reviewVersion
     );

@@ -19,7 +19,7 @@ public class ReviewClientResponse {
 
     private String comment;
 
-    private Integer rate;
+    private Double rate;
 
     @DateTimeFormat(pattern = "E, dd MMM yyyy HH:mm:ss z")
     private LocalDateTime created;

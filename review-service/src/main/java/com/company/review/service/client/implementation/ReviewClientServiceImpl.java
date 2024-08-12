@@ -51,6 +51,12 @@ public class ReviewClientServiceImpl implements ReviewClientService {
 
     @Override
     @Transactional
+    public Double getSummaryRateOfProduct(Long productId) {
+        return reviewRepository.getSummaryRatingOfProduct(productId);
+    }
+
+    @Override
+    @Transactional
     public void deleteReview(Long profileId, Long reviewVersion) {
         if (!reviewRepository.existsByProfileId(profileId)) {
             throw new ReviewNotFoundException(
