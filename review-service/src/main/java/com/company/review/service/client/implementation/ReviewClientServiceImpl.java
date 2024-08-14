@@ -45,7 +45,8 @@ public class ReviewClientServiceImpl implements ReviewClientService {
     public ReviewClientResponse addReview(
             ReviewClientRequest reviewClientRequest, String productUrl) {
         ReviewEntity review = mapReviewClientRequestToEntity(reviewClientRequest);
-        review.setProductId(productFeignClient.getProductIdForReview(productUrl));
+        review.setTitle(productFeignClient.getProductTitleForReview(productUrl));
+        reviewRepository.save(review);
         return mapToReviewClientResponse(review);
     }
 

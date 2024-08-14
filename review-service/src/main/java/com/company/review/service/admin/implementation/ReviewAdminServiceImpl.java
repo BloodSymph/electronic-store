@@ -32,15 +32,6 @@ public class ReviewAdminServiceImpl implements ReviewAdminService {
     }
 
     @Override
-    @Cacheable(unless = "#result == null ")
-    public Page<ReviewAdminResponse> getReviewsByProfileIdOrProductId(
-            Pageable pageable, Long searchParameter) {
-        return reviewRepository
-                .searchByProfileIdAndProductId(searchParameter)
-                .map(ReviewAdminMapper::mapToReviewAdminResponse);
-    }
-
-    @Override
     @Transactional
     public void deleteReviewByProfileId(Long profileId, Long reviewVersion) {
         if (!reviewRepository.existsByProfileId(profileId)) {

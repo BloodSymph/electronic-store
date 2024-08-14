@@ -15,7 +15,7 @@ public class ReviewClientResponse {
 
     private Long id;
 
-    private Long profileId;
+    private String title;
 
     private String comment;
 

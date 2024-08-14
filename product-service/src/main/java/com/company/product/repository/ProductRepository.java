@@ -52,8 +52,8 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 
     Optional<ProductEntity> findByUrlIgnoreCase(String productUrl);
 
-    @Query("SELECT product.id FROM Product product WHERE product.url LIKE LOWER(:productUrl) ")
-    Long getProductIdByUrlIgnoreCase(
+    @Query("SELECT product.title FROM Product product WHERE product.url LIKE LOWER(:productUrl) ")
+    String getProductTitleByUrlIgnoreCase(
             @Param("productUrl") String productUrl
     );
 

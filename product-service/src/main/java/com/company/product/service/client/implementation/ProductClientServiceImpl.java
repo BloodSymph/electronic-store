@@ -106,8 +106,8 @@ public class ProductClientServiceImpl implements ProductClientService {
     }
 
     @Override
-    public Long getProductIdForReviewService(String productUrl) {
-        return productRepository.getProductIdByUrlIgnoreCase(productUrl);
+    public String getProductTitleForReviewService(String productUrl) {
+        return productRepository.getProductTitleByUrlIgnoreCase(productUrl);
     }
 
     @Override

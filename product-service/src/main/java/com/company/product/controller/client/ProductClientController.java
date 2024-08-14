@@ -62,11 +62,11 @@ public class ProductClientController {
         return productClientService.getProductForCart(productId);
     }
 
-    @GetMapping("/products/{productUrl}/get-id")
+    @GetMapping("/products/{productUrl}/get-title")
     @ResponseStatus(HttpStatus.OK)
-    public Long getProductIdForReviewByUrl(
+    public String getProductIdForReviewByUrl(
             @PathVariable(value = "productUrl") String productUrl) {
-        return productClientService.getProductIdForReviewService(productUrl);
+        return productClientService.getProductTitleForReviewService(productUrl);
     }
 
     @GetMapping("/categories/{categoryUrl}/products")

@@ -25,7 +25,7 @@ public interface ProductClientService {
 
     ProductFeignClientDto getProductForCart(Long productId);
 
-    Long getProductIdForReviewService(String productUrl);
+    String getProductTitleForReviewService(String productUrl);
 
     Page<ProductClientResponse> getProductsByCategory(
             Pageable pageable, String categoryUrl

@@ -13,21 +13,12 @@ import java.util.List;
 @Repository
 public interface ReviewRepository extends JpaRepository<ReviewEntity, Long> {
 
-    @Query("SELECT avg(sum(reviews.rate)) FROM Review reviews WHERE reviews.productId = :productId ")
+    @Query("SELECT avg(reviews.rate) FROM Review reviews WHERE reviews.productId = :productId ")
     Double getSummaryRatingOfProduct(
            @Param(value = "productId") Long productId
     );
 
     Page<ReviewEntity> findByProductId(Pageable pageable, Long productId);
-
-    @Query(
-            "SELECT reviews FROM Review reviews " +
-            "WHERE reviews.profileId = :searchParameter " +
-            "AND reviews.productId = :searchParameter"
-    )
-    Page<ReviewEntity> searchByProfileIdAndProductId(
-            @Param(value = "searchParameter") Long searchParameter
-    );
 
     void deleteByProfileId(Long profileId);
 

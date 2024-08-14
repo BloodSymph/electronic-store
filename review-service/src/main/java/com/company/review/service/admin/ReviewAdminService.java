@@ -11,10 +11,6 @@ public interface ReviewAdminService {
 
     Page<ReviewAdminResponse> getAllReviews(Pageable pageable);
 
-    Page<ReviewAdminResponse> getReviewsByProfileIdOrProductId(
-            Pageable pageable, Long searchParameter
-    );
-
     void deleteReviewByProfileId(Long profileId, Long reviewVersion);
 
     @Scheduled(fixedRate = 120)

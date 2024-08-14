@@ -33,20 +33,6 @@ public class ReviewAdminController {
         return reviewAdminService.getAllReviews(pageable);
     }
 
-    @GetMapping("/reviews/search")
-    @ResponseStatus(HttpStatus.OK)
-    public Page<ReviewAdminResponse> searchReviews(
-            @PageableDefault(
-                    sort = "rate",
-                    direction = Sort.Direction.ASC,
-                    page = 0,
-                    size = 15) Pageable pageable,
-            @RequestParam("searchParam") Long searchParam) {
-        return reviewAdminService.getReviewsByProfileIdOrProductId(
-                pageable, searchParam
-        );
-    }
-
     @DeleteMapping("/{profileId}/review/delete")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> deleteReview(

@@ -11,6 +11,7 @@ public class ReviewAdminMapper {
         return ReviewAdminResponse.builder()
                 .id(review.getId())
                 .profileId(review.getProfileId())
+                .title(review.getTitle())
                 .comment(review.getComment())
                 .rate(review.getRate())
                 .created(review.getCreated())

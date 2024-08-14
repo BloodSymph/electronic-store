@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 )
 public interface ProductFeignClient {
 
-    @GetMapping("/{productUrl}/get-id")
+    @GetMapping("/{productUrl}/get-title")
     @ResponseStatus(HttpStatus.OK)
-    Long getProductIdForReview(
+    String getProductTitleForReview(
             @PathVariable(value = "productUrl") String productUrl
     );
 

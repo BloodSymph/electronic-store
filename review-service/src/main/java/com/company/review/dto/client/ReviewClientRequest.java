@@ -21,7 +21,7 @@ public class ReviewClientRequest {
     @Length(max = 2000, message = "Review comment field shod have maximum of {max} characters!")
     private String comment;
 
-    @Range(max = 1, message = "Rating field shod have maximum of {max} characters!")
+    @Range(max = 5, message = "Rating field shod have maximum of {max} characters!")
     @Min(value = 0, message = "Rating field shod have minimal value 0!")
     @Max(value = 5, message = "Rating field shod have maximum value 5!")
     private Double rate;
