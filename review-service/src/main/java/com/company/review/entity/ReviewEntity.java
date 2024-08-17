@@ -25,7 +25,7 @@ public class ReviewEntity {
     private Long profileId;
 
     @Column(name = "product_title", nullable = false, length = 120)
-    private String title;
+    private String productTitle;
 
     @Column(name = "review_comment", length = 2000)
     private String comment;

@@ -16,7 +16,7 @@ public class ReviewAdminResponse {
 
     private Long profileId;
 
-    private String title;
+    private String productTitle;
 
     private String comment;
 

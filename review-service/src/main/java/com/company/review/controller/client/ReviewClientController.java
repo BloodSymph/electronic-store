@@ -20,7 +20,7 @@ public class ReviewClientController {
 
     private final ReviewClientService reviewClientService;
 
-    @GetMapping("/{productId}/reviews")
+    @GetMapping("/{productTitle}/reviews")
     @ResponseStatus(HttpStatus.OK)
     public Page<ReviewClientResponse> getAllReviews(
             @PageableDefault(
@@ -28,17 +28,17 @@ public class ReviewClientController {
                     direction = Sort.Direction.ASC,
                     page = 0,
                     size = 15) Pageable pageable,
-            @PathVariable(value = "productId") Long productId) {
+            @PathVariable(value = "productTitle") String productTitle) {
         return reviewClientService.getAllReviews(
-                pageable, productId
+                pageable, productTitle
         );
     }
 
-    @GetMapping("/{productId}/summary-rating")
+    @GetMapping("/{productTitle}/summary-rating")
     @ResponseStatus(HttpStatus.OK)
     public Double getSummaryProductRating(
-            @PathVariable(value = "productId") Long productId) {
-        return reviewClientService.getSummaryRateOfProduct(productId);
+            @PathVariable(value = "productTitle") String productTitle) {
+        return reviewClientService.getSummaryRateOfProduct(productTitle);
     }
 
     @PostMapping("/{productUrl}/add-review")

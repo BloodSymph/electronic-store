@@ -15,7 +15,7 @@ public class ReviewClientResponse {
 
     private Long id;
 
-    private String title;
+    private String productTitle;
 
     private String comment;
 

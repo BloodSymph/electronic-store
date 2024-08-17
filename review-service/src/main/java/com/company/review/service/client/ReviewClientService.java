@@ -11,14 +11,14 @@ import org.springframework.stereotype.Service;
 public interface ReviewClientService {
 
     Page<ReviewClientResponse> getAllReviews(
-            Pageable pageable, Long productId
+            Pageable pageable, String ProductTitle
     );
 
     ReviewClientResponse addReview(
             ReviewClientRequest reviewClientRequest, String productUrl
     );
 
-    Double getSummaryRateOfProduct(Long productId);
+    Double getSummaryRateOfProduct(String ProductTitle);
 
     void deleteReview(
             Long profileId, Long reviewVersion

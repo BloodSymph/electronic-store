@@ -12,7 +12,7 @@ public class ReviewClientMapper {
     public static ReviewClientResponse mapToReviewClientResponse(ReviewEntity review) {
         return ReviewClientResponse.builder()
                 .id(review.getId())
-                .title(review.getTitle())
+                .productTitle(review.getProductTitle())
                 .comment(review.getComment())
                 .rate(review.getRate())
                 .created(review.getCreated())

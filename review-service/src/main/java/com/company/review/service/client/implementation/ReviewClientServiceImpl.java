@@ -34,9 +34,10 @@ public class ReviewClientServiceImpl implements ReviewClientService {
 
     @Override
     @Cacheable(unless = "#result == null ")
-    public Page<ReviewClientResponse> getAllReviews(Pageable pageable, Long productId) {
+    public Page<ReviewClientResponse> getAllReviews(
+            Pageable pageable, String productTitle) {
         return reviewRepository
-                .findByProductId(pageable, productId)
+                .findByProductTitleIgnoreCase(pageable, productTitle)
                 .map(ReviewClientMapper::mapToReviewClientResponse);
     }
 
@@ -45,15 +46,15 @@ public class ReviewClientServiceImpl implements ReviewClientService {
     public ReviewClientResponse addReview(
             ReviewClientRequest reviewClientRequest, String productUrl) {
         ReviewEntity review = mapReviewClientRequestToEntity(reviewClientRequest);
-        review.setTitle(productFeignClient.getProductTitleForReview(productUrl));
+        review.setProductTitle(productFeignClient.getProductTitleForReview(productUrl));
         reviewRepository.save(review);
         return mapToReviewClientResponse(review);
     }
 
     @Override
     @Transactional
-    public Double getSummaryRateOfProduct(Long productId) {
-        return reviewRepository.getSummaryRatingOfProduct(productId);
+    public Double getSummaryRateOfProduct(String productTitle) {
+        return reviewRepository.getSummaryRatingOfProduct(productTitle);
     }
 
     @Override
