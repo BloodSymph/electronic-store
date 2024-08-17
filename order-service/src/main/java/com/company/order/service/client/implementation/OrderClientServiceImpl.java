@@ -58,7 +58,6 @@ public class OrderClientServiceImpl implements OrderClientService {
 
     @Override
     @Transactional
-    @CacheEvict(key = "#profileId")
     public void removeOrder(Long profileId, Long orderVersion) {
         if (!orderRepository.existsByProfileId(profileId)) {
             throw new OrderNotFoundException(

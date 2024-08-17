@@ -27,10 +27,25 @@ public class ReviewAdminController {
     public Page<ReviewAdminResponse> getAllReviews(
             @PageableDefault(
                     sort = "rate",
-                    direction = Sort.Direction.ASC,
+                    direction = Sort.Direction.DESC,
                     page = 0,
                     size = 15) Pageable pageable) {
         return reviewAdminService.getAllReviews(pageable);
+    }
+
+    @GetMapping("/reviews/search")
+    @ResponseStatus(HttpStatus.OK)
+    public Page<ReviewAdminResponse> searchReviews(
+            @PageableDefault(
+                    sort = "rate",
+                    direction = Sort.Direction.DESC,
+                    page = 0,
+                    size = 15) Pageable pageable,
+            @RequestParam(
+                    value = "productTitle",
+                    required = false,
+                    defaultValue = "") String productTitle) {
+        return reviewAdminService.searchReviews(pageable, productTitle);
     }
 
     @DeleteMapping("/{profileId}/review/delete")

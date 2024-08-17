@@ -106,7 +106,6 @@ public class BrandAdminServiceImpl implements BrandAdminService {
 
     @Override
     @Transactional
-    @CacheEvict(allEntries = true)
     public void deleteCurrentBrand(String brandUrl, Long brandVersion) {
         if (!brandRepository.existsByUrlIgnoreCase(brandUrl)) {
             throw new BrandNotFoundException(

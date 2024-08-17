@@ -82,7 +82,6 @@ public class DescriptionAdminImp implements DescriptionAdminService {
 
     @Override
     @Transactional
-    @CacheEvict(allEntries = true)
     public void deleteCurrentDescription(
             String productUrl, Long descriptionVersion) {
         if (!descriptionRepository.existsByProduct_Url(productUrl)) {

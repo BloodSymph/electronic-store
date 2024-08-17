@@ -20,8 +20,19 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Long> {
            @Param(value = "productTitle") String productTitle
     );
 
+    @Query("SELECT reviews FROM Review reviews WHERE reviews.productTitle LIKE LOWER(:productTitle) ")
     Page<ReviewEntity> findByProductTitleIgnoreCase(
-            Pageable pageable, String ProductTitle
+            Pageable pageable,
+            @Param(value = "productTitle") String productTitle
+    );
+
+    @Query("SELECT reviews FROM Review reviews " +
+            "WHERE LOWER(reviews.productTitle) " +
+            "LIKE CONCAT('%', :productTitle ,'%') "
+    )
+    Page<ReviewEntity> searchByProductTitleIgnoreCase(
+            Pageable pageable,
+            @Param(value = "productTitle") String productTitle
     );
 
     void deleteByProfileId(Long profileId);

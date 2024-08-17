@@ -41,11 +41,12 @@ public class CartClientController {
         return cartClientService.addItemToTheCart(itemClientRequest, profileId);
     }
 
-    @GetMapping("/{profileId}/cart/calculate/price")
+    @GetMapping("/{profileId}/cart/{itemId}/calculate/price")
     @ResponseStatus(HttpStatus.OK)
     public Double calculatePricesOfItemsInCart(
-            @PathVariable(value = "profileId") Long profileId) {
-        return cartClientService.calculateItemsPriseInCart(profileId);
+            @PathVariable(value = "profileId") Long profileId,
+            @PathVariable(value = "itemId") Long itemId) {
+        return cartClientService.calculateItemsPriseInCart(profileId, itemId);
     }
 
     @GetMapping("/{profileId}/cart/get/id")

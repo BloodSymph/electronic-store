@@ -17,7 +17,7 @@ import static com.company.product.util.CacheEvictUtility.evictAllCaches;
 
 @Service
 @RequiredArgsConstructor
-@CacheConfig(cacheNames = {"categories"})
+@CacheConfig(cacheNames = {"categories_client"})
 public class CategoryClientServiceImpl implements CategoryClientService {
 
     private final CategoryRepository categoryRepository;

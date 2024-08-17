@@ -25,7 +25,7 @@ public class BrandAdminController {
     public Page<BrandAdminResponse> getListOfBrands(
             @PageableDefault(
                     sort = "name",
-                    direction = Sort.Direction.ASC,
+                    direction = Sort.Direction.DESC,
                     page = 0,
                     size = 5) Pageable pageable) {
 
@@ -38,7 +38,7 @@ public class BrandAdminController {
     public Page<BrandAdminResponse> searchBrands(
             @PageableDefault(
                     sort = "name",
-                    direction = Sort.Direction.ASC,
+                    direction = Sort.Direction.DESC,
                     page = 0,
                     size = 5) Pageable pageable,
             @RequestParam(

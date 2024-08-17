@@ -48,7 +48,6 @@ public class OrderAdminServiceImpl implements OrderAdminService {
 
     @Override
     @Transactional
-    @CacheEvict(allEntries = true)
     public void deleteUserOrder(Long profileId, Long orderVersion) {
         if (!orderRepository.existsByProfileId(profileId)) {
             throw new OrderNotFoundException(

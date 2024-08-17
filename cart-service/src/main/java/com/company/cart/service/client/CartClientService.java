@@ -21,7 +21,7 @@ public interface CartClientService {
             ItemClientRequest itemClientRequest, Long profileId
     );
 
-    Double calculateItemsPriseInCart(Long profileId);
+    Double calculateItemsPriseInCart(Long profileId, Long productId);
 
     Long getCartIdForOrder(Long profileId);
 

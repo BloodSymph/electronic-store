@@ -25,7 +25,7 @@ public class CategoryAdminController {
     public Page<CategoryAdminResponse> getListOfCategories(
             @PageableDefault(
                     sort = "name",
-                    direction = Sort.Direction.ASC,
+                    direction = Sort.Direction.DESC,
                     page = 0,
                     size = 5) Pageable pageable) {
 
@@ -38,7 +38,7 @@ public class CategoryAdminController {
     public Page<CategoryAdminResponse> searchCategory(
             @PageableDefault(
                     sort = "name",
-                    direction = Sort.Direction.ASC,
+                    direction = Sort.Direction.DESC,
                     page = 0,
                     size = 5) Pageable pageable,
             @RequestParam(

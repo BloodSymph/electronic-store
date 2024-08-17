@@ -226,7 +226,6 @@ public class ProductAdminServiceImp implements ProductAdminService {
 
     @Override
     @Transactional
-    @CacheEvict(allEntries = true)
     public void deleteCurrentProduct(
             String productUrl, Long productVersion) {
         if (!productRepository.existsByUrlIgnoreCase(productUrl)) {

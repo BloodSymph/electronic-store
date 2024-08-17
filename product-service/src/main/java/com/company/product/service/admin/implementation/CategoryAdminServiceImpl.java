@@ -85,7 +85,6 @@ public class CategoryAdminServiceImpl implements CategoryAdminService {
 
     @Override
     @Transactional
-    @CacheEvict(allEntries = true)
     public void deleteCurrentCategory(
             String categoryUrl, Long categoryVersion) {
         if (!categoryRepository.existsByUrlIgnoreCase(categoryUrl)) {

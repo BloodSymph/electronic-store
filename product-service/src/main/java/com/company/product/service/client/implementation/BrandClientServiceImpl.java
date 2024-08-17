@@ -17,7 +17,7 @@ import static com.company.product.util.CacheEvictUtility.evictAllCaches;
 
 @Service
 @RequiredArgsConstructor
-@CacheConfig(cacheNames = {"brands"})
+@CacheConfig(cacheNames = {"brands_client"})
 public class BrandClientServiceImpl implements BrandClientService {
 
     private final BrandRepository brandRepository;

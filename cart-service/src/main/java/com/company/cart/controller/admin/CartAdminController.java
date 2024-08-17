@@ -24,7 +24,7 @@ public class CartAdminController {
     public Page<CartAdminResponse> getAllCarts(
             @PageableDefault(
                     sort = "created",
-                    direction = Sort.Direction.ASC,
+                    direction = Sort.Direction.DESC,
                     page = 0,
                     size = 15) Pageable pageable) {
         return cartAdminService.getAllCarts(pageable);
@@ -39,7 +39,7 @@ public class CartAdminController {
                     defaultValue = "") Long profileId,
             @PageableDefault(
                     sort = "created",
-                    direction = Sort.Direction.ASC,
+                    direction = Sort.Direction.DESC,
                     page = 0,
                     size = 15) Pageable pageable) {
         return cartAdminService.searchCarts(pageable, profileId);

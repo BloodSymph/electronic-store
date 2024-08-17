@@ -24,7 +24,7 @@ public class OrderAdminController {
     public Page<OrderAdminResponse> getAllOrders(
             @PageableDefault(
                     sort = "orderCode",
-                    direction = Sort.Direction.ASC,
+                    direction = Sort.Direction.DESC,
                     page = 0,
                     size = 15
             ) Pageable pageable) {

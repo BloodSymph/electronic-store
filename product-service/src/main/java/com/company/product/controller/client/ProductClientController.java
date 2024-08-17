@@ -26,7 +26,7 @@ public class ProductClientController {
     public Page<ProductClientResponse> getAllProducts(
            @PageableDefault(
                    sort = "title",
-                   direction = Sort.Direction.ASC,
+                   direction = Sort.Direction.DESC,
                    page = 0,
                    size = 15
            ) Pageable pageable) {
@@ -39,7 +39,7 @@ public class ProductClientController {
             @RequestParam(value = "searchText") String searchText,
             @PageableDefault(
                     sort = "title",
-                    direction = Sort.Direction.ASC,
+                    direction = Sort.Direction.DESC,
                     page = 0,
                     size = 15
             ) Pageable pageable) {
@@ -75,7 +75,7 @@ public class ProductClientController {
             @PathVariable(value = "categoryUrl") String categoryUrl,
             @PageableDefault(
                     sort = "title",
-                    direction = Sort.Direction.ASC,
+                    direction = Sort.Direction.DESC,
                     page = 0,
                     size = 15
             ) Pageable pageable) {
@@ -90,7 +90,7 @@ public class ProductClientController {
             @PathVariable(value = "brandUrl") String brandUrl,
             @PageableDefault(
                     sort = "title",
-                    direction = Sort.Direction.ASC,
+                    direction = Sort.Direction.DESC,
                     page = 0,
                     size = 15
             ) Pageable pageable){

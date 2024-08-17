@@ -25,7 +25,7 @@ public class ReviewClientController {
     public Page<ReviewClientResponse> getAllReviews(
             @PageableDefault(
                     sort = "rate",
-                    direction = Sort.Direction.ASC,
+                    direction = Sort.Direction.DESC,
                     page = 0,
                     size = 15) Pageable pageable,
             @PathVariable(value = "productTitle") String productTitle) {

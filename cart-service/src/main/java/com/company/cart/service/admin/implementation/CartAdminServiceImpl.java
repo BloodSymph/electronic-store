@@ -46,7 +46,6 @@ public class CartAdminServiceImpl implements CartAdminService {
     }
 
     @Override
-    @Cacheable(key = "#profileId", unless = "#result == null ")
     public CartDetailedAdminResponse getCartUserItems(Long profileId) {
         CartEntity cart = cartRepository
                 .findByProfileId(profileId)
@@ -60,7 +59,6 @@ public class CartAdminServiceImpl implements CartAdminService {
 
     @Override
     @Transactional
-    @CacheEvict(allEntries = true)
     public void deleteCart(Long profileId, Long cartVersion) {
         if (!cartRepository.existsByProfileId(profileId)) {
             throw new CartProfileIdNotValidException(

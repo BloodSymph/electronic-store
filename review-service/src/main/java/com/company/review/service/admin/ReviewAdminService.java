@@ -11,7 +11,13 @@ public interface ReviewAdminService {
 
     Page<ReviewAdminResponse> getAllReviews(Pageable pageable);
 
-    void deleteReviewByProfileId(Long profileId, Long reviewVersion);
+    Page<ReviewAdminResponse> searchReviews(
+            Pageable pageable, String productTitle
+    );
+
+    void deleteReviewByProfileId(
+            Long profileId, Long reviewVersion
+    );
 
     @Scheduled(fixedRate = 120)
     void evictAllCacheWithTime();

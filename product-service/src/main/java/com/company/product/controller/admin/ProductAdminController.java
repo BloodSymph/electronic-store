@@ -30,7 +30,7 @@ public class ProductAdminController {
     public Page<ProductAdminResponse> getAllProducts(
             @PageableDefault(
                     sort = "title",
-                    direction = Sort.Direction.ASC,
+                    direction = Sort.Direction.DESC,
                     page = 0,
                     size = 15
             ) Pageable pageable) {
@@ -47,7 +47,7 @@ public class ProductAdminController {
             ) String searchText,
             @PageableDefault(
                     sort = "title",
-                    direction = Sort.Direction.ASC,
+                    direction = Sort.Direction.DESC,
                     page = 0,
                     size = 15
             ) Pageable pageable) {

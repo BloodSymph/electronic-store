@@ -58,7 +58,7 @@ public class CartClientServiceImpl implements CartClientService {
 
     @Override
     @Transactional
-    @CachePut(cacheNames = {"carts"}, key = "#cartClientRequest.profileId", unless = "#result == null ")
+    @CachePut(cacheNames = {"carts_client"}, key = "#cartClientRequest.profileId", unless = "#result == null ")
     public CartClientResponse createCart(CartClientRequest cartClientRequest) {
         CartEntity cart = mapToCartEntity(cartClientRequest);
         cartRepository.save(cart);
@@ -68,7 +68,7 @@ public class CartClientServiceImpl implements CartClientService {
 
     @Override
     @Transactional
-    @CachePut(cacheNames = {"items"}, key = "#profileId", unless = "#result == null ")
+    @CachePut(cacheNames = {"items_client"}, key = "#profileId", unless = "#result == null ")
     public ItemClientResponse addItemToTheCart(
             ItemClientRequest itemClientRequest, Long profileId) {
 
@@ -95,8 +95,20 @@ public class CartClientServiceImpl implements CartClientService {
 
     @Override
     @Transactional
-    //todo: Add counts of same products
-    public Double calculateItemsPriseInCart(Long profileId) {
+    public Double calculateItemsPriseInCart(Long profileId, Long productId) {
+        ItemEntity itemEntity = itemRepository
+                .findByCart_ProfileIdAndProductId(profileId, productId)
+                .orElseThrow(
+                        () -> new ItemNotFoundException(
+                                "Can not find item by current cart profile id: " + profileId
+                                        + " or product Id:" + productId + " !"
+                        )
+                );
+
+        if (itemEntity.getProductId().equals(productId)) {
+            return itemRepository.countAllByPrice(profileId) * itemEntity.getItemsCount();
+        }
+
         return itemRepository.countAllByPrice(profileId);
     }
 
@@ -108,7 +120,7 @@ public class CartClientServiceImpl implements CartClientService {
 
     @Override
     @Transactional
-    @CacheEvict(cacheNames = {"items"}, key = "#profileId")
+    @CacheEvict(cacheNames = {"items_client"}, key = "#profileId")
     public void removeItemFromCart(Long profileId, Long itemId, Long itemVersion) {
         if (!cartRepository.existsByProfileId(profileId)) {
             throw new CartProfileIdNotValidException(
@@ -130,7 +142,7 @@ public class CartClientServiceImpl implements CartClientService {
 
     @Override
     @Transactional
-    @CacheEvict(cacheNames = {"carts"}, key = "#profileId")
+    @CacheEvict(cacheNames = {"carts_client"}, key = "#profileId")
     public void clearCart(Long profileId, Long cartVersion) {
         if (!cartRepository.existsByProfileId(profileId)) {
             throw new CartProfileIdNotValidException(

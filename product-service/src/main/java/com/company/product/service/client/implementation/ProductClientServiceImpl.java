@@ -27,7 +27,7 @@ import static com.company.product.util.FileUtility.encodeFile;
 
 @Service
 @RequiredArgsConstructor
-@CacheConfig(cacheNames = {"products"})
+@CacheConfig(cacheNames = {"products_client"})
 public class ProductClientServiceImpl implements ProductClientService {
 
     private final ProductRepository productRepository;
@@ -73,7 +73,6 @@ public class ProductClientServiceImpl implements ProductClientService {
 
 
     @Override
-    @Cacheable(unless = "#result == null ")
     public ProductDetailedClientResponse getDetailsAboutProduct(
             String productUrl) throws IOException {
         ProductEntity product = productRepository
