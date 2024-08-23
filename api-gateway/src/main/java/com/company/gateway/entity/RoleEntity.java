@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Data
 @Builder
@@ -22,7 +23,7 @@ public class RoleEntity {
     private Long id;
 
     @Column(name = "role_name", nullable = false, length = 120)
-    private String role;
+    private String name;
 
     @CreationTimestamp
     @Column(name = "role_created")
@@ -31,6 +32,9 @@ public class RoleEntity {
     @UpdateTimestamp
     @Column(name = "role_updated")
     private LocalDateTime updated;
+
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
+    private Set<UserEntity> users;
 
     @Version
     @Column(name = "role_version", nullable = false, unique = true)

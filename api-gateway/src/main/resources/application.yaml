@@ -35,5 +35,10 @@ spring:
     hibernate:
       ddl-auto: update
 
-
-
+application:
+  security:
+    jwt:
+      secret-key: 82ca8cddc92198c43eeba394e706e16e850062004c1fb5cddbefdfdbf217ebda
+      expiration: 86400000
+      refresh-token:
+        expiration: 604800000

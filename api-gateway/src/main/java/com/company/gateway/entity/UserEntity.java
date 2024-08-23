@@ -6,6 +6,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Builder
@@ -38,7 +40,20 @@ public class UserEntity {
     @Column(name = "user_updated")
     private LocalDateTime updated;
 
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = {
+                    @JoinColumn(name = "user_username", referencedColumnName = "username")
+            },
+            inverseJoinColumns = {
+                    @JoinColumn(name = "role_name", referencedColumnName = "name")
+            }
+    )
+    private Set<RoleEntity> roles;
 
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private ProfileEntity profile;
 
     @Version
     @Column(name = "user_version", nullable = false, unique = true)

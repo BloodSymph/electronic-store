@@ -50,6 +50,10 @@ public class ProfileEntity {
     @Column(name = "profile_updated")
     private LocalDateTime updated;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "username", referencedColumnName = "user_username")
+    private UserEntity user;
+
     @Version
     @Column(name = "profile_version", nullable = false, unique = true)
     private Long version;
