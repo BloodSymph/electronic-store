@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 
+import java.time.Instant;
 import java.util.Date;
 
 @Service
@@ -45,21 +46,15 @@ public class JWTService {
 
     }
 
-    public String generateRefreshToken(String accessToken) {
+    public String generateRefreshToken(String username) {
 
         Date currentDate = new Date();
         Date expireDate = new Date(
                 currentDate.getTime() + refreshTokenExpiration
         );
 
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(secretKey)
-                .build()
-                .parseClaimsJws(accessToken)
-                .getBody();
-
         String refreshToken = Jwts.builder()
-                .setClaims(claims)
+                .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(expireDate)
                 .signWith(SignatureAlgorithm.HS512, secretKey)
@@ -97,7 +92,7 @@ public class JWTService {
         } catch (Exception exception) {
 
             throw new AuthenticationCredentialsNotFoundException(
-                    "JWT was expired or incorrect!",
+                    "Access token: " + accessToken + " was expired or incorrect !",
                     exception.fillInStackTrace()
             );
 
@@ -105,9 +100,25 @@ public class JWTService {
 
     }
 
-    public String validateRefreshTokenExpiration(String refreshToken) {
-        //todo: Make a validation for refresh token!
-        return null;
+    public boolean validateRefreshTokenExpiration(String refreshToken) {
+
+        try {
+
+            Jwts.parserBuilder()
+                    .setSigningKey(secretKey)
+                    .build()
+                    .parseClaimsJws(refreshToken);
+
+            return true;
+
+        } catch (Exception exception) {
+
+            throw new AuthenticationCredentialsNotFoundException(
+                    "Access token: " + refreshToken + " was expired or incorrect !",
+                    exception.fillInStackTrace()
+            );
+
+        }
 
     }
 
