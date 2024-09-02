@@ -23,13 +23,13 @@ public class UserEntity {
     @Column(name = "user_id")
     private Long id;
 
-    @Column(name = "user_username", unique = true, nullable = false, length = 120)
+    @Column(name = "user_username", unique = true, nullable = false, length = 60)
     private String username;
 
-    @Column(name = "user_email", unique = true, nullable = false, length = 120)
+    @Column(name = "user_email", unique = true, nullable = false, length = 60)
     private String email;
 
-    @Column(name = "user_password", nullable = false, unique = true, length = 120)
+    @Column(name = "user_password", nullable = false, unique = true, length = 25)
     private String password;
 
     @CreationTimestamp

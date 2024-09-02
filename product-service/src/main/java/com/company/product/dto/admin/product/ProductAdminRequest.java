@@ -1,6 +1,7 @@
 package com.company.product.dto.admin.product;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -15,7 +16,7 @@ import org.hibernate.validator.constraints.URL;
 @ToString
 public class ProductAdminRequest {
 
-    @NotNull(message = "Product title field shod not contains null value!")
+    @NotEmpty
     @NotBlank(message = "Product title field shod not be empty!")
     @Length(max = 120, message = "Product title field shod have maximum of {max} characters!")
     private String title;
