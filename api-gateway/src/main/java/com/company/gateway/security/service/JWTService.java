@@ -66,55 +66,33 @@ public class JWTService {
         return refreshToken;
     }
 
-    public String getUsernameFromAccessToken(String accessToken) {
+    public String getUsernameFromToken(String token) {
 
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(secretKey)
                 .build()
-                .parseClaimsJws(accessToken)
+                .parseClaimsJws(token)
                 .getBody();
 
         return claims.getSubject();
 
     }
 
-    public boolean validatedAccessToken(String accessToken) {
+    public boolean validatedToken(String token) {
 
         try {
 
             Jwts.parserBuilder()
                     .setSigningKey(secretKey)
                     .build()
-                    .parseClaimsJws(accessToken);
+                    .parseClaimsJws(token);
 
             return true;
 
         } catch (Exception exception) {
 
             throw new AuthenticationCredentialsNotFoundException(
-                    "Access token: " + accessToken + " was expired or incorrect !",
-                    exception.fillInStackTrace()
-            );
-
-        }
-
-    }
-
-    public boolean validateRefreshTokenExpiration(String refreshToken) {
-
-        try {
-
-            Jwts.parserBuilder()
-                    .setSigningKey(secretKey)
-                    .build()
-                    .parseClaimsJws(refreshToken);
-
-            return true;
-
-        } catch (Exception exception) {
-
-            throw new AuthenticationCredentialsNotFoundException(
-                    "Access token: " + refreshToken + " was expired or incorrect !",
+                    "Token: " + token + " was expired or incorrect !",
                     exception.fillInStackTrace()
             );
 

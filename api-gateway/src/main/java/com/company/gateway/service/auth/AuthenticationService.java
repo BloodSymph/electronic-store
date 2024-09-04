@@ -14,5 +14,6 @@ public interface AuthenticationService {
     AuthorizationResponse login(LoginRequest loginRequest);
 
     //todo: Think about refresh token
+    AuthorizationResponse refresh();
 
 }

@@ -33,7 +33,6 @@ public class JWTAuthFilter extends OncePerRequestFilter {
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
 
-    //todo: Refresh token!!!
     @Override
     protected void doFilterInternal(
            @NonNull HttpServletRequest request,
@@ -42,9 +41,9 @@ public class JWTAuthFilter extends OncePerRequestFilter {
 
         String token = getJWTFromRequest(request);
 
-        if (StringUtils.hasText(token) && jwtService.validatedAccessToken(token)) {
+        if (StringUtils.hasText(token) && jwtService.validatedToken(token)) {
 
-            String username = jwtService.getUsernameFromAccessToken(token);
+            String username = jwtService.getUsernameFromToken(token);
 
             UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
