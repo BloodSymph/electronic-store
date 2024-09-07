@@ -16,7 +16,4 @@ public interface ProfileClientService {
 
     void deleteProfile(Long profileVersion);
 
-//    @Scheduled(fixedRate = 120)
-//    void evictAllCacheWithTime();
-
 }

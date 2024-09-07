@@ -3,6 +3,7 @@ package com.company.gateway.exception.handler;
 import com.company.gateway.exception.entity.ErrorEntity;
 import com.company.gateway.exception.exceptions.user.UserNotFoundException;
 import com.company.gateway.exception.exceptions.user.UserVersionNotValidException;
+import com.company.gateway.exception.exceptions.user.UsernameIsTakenException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -34,6 +35,19 @@ public class UserExceptionHandler {
         ErrorEntity errorEntity = new ErrorEntity();
         errorEntity.setStatusCode(HttpStatus.BAD_REQUEST.value());
         errorEntity.setErrorMessage(userVersionNotValidException.getMessage());
+        errorEntity.setErrorTimeStamp(new Date());
+        return new ResponseEntity<>(
+                errorEntity, HttpStatus.BAD_REQUEST
+        );
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(UsernameIsTakenException.class)
+    public ResponseEntity<ErrorEntity> usernameIsTakenExceptionHandler(
+            UsernameIsTakenException usernameIsTakenException) {
+        ErrorEntity errorEntity = new ErrorEntity();
+        errorEntity.setStatusCode(HttpStatus.BAD_REQUEST.value());
+        errorEntity.setErrorMessage(usernameIsTakenException.getMessage());
         errorEntity.setErrorTimeStamp(new Date());
         return new ResponseEntity<>(
                 errorEntity, HttpStatus.BAD_REQUEST

@@ -27,6 +27,7 @@ public class JWTService {
     public String generateAccessToken(Authentication authentication) {
 
         String username = authentication.getName();
+
         Date currentDate = new Date();
         Date expireDate = new Date(
                 currentDate.getTime() + accessTokenExpiration
@@ -46,7 +47,9 @@ public class JWTService {
 
     }
 
-    public String generateRefreshToken(String username) {
+    public String generateRefreshToken(Authentication authentication) {
+
+        String username = authentication.getName();
 
         Date currentDate = new Date();
         Date expireDate = new Date(
