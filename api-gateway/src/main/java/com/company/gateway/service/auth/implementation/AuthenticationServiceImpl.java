@@ -2,7 +2,6 @@ package com.company.gateway.service.auth.implementation;
 
 import com.company.gateway.dto.auth.login.AuthorizationResponse;
 import com.company.gateway.dto.auth.login.LoginRequest;
-import com.company.gateway.dto.auth.refresh.RefreshTokenRequest;
 import com.company.gateway.dto.auth.register.RegisterRequest;
 import com.company.gateway.dto.auth.register.RegisterResponse;
 import com.company.gateway.entity.RoleEntity;
@@ -13,7 +12,10 @@ import com.company.gateway.repository.RoleRepository;
 import com.company.gateway.repository.UserRepository;
 import com.company.gateway.security.service.JWTService;
 import com.company.gateway.service.auth.AuthenticationService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,6 +24,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.Collections;
 
 import static com.company.gateway.mapper.auth.AuthenticationMapper.mapToRegisterResponse;
@@ -103,13 +106,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     //todo:Think better about this!!!
+
     @Override
     @Transactional
-    public AuthorizationResponse refresh(RefreshTokenRequest refreshTokenRequest) {
+    public void refresh(
+            HttpServletRequest httpServletRequest,
+            HttpServletResponse response) throws IOException {
 
-
-
-        return null;
     }
 
 }

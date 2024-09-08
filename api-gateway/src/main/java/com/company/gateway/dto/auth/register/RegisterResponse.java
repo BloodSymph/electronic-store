@@ -1,11 +1,7 @@
 package com.company.gateway.dto.auth.register;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Table;
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import java.time.LocalDateTime;
 
 @Data
 @Builder

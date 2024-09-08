@@ -1,6 +1,5 @@
 package com.company.gateway.mapper.auth;
 
-import com.company.gateway.dto.auth.register.RegisterRequest;
 import com.company.gateway.dto.auth.register.RegisterResponse;
 import com.company.gateway.entity.UserEntity;
 import org.springframework.stereotype.Component;
