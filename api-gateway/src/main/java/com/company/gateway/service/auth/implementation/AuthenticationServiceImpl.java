@@ -84,25 +84,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     @Transactional
     public AuthorizationResponse login(LoginRequest loginRequest) {
-
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getUsername(),
-                        loginRequest.getPassword()
-                )
-        );
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        String accessToken = jwtService.generateAccessToken(authentication);
-        String refreshToken = jwtService.generateRefreshToken(authentication);
-
-        AuthorizationResponse authorizationResponse = new AuthorizationResponse();
-        authorizationResponse.setAccessToken(accessToken);
-        authorizationResponse.setRefreshToken(refreshToken);
-
-        return authorizationResponse;
-
+        return null;
     }
 
     //todo:Think better about this!!!

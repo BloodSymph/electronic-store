@@ -52,6 +52,9 @@ public class UserEntity {
     )
     private Set<RoleEntity> roles;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private Set<TokenEntity> tokens;
+
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private ProfileEntity profile;
 

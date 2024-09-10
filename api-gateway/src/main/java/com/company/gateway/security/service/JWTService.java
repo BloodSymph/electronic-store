@@ -1,18 +1,27 @@
 package com.company.gateway.security.service;
 
+import com.company.gateway.entity.UserEntity;
+import com.company.gateway.repository.TokenRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 
+import javax.crypto.SecretKey;
 import java.time.Instant;
 import java.util.Date;
+import java.util.function.Function;
 
 @Service
+@RequiredArgsConstructor
 public class JWTService {
 
     @Value("${application.security.jwt.secret-key}")
@@ -24,83 +33,81 @@ public class JWTService {
     @Value("${application.security.jwt.refresh-token.expiration}")
     private Long refreshTokenExpiration;
 
-    public String generateAccessToken(Authentication authentication) {
+    private final TokenRepository tokenRepository;
 
-        String username = authentication.getName();
-
-        Date currentDate = new Date();
-        Date expireDate = new Date(
-                currentDate.getTime() + accessTokenExpiration
-        );
-
-        String accessToken = Jwts.builder()
-                .setSubject(username)
-                .setIssuedAt(new Date())
-                .setExpiration(expireDate)
-                .signWith(SignatureAlgorithm.HS512, secretKey)
-                .compact();
-
-        System.out.println("New token: ");
-        System.out.println(accessToken);
-
-        return accessToken;
-
+    public String extractUsername(String token) {
+        return extractClaim(token, Claims::getSubject);
     }
 
-    public String generateRefreshToken(Authentication authentication) {
 
-        String username = authentication.getName();
+    public boolean isValid(String token, UserDetails user) {
+        String username = extractUsername(token);
 
-        Date currentDate = new Date();
-        Date expireDate = new Date(
-                currentDate.getTime() + refreshTokenExpiration
-        );
+        boolean validToken = tokenRepository
+                .findByAccessToken(token)
+                .map(t -> !t.isLoggedOut())
+                .orElse(false);
 
-        String refreshToken = Jwts.builder()
-                .setSubject(username)
-                .setIssuedAt(new Date())
-                .setExpiration(expireDate)
-                .signWith(SignatureAlgorithm.HS512, secretKey)
-                .compact();
-
-        System.out.println("Refresh token: ");
-        System.out.println(refreshToken);
-
-        return refreshToken;
+        return (username.equals(user.getUsername())) && !isTokenExpired(token) && validToken;
     }
 
-    public String getUsernameFromToken(String token) {
+    public boolean isValidRefreshToken(String token, UserEntity user) {
+        String username = extractUsername(token);
 
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(secretKey)
+        boolean validRefreshToken = tokenRepository
+                .findByRefreshToken(token)
+                .map(t -> !t.isLoggedOut())
+                .orElse(false);
+
+        return (username.equals(user.getUsername())) && !isTokenExpired(token) && validRefreshToken;
+    }
+
+    private boolean isTokenExpired(String token) {
+        return extractExpiration(token).before(new Date());
+    }
+
+    private Date extractExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration);
+    }
+
+    public <T> T extractClaim(String token, Function<Claims, T> resolver) {
+        Claims claims = extractAllClaims(token);
+        return resolver.apply(claims);
+    }
+
+    private Claims extractAllClaims(String token) {
+        return Jwts
+                .parserBuilder()
+                .setSigningKey(getKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
-
-        return claims.getSubject();
-
     }
 
-    public boolean validatedToken(String token) {
 
-        try {
+    public String generateAccessToken(UserEntity user) {
+        return generateToken(user, accessTokenExpiration);
+    }
 
-            Jwts.parserBuilder()
-                    .setSigningKey(secretKey)
-                    .build()
-                    .parseClaimsJws(token);
+    public String generateRefreshToken(UserEntity user) {
+        return generateToken(user, refreshTokenExpiration);
+    }
 
-            return true;
+    private String generateToken(UserEntity user, Long expireTime) {
+        String token = Jwts
+                .builder()
+                .setSubject(user.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + expireTime ))
+                .signWith(getKey())
+                .compact();
 
-        } catch (Exception exception) {
+        return token;
+    }
 
-            throw new AuthenticationCredentialsNotFoundException(
-                    "Token: " + token + " was expired or incorrect !",
-                    exception.fillInStackTrace()
-            );
-
-        }
-
+    private SecretKey getKey() {
+        byte[] keyBytes = Decoders.BASE64URL.decode(secretKey);
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 
 }

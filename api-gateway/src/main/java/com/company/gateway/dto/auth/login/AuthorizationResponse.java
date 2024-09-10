@@ -10,9 +10,6 @@ import lombok.*;
 @ToString
 public class AuthorizationResponse {
 
-    @JsonProperty("token_type")
-    private String tokenType = "Bearer ";
-
     @JsonProperty("access_token")
     private String accessToken;
 
