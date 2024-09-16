@@ -1,14 +1,15 @@
 package com.company.gateway.service.auth.implementation;
 
-import com.company.gateway.dto.auth.login.AuthorizationResponse;
+import com.company.gateway.dto.auth.login.AuthenticationResponse;
 import com.company.gateway.dto.auth.login.LoginRequest;
 import com.company.gateway.dto.auth.register.RegisterRequest;
-import com.company.gateway.dto.auth.register.RegisterResponse;
 import com.company.gateway.entity.RoleEntity;
+import com.company.gateway.entity.TokenEntity;
 import com.company.gateway.entity.UserEntity;
 import com.company.gateway.exception.exceptions.role.RoleNotFoundException;
 import com.company.gateway.exception.exceptions.user.UsernameIsTakenException;
 import com.company.gateway.repository.RoleRepository;
+import com.company.gateway.repository.TokenRepository;
 import com.company.gateway.repository.UserRepository;
 import com.company.gateway.security.service.JWTService;
 import com.company.gateway.service.auth.AuthenticationService;
@@ -16,18 +17,18 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.Collections;
-
-import static com.company.gateway.mapper.auth.AuthenticationMapper.mapToRegisterResponse;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -39,6 +40,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final RoleRepository roleRepository;
 
+    private final TokenRepository tokenRepository;
+
     private final PasswordEncoder passwordEncoder;
 
     private final JWTService jwtService;
@@ -46,7 +49,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     @Transactional
-    public RegisterResponse registerNewUser(RegisterRequest registerRequest) {
+    public AuthenticationResponse registerNewUser(RegisterRequest registerRequest) {
 
         if (userRepository.existsByUsernameIgnoreCase(registerRequest.getUsername())) {
             throw new UsernameIsTakenException(
@@ -77,23 +80,122 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         userRepository.save(userEntity);
 
-        return mapToRegisterResponse(userEntity);
+        String accessToken = jwtService.generateAccessToken(userEntity);
+        String refreshToken = jwtService.generateRefreshToken(userEntity);
+
+        saveUserToken(accessToken, refreshToken, userEntity);
+
+        return new AuthenticationResponse(
+                accessToken,
+                refreshToken,
+                "User: " + registerRequest.getUsername() + " login was successful!"
+        );
 
     }
 
     @Override
     @Transactional
-    public AuthorizationResponse login(LoginRequest loginRequest) {
-        return null;
-    }
+    public AuthenticationResponse login(LoginRequest loginRequest) {
 
-    //todo:Think better about this!!!
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.getUsername(),
+                        loginRequest.getPassword()
+                )
+        );
+
+        UserEntity user = userRepository
+                .findByUsernameIgnoreCase(
+                        loginRequest.getUsername()
+                ).orElseThrow(
+                        () -> new UsernameNotFoundException(
+                                "Can not find user by current username: " + loginRequest.getUsername() + " !"
+                        )
+                );
+
+        String accessToken = jwtService.generateAccessToken(user);
+        String refreshToken = jwtService.generateRefreshToken(user);
+
+        revokeAllTokenByUser(user);
+
+        saveUserToken(accessToken, refreshToken, user);
+
+        return new AuthenticationResponse(
+                accessToken,
+                refreshToken,
+                "User: " + loginRequest.getUsername() + " login was successful!"
+        );
+    }
 
     @Override
     @Transactional
-    public void refresh(
+    public ResponseEntity<?> refresh(
             HttpServletRequest httpServletRequest,
             HttpServletResponse response) throws IOException {
+
+        String authHeader = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
+
+        if(authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        String token = authHeader.substring(7);
+
+        String username = jwtService.extractUsername(token);
+
+        UserEntity user = userRepository
+                .findByUsernameIgnoreCase(username)
+                .orElseThrow(
+                        () -> new UsernameNotFoundException(
+                                "Can not find user by current username: " + username + " !"
+                        )
+                );
+
+        if(jwtService.isValidRefreshToken(token, user)) {
+
+            String accessToken = jwtService.generateAccessToken(user);
+            String refreshToken = jwtService.generateRefreshToken(user);
+
+            revokeAllTokenByUser(user);
+            saveUserToken(accessToken, refreshToken, user);
+
+            return new ResponseEntity<>(
+                    new AuthenticationResponse(
+                            accessToken, refreshToken, "New tokens are generated!"
+                    ),
+                    HttpStatus.OK
+            );
+
+        }
+
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
+    }
+
+    private void revokeAllTokenByUser(UserEntity owner) {
+
+        List<TokenEntity> validTokens = tokenRepository.findAllAccessTokenByOwnerId(owner.getId());
+
+        if(validTokens.isEmpty()) {
+            return;
+        }
+
+        validTokens.forEach(t-> {
+            t.setLoggedOut(true);
+        });
+
+        tokenRepository.saveAll(validTokens);
+
+    }
+    private void saveUserToken(String accessToken, String refreshToken, UserEntity owner) {
+
+        TokenEntity token = new TokenEntity();
+        token.setAccessToken(accessToken);
+        token.setRefreshToken(refreshToken);
+        token.setLoggedOut(false);
+        token.setOwner(owner);
+
+        tokenRepository.save(token);
 
     }
 

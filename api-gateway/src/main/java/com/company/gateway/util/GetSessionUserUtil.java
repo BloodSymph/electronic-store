@@ -6,7 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 @UtilityClass
-public class SecurityUtil {
+public class GetSessionUserUtil {
 
     public static String getSessionUser() {
 

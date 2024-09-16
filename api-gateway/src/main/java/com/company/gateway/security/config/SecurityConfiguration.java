@@ -1,12 +1,14 @@
 package com.company.gateway.security.config;
 
 import com.company.gateway.security.filter.JWTAuthFilter;
+import com.company.gateway.security.handler.CustomLogoutHandler;
 import com.company.gateway.security.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -15,9 +17,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -31,6 +35,10 @@ import java.util.Arrays;
 public class SecurityConfiguration {
 
     private final CustomUserDetailsService customUserDetailsService;
+
+    private final CustomLogoutHandler customLogoutHandler;
+
+    private final JWTAuthFilter jwtAuthFilter;
 
     @Bean
     public AuthenticationManager authenticationManager(
@@ -52,17 +60,12 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public JWTAuthFilter jwtAuthFilter() {
-        return new JWTAuthFilter();
-    }
-
-    @Bean
     public CorsConfigurationSource corsConfigurationSource() {
 
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowCredentials(true);
-        configuration.addAllowedHeader("http://localhost:0000");
+        configuration.addAllowedHeader("http://localhost:3000");
 
         configuration.setAllowedMethods(
                 Arrays.asList(
@@ -105,12 +108,23 @@ public class SecurityConfiguration {
                 authorizationManagerRequestMatcherRegistry -> authorizationManagerRequestMatcherRegistry
                         .requestMatchers(
                                 HttpMethod.POST,
-                                "/api/v1/api-gateway/authorization/client/"
+                                "/api/v1/api-gateway/auth/**"
                         )
                         .permitAll()
         ).addFilterBefore(
-                jwtAuthFilter(),
+                jwtAuthFilter,
                 UsernamePasswordAuthenticationFilter.class
+        ).exceptionHandling(
+                httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer.accessDeniedHandler(
+                        (request, response, accessDeniedException) -> response.setStatus(403)
+                ).authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+        ).logout(
+                httpSecurityLogoutConfigurer -> httpSecurityLogoutConfigurer
+                        .logoutUrl("/logout")
+                        .addLogoutHandler(customLogoutHandler)
+                        .logoutSuccessHandler(
+                                (request, response, authentication) -> SecurityContextHolder.clearContext()
+                        )
         );
 
         return httpSecurity.build();
