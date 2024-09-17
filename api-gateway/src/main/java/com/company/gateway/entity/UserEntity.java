@@ -44,15 +44,15 @@ public class UserEntity {
     @JoinTable(
             name = "user_roles",
             joinColumns = {
-                    @JoinColumn(name = "user_username", referencedColumnName = "username")
+                    @JoinColumn(name = "user_username", referencedColumnName = "user_username")
             },
             inverseJoinColumns = {
-                    @JoinColumn(name = "role_name", referencedColumnName = "name")
+                    @JoinColumn(name = "role_name", referencedColumnName = "role_name")
             }
     )
     private Set<RoleEntity> roles;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Set<TokenEntity> tokens;
 
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
