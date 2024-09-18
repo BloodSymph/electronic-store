@@ -1,6 +1,6 @@
-package com.company.auth.dto.auth.register;
+package com.company.authentication.dto.auth.register;
 
-import com.company.auth.validator.ValidPassword;
+import com.company.authentication.validator.ValidPassword;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;

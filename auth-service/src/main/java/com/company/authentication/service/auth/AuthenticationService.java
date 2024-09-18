@@ -1,8 +1,8 @@
-package com.company.auth.service.auth;
+package com.company.authentication.service.auth;
 
-import com.company.auth.dto.auth.login.AuthenticationResponse;
-import com.company.auth.dto.auth.login.LoginRequest;
-import com.company.auth.dto.auth.register.RegisterRequest;
+import com.company.authentication.dto.auth.login.AuthenticationResponse;
+import com.company.authentication.dto.auth.login.LoginRequest;
+import com.company.authentication.dto.auth.register.RegisterRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;

@@ -1,9 +1,9 @@
-package com.company.auth.controller.auth;
+package com.company.authentication.controller.auth;
 
-import com.company.auth.dto.auth.login.AuthenticationResponse;
-import com.company.auth.dto.auth.login.LoginRequest;
-import com.company.auth.dto.auth.register.RegisterRequest;
-import com.company.auth.service.auth.AuthenticationService;
+import com.company.authentication.dto.auth.login.AuthenticationResponse;
+import com.company.authentication.dto.auth.login.LoginRequest;
+import com.company.authentication.dto.auth.register.RegisterRequest;
+import com.company.authentication.service.auth.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -16,7 +16,7 @@ import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/api-gateway/auth")
+@RequestMapping("/api/v1/auth-service/auth")
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;

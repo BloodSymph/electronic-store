@@ -1,7 +1,7 @@
-package com.company.auth.security.handler;
+package com.company.authentication.security.handler;
 
-import com.company.auth.entity.TokenEntity;
-import com.company.auth.repository.TokenRepository;
+import com.company.authentication.entity.TokenEntity;
+import com.company.authentication.repository.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

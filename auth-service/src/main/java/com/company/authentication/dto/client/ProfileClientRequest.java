@@ -1,4 +1,4 @@
-package com.company.auth.dto.client;
+package com.company.authentication.dto.client;
 
 import lombok.*;
 

@@ -1,6 +1,6 @@
-package com.company.auth.repository;
+package com.company.authentication.repository;
 
-import com.company.auth.entity.ProfileEntity;
+import com.company.authentication.entity.ProfileEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

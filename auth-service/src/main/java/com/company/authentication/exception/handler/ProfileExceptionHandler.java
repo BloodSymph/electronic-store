@@ -1,8 +1,8 @@
-package com.company.auth.exception.handler;
+package com.company.authentication.exception.handler;
 
-import com.company.auth.exception.entity.ErrorEntity;
-import com.company.auth.exception.exceptions.profile.ProfileNotFoundException;
-import com.company.auth.exception.exceptions.profile.ProfileVersionNotValidException;
+import com.company.authentication.exception.entity.ErrorEntity;
+import com.company.authentication.exception.exceptions.profile.ProfileNotFoundException;
+import com.company.authentication.exception.exceptions.profile.ProfileVersionNotValidException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

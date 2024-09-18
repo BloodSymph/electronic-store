@@ -1,9 +1,9 @@
-package com.company.auth.exception.handler;
+package com.company.authentication.exception.handler;
 
-import com.company.auth.exception.entity.ErrorEntity;
-import com.company.auth.exception.exceptions.user.UserNotFoundException;
-import com.company.auth.exception.exceptions.user.UserVersionNotValidException;
-import com.company.auth.exception.exceptions.user.UsernameIsTakenException;
+import com.company.authentication.exception.entity.ErrorEntity;
+import com.company.authentication.exception.exceptions.user.UserNotFoundException;
+import com.company.authentication.exception.exceptions.user.UserVersionNotValidException;
+import com.company.authentication.exception.exceptions.user.UsernameIsTakenException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

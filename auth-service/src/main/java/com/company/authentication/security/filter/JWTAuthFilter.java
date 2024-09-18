@@ -1,7 +1,7 @@
-package com.company.auth.security.filter;
+package com.company.authentication.security.filter;
 
-import com.company.auth.security.service.CustomUserDetailsService;
-import com.company.auth.security.service.JWTService;
+import com.company.authentication.security.service.CustomUserDetailsService;
+import com.company.authentication.security.service.JWTService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

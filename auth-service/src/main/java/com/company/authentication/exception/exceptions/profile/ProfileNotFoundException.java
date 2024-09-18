@@ -1,4 +1,4 @@
-package com.company.auth.exception.exceptions.profile;
+package com.company.authentication.exception.exceptions.profile;
 
 public class ProfileNotFoundException extends RuntimeException{
 

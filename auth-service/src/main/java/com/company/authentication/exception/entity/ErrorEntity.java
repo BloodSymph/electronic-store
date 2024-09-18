@@ -1,4 +1,4 @@
-package com.company.auth.exception.entity;
+package com.company.authentication.exception.entity;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

@@ -1,8 +1,8 @@
-package com.company.auth.security.config;
+package com.company.authentication.security.config;
 
-import com.company.auth.security.filter.JWTAuthFilter;
-import com.company.auth.security.handler.CustomLogoutHandler;
-import com.company.auth.security.service.CustomUserDetailsService;
+import com.company.authentication.security.filter.JWTAuthFilter;
+import com.company.authentication.security.handler.CustomLogoutHandler;
+import com.company.authentication.security.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +15,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -101,28 +102,20 @@ public class SecurityConfiguration {
         httpSecurity.cors(
                 httpSecurityCorsConfigurer -> corsConfigurationSource()
         ).csrf(
-                httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer
-                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                        .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
+                AbstractHttpConfigurer::disable
         ).sessionManagement(
                 httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         ).authorizeHttpRequests(
-                (authorizationManagerRequestMatcherRegistry) -> authorizationManagerRequestMatcherRegistry
+                authorizationManagerRequestMatcherRegistry -> authorizationManagerRequestMatcherRegistry
                         .requestMatchers(
                                 HttpMethod.POST,
-                                "/api/v1/api-gateway/auth/**"
+                                "/api/v1/auth-service/auth/**"
                         )
                         .permitAll()
-                        .anyRequest()
-                        .authenticated()
         ).addFilterBefore(
                 jwtAuthFilter,
                 UsernamePasswordAuthenticationFilter.class
-        ).exceptionHandling(
-                httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer.accessDeniedHandler(
-                        (request, response, accessDeniedException) -> response.setStatus(403)
-                ).authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
         ).logout(
                 httpSecurityLogoutConfigurer -> httpSecurityLogoutConfigurer
                         .logoutUrl("/logout")

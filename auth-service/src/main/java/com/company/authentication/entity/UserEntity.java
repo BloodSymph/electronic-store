@@ -1,4 +1,4 @@
-package com.company.auth.entity;
+package com.company.authentication.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

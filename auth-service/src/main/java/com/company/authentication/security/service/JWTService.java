@@ -1,7 +1,7 @@
-package com.company.auth.security.service;
+package com.company.authentication.security.service;
 
-import com.company.auth.entity.UserEntity;
-import com.company.auth.repository.TokenRepository;
+import com.company.authentication.entity.UserEntity;
+import com.company.authentication.repository.TokenRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;

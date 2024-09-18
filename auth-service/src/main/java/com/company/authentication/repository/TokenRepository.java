@@ -1,6 +1,6 @@
-package com.company.auth.repository;
+package com.company.authentication.repository;
 
-import com.company.auth.entity.TokenEntity;
+import com.company.authentication.entity.TokenEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

@@ -1,4 +1,4 @@
-package com.company.auth.exception.exceptions.user;
+package com.company.authentication.exception.exceptions.user;
 
 public class UserNotFoundException extends RuntimeException{
 

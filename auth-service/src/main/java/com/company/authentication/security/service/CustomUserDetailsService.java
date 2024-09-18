@@ -1,8 +1,8 @@
-package com.company.auth.security.service;
+package com.company.authentication.security.service;
 
-import com.company.auth.entity.RoleEntity;
-import com.company.auth.entity.UserEntity;
-import com.company.auth.repository.UserRepository;
+import com.company.authentication.entity.RoleEntity;
+import com.company.authentication.entity.UserEntity;
+import com.company.authentication.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

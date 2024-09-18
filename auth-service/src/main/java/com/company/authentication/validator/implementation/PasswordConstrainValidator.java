@@ -1,6 +1,6 @@
-package com.company.auth.validator.implementation;
+package com.company.authentication.validator.implementation;
 
-import com.company.auth.validator.ValidPassword;
+import com.company.authentication.validator.ValidPassword;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.passay.*;

@@ -1,4 +1,4 @@
-package com.company.auth.exception.exceptions.role;
+package com.company.authentication.exception.exceptions.role;
 
 public class RoleNotFoundException extends RuntimeException{
 

@@ -1,4 +1,4 @@
-package com.company.auth.util;
+package com.company.authentication.util;
 
 
 
