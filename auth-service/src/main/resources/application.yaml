@@ -6,14 +6,12 @@ eureka:
     service-url:
       defaultZone: http://localhost:8761/eureka/
 
-
 spring:
   application:
     name: auth-service
   cloud:
     config:
       enabled: false
-
   datasource:
     url: jdbc:postgresql://localhost:5432/auth
     username: postgres
@@ -28,7 +26,7 @@ spring:
 application:
   security:
     jwt:
-      secret-key: 82ca8cddc92198c43eeba394e706e16e850062004c1fb5cddbefdfdbf217ebda
+      secret-key: 4bb6d1dfbafb64a681139d1586b6f1160d18159afd57c8c79136d7490630407c
       expiration: 86400000
       refresh-token:
         expiration: 604800000
