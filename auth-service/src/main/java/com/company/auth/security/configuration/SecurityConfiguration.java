@@ -91,24 +91,26 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(httpSecurityCorsConfigurer -> corsConfigurationSource())
                 .authorizeHttpRequests(
-                        req -> req.requestMatchers("/api/vi/auth-service/authorization/**")
+                        requestMatcherRegistry -> requestMatcherRegistry
+                                .requestMatchers("/api/vi/auth-service/authorization/**")
                                 .permitAll()
 //                                .requestMatchers("/admin_only/**").hasAuthority("ADMIN")
 //                                .anyRequest()
 //                                .authenticated()
                 ).userDetailsService(customUserDetailsService)
-                .sessionManagement(session -> session
+                .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(
-                        e -> e.accessDeniedHandler(
+                        httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer
+                                .accessDeniedHandler(
                                         (request, response, accessDeniedException) -> response.setStatus(403)
                                 )
                                 .authenticationEntryPoint(
                                         new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)
                                 )
                 )
-                .logout(l -> l
+                .logout(httpSecurityLogoutConfigurer -> httpSecurityLogoutConfigurer
                         .logoutUrl("/logout")
                         .addLogoutHandler(customLogoutHandler)
                         .logoutSuccessHandler(

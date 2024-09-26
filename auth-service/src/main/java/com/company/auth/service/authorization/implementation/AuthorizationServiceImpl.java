@@ -61,7 +61,9 @@ public class AuthorizationServiceImpl implements AuthorizationService {
 
         user.setUsername(registerRequest.getUsername());
         user.setEmail(registerRequest.getEmail());
-        user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+        user.setPassword(passwordEncoder.encode(
+                registerRequest.getPassword())
+        );
         user.setVersion(registerRequest.getVersion());
 
         RoleEntity roleEntity = roleRepository
@@ -74,7 +76,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
 
         user.setRoles(Collections.singleton(roleEntity));
 
-        userRepository.save(user);
+        user = userRepository.save(user);
 
         String accessToken = jwtService.generateAccessToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
@@ -170,7 +172,8 @@ public class AuthorizationServiceImpl implements AuthorizationService {
 
     private void revokeAllTokenByUser(UserEntity user) {
 
-        List<TokenEntity> validTokens = tokenRepository.findAllAccessTokenByUserId(user.getId());
+        List<TokenEntity> validTokens = tokenRepository
+                .findAllAccessTokenByUserId(user.getId());
 
         if(validTokens.isEmpty()) {
             return;

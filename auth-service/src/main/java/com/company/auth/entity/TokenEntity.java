@@ -26,7 +26,7 @@ public class TokenEntity {
     @Column(name = "is_logged_out")
     private boolean loggedOut;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private UserEntity user;
 

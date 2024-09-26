@@ -19,13 +19,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 @Component
+@RequiredArgsConstructor
 public class JWTAuthFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private CustomUserDetailsService customUserDetailsService;
+    private final CustomUserDetailsService customUserDetailsService;
 
-    @Autowired
-    private JWTService jwtService;
+    private final JWTService jwtService;
 
     @Override
     protected void doFilterInternal(
@@ -47,7 +46,6 @@ public class JWTAuthFilter extends OncePerRequestFilter {
         if(username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
             UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
-
 
             if(jwtService.isValid(token, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
