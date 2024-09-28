@@ -170,6 +170,8 @@ public class AuthorizationServiceImpl implements AuthorizationService {
 
     }
 
+    //todo: Make mechanic of changing password!
+
     private void revokeAllTokenByUser(UserEntity user) {
 
         List<TokenEntity> validTokens = tokenRepository

@@ -47,7 +47,10 @@ public class UserEntity implements UserDetails{
     @Column(name = "user_updated")
     private LocalDateTime updated;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(
+            fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE}
+    )
     @JoinTable(
             name = "user_roles",
             joinColumns = {
@@ -59,10 +62,20 @@ public class UserEntity implements UserDetails{
     )
     private Set<RoleEntity> roles;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL ,orphanRemoval = true)
+    @OneToMany(
+            mappedBy = "user",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL ,
+            orphanRemoval = true
+    )
     private List<TokenEntity> tokens;
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToOne(
+            mappedBy = "user",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.REMOVE,
+            orphanRemoval = true
+    )
     private ProfileEntity profile;
 
     @Version

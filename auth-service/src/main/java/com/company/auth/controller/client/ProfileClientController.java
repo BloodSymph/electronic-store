@@ -1,17 +1,35 @@
 package com.company.auth.controller.client;
 
+import com.company.auth.dto.client.ProfileClientRequest;
+import com.company.auth.dto.client.ProfileClientResponse;
 import com.company.auth.service.client.ProfileClientService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/vi/auth-service/authorization")
+@RequestMapping("/api/vi/auth-service/client")
 public class ProfileClientController {
 
     private final ProfileClientService profileClientService;
 
-    //todo:Make endpoints
+    @GetMapping("/profile")
+    @ResponseStatus(HttpStatus.OK)
+    public ProfileClientResponse viewUserProfile() {
+        return profileClientService.viewUserProfile();
+    }
+
+    @PostMapping("/profile/create")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ProfileClientResponse createProfile(
+            @Valid @RequestBody ProfileClientRequest profileClientRequest) {
+        return profileClientService.createProfile(profileClientRequest);
+    }
+
+    //todo: Update endpoint
+
+    //todo: Delete endpoint
 
 }
