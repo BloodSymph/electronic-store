@@ -94,6 +94,8 @@ public class SecurityConfiguration {
                         requestMatcherRegistry -> requestMatcherRegistry
                                 .requestMatchers("/api/vi/auth-service/authorization/**")
                                 .permitAll()
+                                .requestMatchers("/api/vi/auth-service/client/**")
+                                .authenticated()
 //                                .requestMatchers("/admin_only/**").hasAuthority("ADMIN")
 //                                .anyRequest()
 //                                .authenticated()

@@ -6,6 +6,7 @@ import com.company.auth.service.client.ProfileClientService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -28,8 +29,21 @@ public class ProfileClientController {
         return profileClientService.createProfile(profileClientRequest);
     }
 
-    //todo: Update endpoint
+    @PutMapping("/profile/update")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ProfileClientResponse updateProfile(
+            @Valid @RequestBody ProfileClientRequest profileClientRequest) {
+        return profileClientService.updateProfile(profileClientRequest);
+    }
 
-    //todo: Delete endpoint
+    @DeleteMapping("/profile/delete")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<String> deleteProfile(
+            @RequestParam(value = "profileVersion") Long profileVersion) {
+        profileClientService.deleteProfile(profileVersion);
+        return new ResponseEntity<>(
+                "Profile successful deleted!", HttpStatus.OK
+        );
+    }
 
 }

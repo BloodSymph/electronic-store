@@ -61,6 +61,11 @@ public class ProfileClientServiceImpl implements ProfileClientService {
     @Transactional
     public ProfileClientResponse updateProfile(ProfileClientRequest profileClientRequest) {
         String username = getSessionUser();
+        if (!profileRepository.existsByVersion(profileClientRequest.getVersion())){
+            throw new ProfileVersionNotValidException(
+                    "Profile Entity Version not valid!"
+            );
+        }
         ProfileEntity profile = profileRepository
                 .findByUser_Username(username)
                 .orElseThrow(
@@ -68,7 +73,13 @@ public class ProfileClientServiceImpl implements ProfileClientService {
                                 "Can not find profile by current username: " + username + "!"
                         )
                 );
-        //todo: Set Fields
+        profile.setFirstName(profileClientRequest.getFirstName());
+        profile.setLastName(profileClientRequest.getLastName());
+        profile.setPhoneNumber(profileClientRequest.getPhoneNumber());
+        profile.setCountry(profileClientRequest.getCountry());
+        profile.setCity(profileClientRequest.getCity());
+        profile.setAddress(profileClientRequest.getAddress());
+        profile.setMailAddress(profileClientRequest.getMailAddress());
         profileRepository.save(profile);
         return mapToProfileClientResponse(profile);
     }
