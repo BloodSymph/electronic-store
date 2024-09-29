@@ -1,8 +1,11 @@
 package com.company.auth.dto.admin.user;
 
 import com.company.auth.dto.admin.profile.ProfileAdminResponse;
+import com.company.auth.dto.admin.role.RoleResponse;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+
+import java.util.Set;
 
 @Data
 @SuperBuilder
@@ -12,7 +15,7 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 public class UserDetailedAdminResponse extends UserAdminResponse {
 
-    //todo: Role response
+    private Set<RoleResponse> roles;
 
     private ProfileAdminResponse profileAdminResponse;
 
