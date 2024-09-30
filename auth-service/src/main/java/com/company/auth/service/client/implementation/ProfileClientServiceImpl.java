@@ -63,7 +63,7 @@ public class ProfileClientServiceImpl implements ProfileClientService {
         String username = getSessionUser();
         if (!profileRepository.existsByVersion(profileClientRequest.getVersion())){
             throw new ProfileVersionNotValidException(
-                    "Profile Entity Version not valid!"
+                    "Profile Entity version not valid!"
             );
         }
         ProfileEntity profile = profileRepository
@@ -95,7 +95,7 @@ public class ProfileClientServiceImpl implements ProfileClientService {
         }
         if (!profileRepository.existsByVersion(profileVersion)) {
             throw new ProfileVersionNotValidException(
-                    "Profile Entity Version not valid!"
+                    "Profile Entity version not valid!"
             );
         }
         profileRepository.deleteByUser_Username(username);

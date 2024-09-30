@@ -15,19 +15,31 @@ public interface UserAdminService {
 
     Page<UserAdminResponse> getListOfUsers(Pageable pageable);
 
-    Page<UserAdminResponse> searchUsers(Pageable pageable, String searchText);
+    Page<UserAdminResponse> searchUsers(
+            Pageable pageable, String searchText
+    );
 
     UserDetailedAdminResponse getUserDetails(String username);
 
-    void deleteUser(String username, Long userVersion);
+    void deleteUser(
+            String username, Long userVersion
+    );
 
-    void deleteUsersProfile(String username, Long profileVersion);
+    void deleteUserProfile(
+            String username, Long profileVersion
+    );
 
     Page<RoleResponse> getListOfRoles(Pageable pageable);
 
+    Page<RoleResponse> searchRole(
+            Pageable pageable, String roleName
+    );
+
     RoleResponse createNewRole(RoleRequest roleRequest);
 
-    RoleResponse updateCurrentRole(RoleRequest roleRequest, String roleName);
+    RoleResponse updateCurrentRole(
+            RoleRequest roleRequest, String roleName
+    );
 
     void givePermissionForUser(PermissionDto givePermissionDto);
 
@@ -35,9 +47,9 @@ public interface UserAdminService {
 
     void removeAllUsersPermissions(String username);
 
-    void deleteRole(String roleName, Long roleVersion);
-
-    //todo:Clear all users tokens
+    void deleteRole(
+            String roleName, Long roleVersion
+    );
 
     @Scheduled(fixedRate = 120)
     void evictAllCacheWithTime();

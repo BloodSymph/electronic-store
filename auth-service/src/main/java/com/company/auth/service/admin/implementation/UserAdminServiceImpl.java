@@ -5,6 +5,15 @@ import com.company.auth.dto.admin.role.RoleRequest;
 import com.company.auth.dto.admin.role.RoleResponse;
 import com.company.auth.dto.admin.user.UserAdminResponse;
 import com.company.auth.dto.admin.user.UserDetailedAdminResponse;
+import com.company.auth.entity.RoleEntity;
+import com.company.auth.entity.UserEntity;
+import com.company.auth.exception.exceptions.profile.ProfileVersionNotValidException;
+import com.company.auth.exception.exceptions.role.RoleNotFoundException;
+import com.company.auth.exception.exceptions.role.RoleVersionNotValidException;
+import com.company.auth.exception.exceptions.user.UserNotFoundException;
+import com.company.auth.exception.exceptions.user.UserVersionNotValidException;
+import com.company.auth.mapper.admin.RoleMapper;
+import com.company.auth.mapper.admin.UserAdminMapper;
 import com.company.auth.repository.ProfileRepository;
 import com.company.auth.repository.RoleRepository;
 import com.company.auth.repository.TokenRepository;
@@ -14,14 +23,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.company.auth.mapper.admin.RoleMapper.mapToRoleRequestToEntity;
+import static com.company.auth.mapper.admin.RoleMapper.mapToRoleResponse;
+import static com.company.auth.mapper.admin.UserAdminMapper.mapToUserAdminDetailedResponse;
 import static com.company.auth.util.CacheEvictUtility.evictAllCaches;
 
 @Service
 @RequiredArgsConstructor
-@CacheConfig
 public class UserAdminServiceImpl implements UserAdminService {
 
     private final UserRepository userRepository;
@@ -30,49 +42,99 @@ public class UserAdminServiceImpl implements UserAdminService {
 
     private final ProfileRepository profileRepository;
 
-    private final TokenRepository tokenRepository;
-
     @Override
     public Page<UserAdminResponse> getListOfUsers(Pageable pageable) {
-        return null;
+        return userRepository
+                .findAll(pageable)
+                .map(UserAdminMapper::mapToUserAdminResponse);
     }
 
     @Override
     public Page<UserAdminResponse> searchUsers(Pageable pageable, String searchText) {
-        return null;
+        return userRepository
+                .searchUsers(pageable, searchText)
+                .map(UserAdminMapper::mapToUserAdminResponse);
     }
 
     @Override
     public UserDetailedAdminResponse getUserDetails(String username) {
-        return null;
+        UserEntity user = userRepository
+                .findByUsernameIgnoreCase(username)
+                .orElseThrow(
+                        () -> new UsernameNotFoundException(
+                                "Can not find user by username: " + username + "!"
+                        )
+                );
+        return mapToUserAdminDetailedResponse(user);
     }
 
     @Override
     @Transactional
     public void deleteUser(String username, Long userVersion) {
-
+        if (!userRepository.existsByUsernameIgnoreCase(username)) {
+            throw new UserNotFoundException(
+                    "Can not find user by username: " + username + "!"
+            );
+        }
+        if (!userRepository.existsByVersion(userVersion)) {
+            throw new UserVersionNotValidException(
+                    "User Entity version not valid!"
+            );
+        }
+        userRepository.deleteByUsername(username);
     }
 
     @Override
     @Transactional
-    public void deleteUsersProfile(String username, Long profileVersion) {
-
+    public void deleteUserProfile(String username, Long profileVersion) {
+        if (!profileRepository.existsByUser_Username(username)) {
+            throw new RoleNotFoundException(
+                    "Can not find profile by username: " + username + "!"
+            );
+        }
+        if (!profileRepository.existsByVersion(profileVersion)) {
+            throw new ProfileVersionNotValidException(
+                    "Profile Entity version not valid!"
+            );
+        }
+        profileRepository.deleteByUser_Username(username);
     }
 
     @Override
     public Page<RoleResponse> getListOfRoles(Pageable pageable) {
-        return null;
+        return roleRepository
+                .findAll(pageable)
+                .map(RoleMapper::mapToRoleResponse);
+    }
+
+    @Override
+    public Page<RoleResponse> searchRole(Pageable pageable, String roleName) {
+        return roleRepository
+                .searchRole(pageable, roleName)
+                .map(RoleMapper::mapToRoleResponse);
     }
 
     @Override
     public RoleResponse createNewRole(RoleRequest roleRequest) {
-        return null;
+        RoleEntity role = mapToRoleRequestToEntity(roleRequest);
+        roleRepository.save(role);
+        return mapToRoleResponse(role);
     }
 
     @Override
     @Transactional
     public RoleResponse updateCurrentRole(RoleRequest roleRequest, String roleName) {
-        return null;
+        RoleEntity role = roleRepository
+                .findByNameIgnoreCase(roleName)
+                .orElseThrow(
+                        () -> new RoleNotFoundException(
+                                "Can not find role by name: " + roleName + "!"
+                        )
+                );
+        role.setName(roleRequest.getName());
+        role.setVersion(roleRequest.getVersion());
+        roleRepository.save(role);
+        return mapToRoleResponse(role);
     }
 
     @Override
@@ -96,11 +158,22 @@ public class UserAdminServiceImpl implements UserAdminService {
     @Override
     @Transactional
     public void deleteRole(String roleName, Long roleVersion) {
-
+        if (!roleRepository.existsByNameIgnoreCase(roleName)) {
+            throw new RoleNotFoundException(
+                    "Can not find role by name: " + roleName + "!"
+            );
+        }
+        if (!roleRepository.existsByVersion(roleVersion)) {
+            throw new RoleVersionNotValidException(
+                    "Role Entity version not valid!"
+            );
+        }
+        roleRepository.deleteByNameIgnoreCase(roleName);
     }
 
     @Override
     public void evictAllCacheWithTime() {
         evictAllCaches();
     }
+
 }
