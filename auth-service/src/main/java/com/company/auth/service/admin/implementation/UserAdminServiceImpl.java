@@ -21,6 +21,8 @@ import com.company.auth.repository.UserRepository;
 import com.company.auth.service.admin.UserAdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -43,6 +45,7 @@ public class UserAdminServiceImpl implements UserAdminService {
     private final ProfileRepository profileRepository;
 
     @Override
+    @Cacheable(value = "user_admin", unless = "#result == null ")
     public Page<UserAdminResponse> getListOfUsers(Pageable pageable) {
         return userRepository
                 .findAll(pageable)
@@ -50,6 +53,7 @@ public class UserAdminServiceImpl implements UserAdminService {
     }
 
     @Override
+    @Cacheable(value = "user_admin", unless = "#result == null ")
     public Page<UserAdminResponse> searchUsers(Pageable pageable, String searchText) {
         return userRepository
                 .searchUsers(pageable, searchText)
@@ -101,6 +105,7 @@ public class UserAdminServiceImpl implements UserAdminService {
     }
 
     @Override
+    @Cacheable(value = "role_admin", unless = "#result == null ")
     public Page<RoleResponse> getListOfRoles(Pageable pageable) {
         return roleRepository
                 .findAll(pageable)
@@ -108,6 +113,7 @@ public class UserAdminServiceImpl implements UserAdminService {
     }
 
     @Override
+    @Cacheable(value = "role_admin", unless = "#result == null ")
     public Page<RoleResponse> searchRole(Pageable pageable, String roleName) {
         return roleRepository
                 .searchRole(pageable, roleName)
@@ -115,6 +121,7 @@ public class UserAdminServiceImpl implements UserAdminService {
     }
 
     @Override
+    @CachePut(value = "role_admin", unless = "#result == null ")
     public RoleResponse createNewRole(RoleRequest roleRequest) {
         RoleEntity role = mapToRoleRequestToEntity(roleRequest);
         roleRepository.save(role);
@@ -123,6 +130,7 @@ public class UserAdminServiceImpl implements UserAdminService {
 
     @Override
     @Transactional
+    @CachePut(value = "role_admin", unless = "#result == null ")
     public RoleResponse updateCurrentRole(RoleRequest roleRequest, String roleName) {
         RoleEntity role = roleRepository
                 .findByNameIgnoreCase(roleName)
@@ -141,17 +149,73 @@ public class UserAdminServiceImpl implements UserAdminService {
     @Transactional
     public void givePermissionForUser(PermissionDto givePermissionDto) {
 
+        UserEntity user = userRepository
+                .findByUsernameIgnoreCase(
+                        givePermissionDto.getUsername()
+                ).orElseThrow(
+                        () -> new UserNotFoundException(
+                                "Can not find user by username: " + givePermissionDto.getUsername() + "!"
+                        )
+                );
+
+        RoleEntity role = roleRepository
+                .findByNameIgnoreCase(
+                        givePermissionDto.getRoleName()
+                ).orElseThrow(
+                        () -> new RoleNotFoundException(
+                                "Can not find role by name: " + givePermissionDto.getRoleName() + "!"
+                        )
+                );
+
+        user.getRoles().add(role);
+
+        userRepository.save(user);
+
     }
 
     @Override
     @Transactional
     public void removePermission(PermissionDto givePermissionDto) {
 
+        UserEntity user = userRepository
+                .findByUsernameIgnoreCase(
+                        givePermissionDto.getUsername()
+                ).orElseThrow(
+                        () -> new UserNotFoundException(
+                                "Can not find user by username: " + givePermissionDto.getUsername() + "!"
+                        )
+                );
+
+        RoleEntity role = roleRepository
+                .findByNameIgnoreCase(
+                        givePermissionDto.getRoleName()
+                ).orElseThrow(
+                        () -> new RoleNotFoundException(
+                                "Can not find role by name: " + givePermissionDto.getRoleName() + "!"
+                        )
+                );
+
+        user.getRoles().remove(role);
+
+        userRepository.save(user);
+
     }
 
     @Override
     @Transactional
     public void removeAllUsersPermissions(String username) {
+
+        UserEntity user = userRepository
+                .findByUsernameIgnoreCase(username)
+                .orElseThrow(
+                        () -> new UserNotFoundException(
+                                "Can not find user by username: " + username + "!"
+                        )
+                );
+
+        user.getRoles().clear();
+
+        userRepository.save(user);
 
     }
 
