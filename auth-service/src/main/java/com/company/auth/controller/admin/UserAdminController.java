@@ -1,8 +1,12 @@
 package com.company.auth.controller.admin;
 
+import com.company.auth.dto.admin.role.PermissionRequest;
+import com.company.auth.dto.admin.role.RoleRequest;
+import com.company.auth.dto.admin.role.RoleResponse;
 import com.company.auth.dto.admin.user.UserAdminResponse;
 import com.company.auth.dto.admin.user.UserDetailedAdminResponse;
 import com.company.auth.service.admin.UserAdminService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,10 +27,10 @@ public class UserAdminController {
     @ResponseStatus(HttpStatus.OK)
     public Page<UserAdminResponse> getUsersList(
             @PageableDefault(
-            sort = "username",
-            direction = Sort.Direction.ASC,
-            page = 0,
-            size = 20
+                sort = "username",
+                direction = Sort.Direction.ASC,
+                page = 0,
+                size = 20
     ) Pageable pageable) {
         return userAdminService.getListOfUsers(pageable);
     }
@@ -35,12 +39,16 @@ public class UserAdminController {
     @ResponseStatus(HttpStatus.OK)
     public Page<UserAdminResponse> searchUsers(
             @PageableDefault(
-            sort = "username",
-            direction = Sort.Direction.ASC,
-            page = 0,
-            size = 20
+                sort = "username",
+                direction = Sort.Direction.ASC,
+                page = 0,
+                size = 20
     ) Pageable pageable,
-      @RequestParam(value = "searchText", required = false, defaultValue = "") String searchText) {
+            @RequestParam(
+                    value = "searchText",
+                    required = false,
+                    defaultValue = ""
+            ) String searchText) {
         return userAdminService.searchUsers(pageable, searchText);
     }
 
@@ -75,6 +83,93 @@ public class UserAdminController {
         );
     }
 
+    @GetMapping("/roles")
+    @ResponseStatus(HttpStatus.OK)
+    public Page<RoleResponse> getListOfRoles(
+            @PageableDefault(
+                sort = "name",
+                direction = Sort.Direction.ASC,
+                page = 0,
+                size = 20
+    ) Pageable pageable) {
+        return userAdminService.getListOfRoles(pageable);
+    }
 
+    @GetMapping("/roles/search")
+    @ResponseStatus(HttpStatus.OK)
+    public Page<RoleResponse> searchRoles(
+            @PageableDefault(
+                    sort = "name",
+                    direction = Sort.Direction.ASC,
+                    page = 0,
+                    size = 20
+    ) Pageable pageable,
+            @RequestParam(
+                    value = "name",
+                    required = false,
+                    defaultValue = ""
+            ) String name) {
+        return userAdminService.searchRole(pageable, name);
+    }
+
+    @PostMapping("/roles/create")
+    @ResponseStatus(HttpStatus.CREATED)
+    public RoleResponse createRole(
+            @Valid @RequestBody RoleRequest roleRequest) {
+        return userAdminService.createNewRole(roleRequest);
+    }
+
+    @PutMapping("/roles/{roleName}/update")
+    @ResponseStatus(HttpStatus.CREATED)
+    public RoleResponse updateRole(
+            @Valid @RequestBody RoleRequest roleRequest,
+            @PathVariable(value = "roleName") String roleName) {
+        return userAdminService.updateCurrentRole(roleRequest, roleName);
+    }
+
+    @PostMapping("/roles/give-permission")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public ResponseEntity<String> givePermission(
+            @Valid @RequestBody PermissionRequest permissionRequest) {
+        userAdminService.givePermissionForUser(permissionRequest);
+        return new ResponseEntity<>(
+                "Permission is successful given!",
+                HttpStatus.ACCEPTED
+        );
+    }
+
+    @DeleteMapping("/roles/remove-permission")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<String> removePermission(
+            @Valid @RequestBody PermissionRequest permissionRequest) {
+        userAdminService.removePermission(permissionRequest);
+        return new ResponseEntity<>(
+                "Permission is successful removed!",
+                HttpStatus.OK
+        );
+    }
+
+    @DeleteMapping("{username}/roles/remove-all-permissions")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<String> removeAllPermission(
+            @PathVariable(value = "username") String username) {
+        userAdminService.removeAllUsersPermissions(username);
+        return new ResponseEntity<>(
+                "Permission is successful removed!",
+                HttpStatus.OK
+        );
+    }
+
+    @DeleteMapping("/roles/{roleName}/delete")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<String> deleteRole(
+            @PathVariable(value = "roleName") String roleName,
+            @RequestParam(value = "roleVersion") Long roleVersion) {
+        userAdminService.deleteRole(roleName, roleVersion);
+        return new ResponseEntity<>(
+                "Role is successful deleted!",
+                HttpStatus.OK
+        );
+    }
 
 }

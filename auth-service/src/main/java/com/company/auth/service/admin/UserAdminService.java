@@ -1,6 +1,6 @@
 package com.company.auth.service.admin;
 
-import com.company.auth.dto.admin.role.PermissionDto;
+import com.company.auth.dto.admin.role.PermissionRequest;
 import com.company.auth.dto.admin.role.RoleRequest;
 import com.company.auth.dto.admin.role.RoleResponse;
 import com.company.auth.dto.admin.user.UserAdminResponse;
@@ -41,9 +41,9 @@ public interface UserAdminService {
             RoleRequest roleRequest, String roleName
     );
 
-    void givePermissionForUser(PermissionDto givePermissionDto);
+    void givePermissionForUser(PermissionRequest givePermissionDto);
 
-    void removePermission(PermissionDto givePermissionDto);
+    void removePermission(PermissionRequest givePermissionDto);
 
     void removeAllUsersPermissions(String username);
 

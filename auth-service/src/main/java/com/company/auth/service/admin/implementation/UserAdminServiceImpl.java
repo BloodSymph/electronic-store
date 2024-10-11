@@ -1,6 +1,6 @@
 package com.company.auth.service.admin.implementation;
 
-import com.company.auth.dto.admin.role.PermissionDto;
+import com.company.auth.dto.admin.role.PermissionRequest;
 import com.company.auth.dto.admin.role.RoleRequest;
 import com.company.auth.dto.admin.role.RoleResponse;
 import com.company.auth.dto.admin.user.UserAdminResponse;
@@ -16,11 +16,9 @@ import com.company.auth.mapper.admin.RoleMapper;
 import com.company.auth.mapper.admin.UserAdminMapper;
 import com.company.auth.repository.ProfileRepository;
 import com.company.auth.repository.RoleRepository;
-import com.company.auth.repository.TokenRepository;
 import com.company.auth.repository.UserRepository;
 import com.company.auth.service.admin.UserAdminService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -139,6 +137,11 @@ public class UserAdminServiceImpl implements UserAdminService {
                                 "Can not find role by name: " + roleName + "!"
                         )
                 );
+        if (!role.getVersion().equals(roleRequest.getVersion())) {
+            throw new RoleVersionNotValidException(
+                    "Role Entity version not valid!"
+            );
+        }
         role.setName(roleRequest.getName());
         role.setVersion(roleRequest.getVersion());
         roleRepository.save(role);
@@ -147,23 +150,23 @@ public class UserAdminServiceImpl implements UserAdminService {
 
     @Override
     @Transactional
-    public void givePermissionForUser(PermissionDto givePermissionDto) {
+    public void givePermissionForUser(PermissionRequest permissionRequest) {
 
         UserEntity user = userRepository
                 .findByUsernameIgnoreCase(
-                        givePermissionDto.getUsername()
+                        permissionRequest.getUsername()
                 ).orElseThrow(
                         () -> new UserNotFoundException(
-                                "Can not find user by username: " + givePermissionDto.getUsername() + "!"
+                                "Can not find user by username: " + permissionRequest.getUsername() + "!"
                         )
                 );
 
         RoleEntity role = roleRepository
                 .findByNameIgnoreCase(
-                        givePermissionDto.getRoleName()
+                        permissionRequest.getRoleName()
                 ).orElseThrow(
                         () -> new RoleNotFoundException(
-                                "Can not find role by name: " + givePermissionDto.getRoleName() + "!"
+                                "Can not find role by name: " + permissionRequest.getRoleName() + "!"
                         )
                 );
 
@@ -175,23 +178,23 @@ public class UserAdminServiceImpl implements UserAdminService {
 
     @Override
     @Transactional
-    public void removePermission(PermissionDto givePermissionDto) {
+    public void removePermission(PermissionRequest permissionRequest) {
 
         UserEntity user = userRepository
                 .findByUsernameIgnoreCase(
-                        givePermissionDto.getUsername()
+                        permissionRequest.getUsername()
                 ).orElseThrow(
                         () -> new UserNotFoundException(
-                                "Can not find user by username: " + givePermissionDto.getUsername() + "!"
+                                "Can not find user by username: " + permissionRequest.getUsername() + "!"
                         )
                 );
 
         RoleEntity role = roleRepository
                 .findByNameIgnoreCase(
-                        givePermissionDto.getRoleName()
+                        permissionRequest.getRoleName()
                 ).orElseThrow(
                         () -> new RoleNotFoundException(
-                                "Can not find role by name: " + givePermissionDto.getRoleName() + "!"
+                                "Can not find role by name: " + permissionRequest.getRoleName() + "!"
                         )
                 );
 
