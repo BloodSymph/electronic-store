@@ -98,7 +98,6 @@ public class SecurityConfiguration {
                                 .authenticated()
                                 .requestMatchers("/api/vi/auth-service/admin/**")
                                 .hasAuthority("ROLE_ADMIN")
-                                .anyRequest()
                 ).userDetailsService(customUserDetailsService)
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))

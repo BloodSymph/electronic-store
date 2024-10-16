@@ -50,7 +50,7 @@ public class ProfileEntity {
     @Column(name = "profile_updated")
     private LocalDateTime updated;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "username", referencedColumnName = "user_username")
     private UserEntity user;
 

@@ -55,7 +55,7 @@ public class UserEntity implements UserDetails{
     private LocalDateTime updated;
 
     @ManyToMany(
-            fetch = FetchType.LAZY,
+            fetch = FetchType.EAGER,
             cascade = {CascadeType.PERSIST, CascadeType.MERGE}
     )
     @JoinTable(
@@ -72,16 +72,14 @@ public class UserEntity implements UserDetails{
     @OneToMany(
             mappedBy = "user",
             fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL ,
-            orphanRemoval = true
+            cascade = CascadeType.ALL
     )
     private List<TokenEntity> tokens;
 
     @OneToOne(
             mappedBy = "user",
             fetch = FetchType.LAZY,
-            cascade = CascadeType.REMOVE,
-            orphanRemoval = true
+            cascade = CascadeType.REMOVE
     )
     private ProfileEntity profile;
 
